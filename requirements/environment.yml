@@ -1,0 +1,10 @@
+prefix: ./env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+    - -r file:requirement_dev.txt
+    - -e ./..
