@@ -1,4 +1,6 @@
-prefix: ./env
+# To create the dev environment use
+# conda env create --prefix=./env -f requirements/environment.yml
+
 channels:
   - conda-forge
   - defaults
@@ -6,5 +8,5 @@ dependencies:
   - python=3.9
   - pip
   - pip:
-    - -r file:requirement_dev.txt
+    - -r requirements_dev.txt
     - -e ./..
