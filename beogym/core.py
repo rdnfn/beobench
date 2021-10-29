@@ -1,5 +1,6 @@
 """Core functions of beogym."""
 import gym
+import beogym
 
 
 class Agent:
@@ -20,10 +21,10 @@ class Env(gym.Env):
         self.problem_description = None
 
         # OPTIONAL: add CVXPY problem definition
-        self.cvxpy_def = self._create_cvxpy_def()
+        self.cvxpy_problem: beogym.cvxpy.EnvProblem = None
 
     def _create_cvxpy_def(self) -> dict:
-        """Create a CVXPY problem definition.
+        """Create a CVXPY problem definition. To be implemented optionally.
 
         Returns:
             dict: dictionary with all parts of CVXPY problem definition.
@@ -32,9 +33,12 @@ class Env(gym.Env):
         variables = {}
         constraints = []
         objective = None
+        # Subset of variables that describe the actions over an episode
+        actions = None
 
         cvxpy_def = {
             "variables": variables,
+            "actions": actions,
             "constraints": constraints,
             "objective": objective,
         }
