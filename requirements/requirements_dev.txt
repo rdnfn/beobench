@@ -9,6 +9,17 @@ coverage
 Sphinx
 twine
 
+# Dev tools
 black
 pre-commit
 pylint
+
+# Jupyter notebooks
+jupyterlab
+
+# RL tools
+gym
+
+
+# Convex solver tools (OPTIONAL)
+cvxpy

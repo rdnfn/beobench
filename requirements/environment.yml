@@ -1,5 +1,8 @@
 # To create the dev environment use
 # conda env create --prefix=./env -f requirements/environment.yml
+# 
+# To remove env
+# conda env remove -p ./env
 
 channels:
   - conda-forge
