@@ -1,16 +1,16 @@
 ======
-beogym
+beobench
 ======
 
 
-.. image:: https://img.shields.io/pypi/v/beogym.svg
-        :target: https://pypi.python.org/pypi/beogym
+.. image:: https://img.shields.io/pypi/v/beobench.svg
+        :target: https://pypi.python.org/pypi/beobench
 
-.. image:: https://img.shields.io/travis/rdnfn/beogym.svg
-        :target: https://travis-ci.com/rdnfn/beogym
+.. image:: https://img.shields.io/travis/rdnfn/beobench.svg
+        :target: https://travis-ci.com/rdnfn/beobench
 
-.. image:: https://readthedocs.org/projects/beogym/badge/?version=latest
-        :target: https://beogym.readthedocs.io/en/latest/?version=latest
+.. image:: https://readthedocs.org/projects/beobench/badge/?version=latest
+        :target: https://beobench.readthedocs.io/en/latest/?version=latest
         :alt: Documentation Status
 
 
@@ -20,7 +20,7 @@ Extension to OpenAI Gym interface for building energy optimisation allowing dive
 
 
 * Free software: MIT license
-* Documentation: https://beogym.readthedocs.io.
+* Documentation: https://beobench.readthedocs.io.
 
 
 Features

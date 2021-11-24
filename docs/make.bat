@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=beogym
+set SPHINXPROJ=beobench
 
 if "%1" == "" goto help
 

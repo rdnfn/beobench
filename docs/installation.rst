@@ -8,13 +8,13 @@ Installation
 Stable release
 --------------
 
-To install beogym, run this command in your terminal:
+To install beobench, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install beogym
+    $ pip install beobench
 
-This is the preferred method to install beogym, as it will always install the most recent stable release.
+This is the preferred method to install beobench, as it will always install the most recent stable release.
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
@@ -26,19 +26,19 @@ you through the process.
 From sources
 ------------
 
-The sources for beogym can be downloaded from the `Github repo`_.
+The sources for beobench can be downloaded from the `Github repo`_.
 
 You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/rdnfn/beogym
+    $ git clone git://github.com/rdnfn/beobench
 
 Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl -OJL https://github.com/rdnfn/beogym/tarball/master
+    $ curl -OJL https://github.com/rdnfn/beobench/tarball/master
 
 Once you have a copy of the source, you can install it with:
 
@@ -47,5 +47,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/rdnfn/beogym
-.. _tarball: https://github.com/rdnfn/beogym/tarball/master
+.. _Github repo: https://github.com/rdnfn/beobench
+.. _tarball: https://github.com/rdnfn/beobench/tarball/master

@@ -1,4 +1,4 @@
-"""Core functions of beogym."""
+"""Core functions of beobench."""
 import gym
 
 
@@ -8,10 +8,10 @@ class Agent:
 
 
 class Env(gym.Env):
-    """Beogym environment interface."""
+    """beobench environment interface."""
 
     def __init__(self) -> None:
-        """Beogym environment interface."""
+        """beobench environment interface."""
         super().__init__()
 
         # Variable to be set when implementing this interface

@@ -1,15 +1,13 @@
 #!/usr/bin/env python
 
-"""Tests for `beogym` package."""
+"""Tests for `beobench` package."""
 
 
 import unittest
 
-from beogym import beogym
 
-
-class TestBeogym(unittest.TestCase):
-    """Tests for `beogym` package."""
+class Testbeobench(unittest.TestCase):
+    """Tests for `beobench` package."""
 
     def setUp(self):
         """Set up test fixtures, if any."""

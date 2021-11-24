@@ -1,4 +1,4 @@
-Welcome to beogym's documentation!
+Welcome to beobench's documentation!
 ======================================
 
 .. toctree::

@@ -1,4 +1,4 @@
-* beogym version:
+* beobench version:
 * Python version:
 * Operating System:
 

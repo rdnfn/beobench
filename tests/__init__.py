@@ -1,1 +1,1 @@
-"""Unit test package for beogym."""
+"""Unit test package for beobench."""

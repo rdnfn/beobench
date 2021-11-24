@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use beogym in a project::
+To use beobench in a project::
 
-    import beogym
+    import beobench
