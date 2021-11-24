@@ -12,4 +12,4 @@ dependencies:
   - pip
   - pip:
     - -r requirements_dev.txt
-    - -e ./..
+    #- -e ./..
