@@ -43,3 +43,8 @@ def install_boptest(install_path: str = DEFAULT_INSTALL_PATH):
         ["git", "reset", "--hard", BOPTEST_COMMIT], cwd=install_path / BOPTEST_REPO_NAME
     ):
         pass
+
+    # clean up name
+    os.rename(
+        DEFAULT_INSTALL_PATH / BOPTEST_REPO_NAME, DEFAULT_INSTALL_PATH / "boptest"
+    )
