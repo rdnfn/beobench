@@ -16,7 +16,7 @@
 	},
 	"workspaceFolder": "/workspace",
 	// "workspaceMount": "source=remote-workspace,target=/workspace,type=volume",
-	// Note the mount must be adapted to clone repo location
+	// Note the mount must be adapted to cloned repo location
 	"workspaceMount": "source=/home/rdnfn-docker/main/repos/github/beobench/,target=/workspace,type=bind,consistency=cached",
 	"postCreateCommand":["pip3 install -e ."],
 	// Set *default* container specific settings.json values on container create.
