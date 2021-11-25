@@ -1,7 +1,11 @@
 """Various configuration constants"""
 
+import pathlib
+import os
+
 # Path locations
-DEFAULT_INSTALL_PATH = "./tmp/beobench_external_install/"
+# DEFAULT_INSTALL_PATH = "./tmp/beobench_external_install/"
+DEFAULT_INSTALL_PATH = pathlib.Path(os.getcwd() + "/tmp/beobench_external_install/")
 
 
 # REPO URLS

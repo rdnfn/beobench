@@ -1,6 +1,7 @@
 """Installer for the different problem defining gym libraries"""
 
 import os
+import subprocess
 
 from beobench.constants import (
     DEFAULT_INSTALL_PATH,
@@ -17,13 +18,28 @@ def install_boptest(install_path: str = DEFAULT_INSTALL_PATH):
         install_path (str, optional): Path of installation.
             Defaults to DEFAULT_INSTALL_PATH.
     """
+    print("Installing BOPTEST")
 
     # Create installation path directories
-    os.makedirs(os.path.dirname(install_path), exist_ok=True)
-    # Change to installation path
-    os.chdir(DEFAULT_INSTALL_PATH)
+    try:
+        os.makedirs(install_path)
+    except FileExistsError as e:
+        raise FileExistsError(
+            (
+                "It appears that the directory in the install path '%s' already exists."  # pylint: disable=consider-using-f-string
+                " Delete the install directory to redo the installation."
+            )
+            % install_path,
+        ) from e
+    except Exception as e:
+        raise e
+
     # Clone BOPTEST repo
-    os.system(("git clone " + BOPTEST_REPO_URL))
+    with subprocess.Popen(["git", "clone", BOPTEST_REPO_URL], cwd=install_path):
+        pass
+
     # Set repo to fixed commit
-    os.chdir(BOPTEST_REPO_NAME)
-    os.system("git reset --hard " + BOPTEST_COMMIT)
+    with subprocess.Popen(
+        ["git", "reset", "--hard", BOPTEST_COMMIT], cwd=install_path / BOPTEST_REPO_NAME
+    ):
+        pass
