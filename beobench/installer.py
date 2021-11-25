@@ -1,7 +1,9 @@
 """Installer for the different problem defining gym libraries"""
 
 import os
+import sys
 import subprocess
+import warnings
 
 from beobench.constants import (
     DEFAULT_INSTALL_PATH,
@@ -11,7 +13,9 @@ from beobench.constants import (
 )
 
 
-def install_boptest(install_path: str = DEFAULT_INSTALL_PATH):
+def install_boptest(
+    install_path: str = DEFAULT_INSTALL_PATH, pip_install_dep: bool = True
+):
     """Install the BOPTEST libraries into the `install_path` directory.
 
     Args:
@@ -44,7 +48,24 @@ def install_boptest(install_path: str = DEFAULT_INSTALL_PATH):
     ):
         pass
 
-    # clean up name
-    os.rename(
-        DEFAULT_INSTALL_PATH / BOPTEST_REPO_NAME, DEFAULT_INSTALL_PATH / "boptest"
+    # Clean up name
+    print("Renaming repo to 'boptest'...")
+    new_boptest_path = DEFAULT_INSTALL_PATH / "boptest"
+    os.rename(DEFAULT_INSTALL_PATH / BOPTEST_REPO_NAME, new_boptest_path)
+
+    # Install pip dependencies
+    if pip_install_dep:
+        print("Installing pip dependencies...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "pandas"])
+
+    warnings.warn(
+        (
+            "In order to use the examples, BOPTEST requires"
+            " you to add its repo directory"
+            " to the PYTHONPATH variable. This can be done by using the command"
+            f" `export PYTHONPATH=$PYTHONPATH:{new_boptest_path}` before executing"
+            " their script."
+        ),
     )
+
+    print(f"BOPTEST has been successfully installed at '{new_boptest_path}'.")
