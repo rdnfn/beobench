@@ -15,9 +15,10 @@
 		}
 	},
 	"workspaceFolder": "/workspace",
+	// "workspaceMount": "source=remote-workspace,target=/workspace,type=volume",
 	// Note the mount must be adapted to clone repo location
 	"workspaceMount": "source=/home/rdnfn-docker/main/repos/github/beobench/,target=/workspace,type=bind,consistency=cached",
-	"postCreateCommand":["pip install -e ."],
+	"postCreateCommand":["pip3 install -e ."],
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
 		"python.defaultInterpreterPath": "/usr/local/bin/python",
@@ -47,7 +48,7 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "pip3 install --user -r requirements.txt",
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "vscode",
+	// "remoteUser": "vscode",
 	"features": {
 		"git": "latest"
 	}
