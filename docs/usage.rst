@@ -62,18 +62,3 @@ It may be desireable to run your dev container on a remote machine. In order to 
 
 4. Create a docker context on your local machine that connects to docker on your remote machine (`See the instructions here <https://stackoverflow.com/a/63814363>`_).
 5. Use the ``Remote-containers: open folder in container`` command and select the ``beobench`` repo in the pop-up window (NOT the ``beobench`` folder inside the repo).
-
-
-Additional installation parts
------------------------------
-
-BOPTEST
-^^^^^^^
-
-After installing BOPTEST using the installer, you need to set it to the PYTHONPATH using the command::
-
-     export PYTHONPATH=$PYTHONPATH:/workspace/notebooks/tmp/beobench_external_install/boptest
-
-Then install the requirements for BOPTEST (taken from its Dockerfile)::
-
-     pip install --user flask-restful==0.3.9 pandas==0.24.2 flask_cors==3.0.10
