@@ -1,5 +1,8 @@
 """Installer for the different problem defining gym libraries"""
 
+# For python 3.7
+from __future__ import annotations
+
 import os
 import pathlib
 import sys
