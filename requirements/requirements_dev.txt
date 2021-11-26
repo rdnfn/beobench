@@ -13,6 +13,7 @@ twine
 black
 pre-commit
 pylint
+click       # command line interface
 
 # Jupyter notebooks
 jupyterlab
