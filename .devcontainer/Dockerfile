@@ -14,4 +14,7 @@ RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requ
     -r /tmp/pip-tmp/boptest_requirements.txt \
     && rm -rf /tmp/pip-tmp
 
-ENV PYTHONPATH "${PYTHONPATH}:/workspace/notebooks/tmp/beobench_external_install/boptest"
+# This enables that BOPTEST example files work. Note that this adds
+# potentially some not so easily identifiable paths to the Python namespace.
+# E.g. `examples`
+ENV PYTHONPATH "${PYTHONPATH}:/opt/beobench/boptest:/opt/beobench/boptest_gym:/opt/beobench/"
