@@ -23,3 +23,8 @@ RUN python beobench/installer.py \
 # potentially some not so easily identifiable paths to the Python namespace.
 # E.g. `examples`
 ENV PYTHONPATH "${PYTHONPATH}:/opt/beobench/boptest:/opt/beobench/boptest_gym:/opt/beobench"
+
+# Install background dependencies for OpenCV (for BOPTEST gym)
+# https://stackoverflow.com/questions/55313610/importerror-libgl-so-1-cannot-open-shared-object-file-no-such-file-or-directo
+RUN apt-get update
+RUN apt-get install ffmpeg libsm6 libxext6  -y
