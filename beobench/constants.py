@@ -26,4 +26,5 @@ BOPTEST_GYM_PIP_DEP = [
     "pandas",
     "scipy",
     "stable-baselines",
+    "tensorflow==1.15",
 ]

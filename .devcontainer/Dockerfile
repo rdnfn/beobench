@@ -28,6 +28,6 @@ ENV PYTHONPATH = "${MAIN_PYTHONPATH}"
 ENV PYTHONPATH "${PYTHONPATH}:/opt/beobench/boptest:/opt/beobench/boptest_gym:/opt/beobench"
 
 # Install background dependencies for OpenCV (for BOPTEST gym)
-# https://stackoverflow.com/questions/55313610/importerror-libgl-so-1-cannot-open-shared-object-file-no-such-file-or-directo
+# See https://stackoverflow.com/a/63377623
 RUN apt-get update
 RUN apt-get install ffmpeg libsm6 libxext6  -y
