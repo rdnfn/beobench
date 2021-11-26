@@ -1,0 +1,7 @@
+matplotlib
+gym
+requests
+numpy
+pandas
+scipy
+stable-baselines

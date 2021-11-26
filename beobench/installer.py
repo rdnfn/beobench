@@ -10,6 +10,11 @@ from beobench.constants import (
     BOPTEST_REPO_URL,
     BOPTEST_REPO_NAME,
     BOPTEST_COMMIT,
+    BOPTEST_PIP_DEP,
+    BOPTEST_GYM_REPO_URL,
+    BOPTEST_GYM_REPO_NAME,
+    BOPTEST_GYM_COMMIT,
+    BOPTEST_GYM_PIP_DEP,
 )
 
 
@@ -22,50 +27,89 @@ def install_boptest(
         install_path (str, optional): Path of installation.
             Defaults to DEFAULT_INSTALL_PATH.
     """
-    print("Installing BOPTEST")
 
-    # Create installation path directories
-    try:
-        os.makedirs(install_path)
-    except FileExistsError as e:
-        raise FileExistsError(
-            (
-                "It appears that the directory in the install path '%s' already exists."  # pylint: disable=consider-using-f-string
-                " Delete the install directory to redo the installation."
-            )
-            % install_path,
-        ) from e
-    except Exception as e:
-        raise e
+    print("Installing BOPTEST...")
 
-    # Clone BOPTEST repo
-    with subprocess.Popen(["git", "clone", BOPTEST_REPO_URL], cwd=install_path):
-        pass
+    _clone_repo(
+        BOPTEST_REPO_URL,
+        BOPTEST_REPO_NAME,
+        install_path,
+        BOPTEST_COMMIT,
+        alt_name="boptest",
+    )
 
-    # Set repo to fixed commit
-    with subprocess.Popen(
-        ["git", "reset", "--hard", BOPTEST_COMMIT], cwd=install_path / BOPTEST_REPO_NAME
-    ):
-        pass
-
-    # Clean up name
-    print("Renaming repo to 'boptest'...")
-    new_boptest_path = DEFAULT_INSTALL_PATH / "boptest"
-    os.rename(DEFAULT_INSTALL_PATH / BOPTEST_REPO_NAME, new_boptest_path)
-
-    # Install pip dependencies
     if pip_install_dep:
-        print("Installing pip dependencies...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "pandas"])
+        _install_pip_dependencies(BOPTEST_PIP_DEP)
 
+    _clone_repo(
+        BOPTEST_GYM_REPO_URL,
+        BOPTEST_GYM_REPO_NAME,
+        install_path,
+        BOPTEST_GYM_COMMIT,
+        alt_name="boptest_gym",
+    )
+
+    if pip_install_dep:
+        _install_pip_dependencies(BOPTEST_GYM_PIP_DEP)
+
+    # Warning about BOPTEST PYTHONPATH requirement
+    boptest_path = install_path / "boptest"
     warnings.warn(
         (
             "In order to use the examples, BOPTEST requires"
             " you to add its repo directory"
             " to the PYTHONPATH variable. This can be done by using the command"
-            f" `export PYTHONPATH=$PYTHONPATH:{new_boptest_path}` before executing"
+            f" `export PYTHONPATH=$PYTHONPATH:{boptest_path}` before executing"
             " their script."
         ),
     )
 
-    print(f"BOPTEST has been successfully installed at '{new_boptest_path}'.")
+    print(f"BOPTEST has been successfully installed at '{boptest_path}'.")
+
+
+def _clone_repo(
+    repo_https_url: str,
+    repo_name: str,
+    local_path: str = None,
+    commit: str = None,
+    alt_name: str = None,
+) -> None:
+    """Clone git repo from https URL, and set it to specific commit.
+
+    Args:
+        repo_https_url (str): https URL of repo to clone.
+        repo_name (str): default name of repo folder.
+        local_path (str, optional): path to clone repo to.
+            Defaults to None (current working dir).
+        commit (str, optional): commit hash of commit the
+            repo should be reset to. Defaults to None (latest commit).
+        alt_name (str, optional): name that the local repo
+             folder is renamed to. Defaults to None (stay the same).
+    """
+
+    os.makedirs(local_path, exist_ok=True)
+
+    # Clone repo
+    with subprocess.Popen(["git", "clone", repo_https_url], cwd=local_path):
+        pass
+
+    # Set repo to fixed commit
+    with subprocess.Popen(
+        ["git", "reset", "--hard", commit], cwd=local_path / repo_name
+    ):
+        pass
+
+    # Rename repo
+    if alt_name is not None:
+        print(f"Renaming repo from '{repo_name}' to '{alt_name}'...")
+        os.rename(local_path / repo_name, local_path / alt_name)
+
+
+def _install_pip_dependencies(pip_requirements: list[str]):
+    """Install pip dependencies from requirements list.
+
+    Args:
+        pip_requirements (list[str]): list of pip requirements.
+    """
+    print("Installing pip dependencies...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", *pip_requirements])
