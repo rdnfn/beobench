@@ -1,7 +1,9 @@
 """Installer for the different problem defining gym libraries"""
 
 import os
+import pathlib
 import sys
+import click
 import subprocess
 import warnings
 
@@ -18,6 +20,30 @@ from beobench.constants import (
 )
 
 
+@click.command()
+@click.option(
+    "--install_path", default=DEFAULT_INSTALL_PATH, help="installation path to use"
+)
+@click.option(
+    "--pip_install_dep",
+    default=True,
+    help="whether to install python dependencies via pip. Defaults to True.",
+)
+def install(
+    install_path: str = DEFAULT_INSTALL_PATH, pip_install_dep: bool = True
+) -> None:
+    """Install all beobench dependencies.
+
+    Args:
+        install_path (str, optional): Path of installation.
+            Defaults to DEFAULT_INSTALL_PATH.
+        pip_install_dep (bool, optional): whether to install python dependencies
+            via pip. Defaults to True.
+    """
+
+    install_boptest(install_path=install_path, pip_install_dep=pip_install_dep)
+
+
 def install_boptest(
     install_path: str = DEFAULT_INSTALL_PATH, pip_install_dep: bool = True
 ):
@@ -26,7 +52,10 @@ def install_boptest(
     Args:
         install_path (str, optional): Path of installation.
             Defaults to DEFAULT_INSTALL_PATH.
+        pip_install_dep (bool, optional): whether to install python dependencies
+            via pip. Defaults to True.
     """
+    install_path = pathlib.Path(install_path)
 
     print("Installing BOPTEST...")
 
@@ -87,22 +116,31 @@ def _clone_repo(
              folder is renamed to. Defaults to None (stay the same).
     """
 
+    local_path = pathlib.Path(local_path)
     os.makedirs(local_path, exist_ok=True)
 
-    # Clone repo
-    with subprocess.Popen(["git", "clone", repo_https_url], cwd=local_path):
-        pass
+    try:
+        # Clone repo
+        with subprocess.Popen(["git", "clone", repo_https_url], cwd=local_path):
+            pass
 
-    # Set repo to fixed commit
-    with subprocess.Popen(
-        ["git", "reset", "--hard", commit], cwd=local_path / repo_name
-    ):
-        pass
+        # Set repo to fixed commit
+        with subprocess.Popen(
+            ["git", "reset", "--hard", commit], cwd=local_path / repo_name
+        ):
+            pass
 
-    # Rename repo
-    if alt_name is not None:
-        print(f"Renaming repo from '{repo_name}' to '{alt_name}'...")
-        os.rename(local_path / repo_name, local_path / alt_name)
+        # Rename repo
+        if alt_name is not None:
+            print(f"Renaming repo from '{repo_name}' to '{alt_name}'...")
+            os.rename(local_path / repo_name, local_path / alt_name)
+    except OSError:
+        print(
+            f"{repo_name} appears to be already installed in '{local_path}'.",
+            "Skipping installation.",
+        )
+    except Exception as e:
+        raise e
 
 
 def _install_pip_dependencies(pip_requirements: list[str]):
@@ -113,3 +151,7 @@ def _install_pip_dependencies(pip_requirements: list[str]):
     """
     print("Installing pip dependencies...")
     subprocess.check_call([sys.executable, "-m", "pip", "install", *pip_requirements])
+
+
+if __name__ == "__main__":
+    install()
