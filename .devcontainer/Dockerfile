@@ -15,9 +15,12 @@ RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requ
     && rm -rf /tmp/pip-tmp
 
 # Install beobench problem set libraries
+ENV MAIN_PYTHONPATH = "${PYTHONPATH}"
+ENV PYTHONPATH "${PYTHONPATH}:/tmp"
 COPY beobench/installer.py beobench/constants.py /tmp/beobench/
-RUN python beobench/installer.py \
+RUN python /tmp/beobench/installer.py \
     && rm -rf /tmp/beobench
+ENV PYTHONPATH = "${MAIN_PYTHONPATH}"
 
 # This enables that BOPTEST example files work. Note that this adds
 # potentially some not so easily identifiable paths to the Python namespace.
