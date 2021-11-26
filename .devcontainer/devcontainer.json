@@ -47,7 +47,8 @@
 		"ms-python.vscode-pylance",
 		"ms-azuretools.vscode-docker",
 		"trond-snekvik.simple-rst",
-		"lextudio.restructuredtext"
+		"lextudio.restructuredtext",
+		"njpwerner.autodocstring"
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
