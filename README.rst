@@ -16,7 +16,6 @@ beobench
 
 
 
-Extension to OpenAI Gym interface for building energy optimisation allowing diverse controllers, including RL and MPC.
 
 
 * Free software: MIT license
