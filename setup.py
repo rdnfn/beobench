@@ -16,7 +16,6 @@ test_requirements = []
 
 setup(
     author="rdnfn",
-    author_email="-",
     python_requires=">=3.6",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
