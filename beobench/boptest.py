@@ -1,13 +1,15 @@
-"""Module for managing BOPTEST servers"""
+"""Module for managing BOPTEST testcase servers"""
 
 import pathlib
 import subprocess
+import time
 
 from beobench.constants import DEFAULT_INSTALL_PATH
 
 
 def build_testcase(
-    testcase: str = "testcase1", install_path: pathlib.Path = DEFAULT_INSTALL_PATH
+    testcase: str = "testcase1",
+    install_path: pathlib.Path = DEFAULT_INSTALL_PATH,
 ) -> None:
     """Build a docker image for a BOPTEST tescase.
 
@@ -29,6 +31,7 @@ def run_testcase(
     testcase: str = "testcase1",
     local_port: int = 5000,
     install_path: pathlib.Path = DEFAULT_INSTALL_PATH,
+    add_wait_time: bool = True,
 ) -> str:
     """Run BOPTEST testcase docker image.
 
@@ -38,13 +41,17 @@ def run_testcase(
             Defaults to 5000.
         install_path (pathlib.Path, optional): path of beobench installation.
             Defaults to DEFAULT_INSTALL_PATH.
+        add_wait_time (bool, optional): wether to add some wait time for
+            API in container to get ready. This is useful when after this
+            command the API is immidiately accessed. Defaults to True.
 
     Returns:
         str: url of testcase API
     """
 
     img_name = f"boptest_{testcase}"
-    url = f"127.0.0.1:{local_port}"
+    ip_plus_port = f"127.0.0.1:{local_port}"
+    url = f"http://{ip_plus_port}"
 
     # In order to be able to change the port
     # this command is executed directly
@@ -57,7 +64,7 @@ def run_testcase(
         "--rm",
         # "-it",
         "-p",
-        f"{url}:5000",
+        f"{ip_plus_port}:5000",
         "--detach=true",
         img_name,
         "/bin/bash",
@@ -69,6 +76,10 @@ def run_testcase(
         args,
         cwd=_get_boptest_path(install_path),
     )
+
+    if add_wait_time:
+        # Allow for the docker image to launch
+        time.sleep(5)
 
     return url
 
