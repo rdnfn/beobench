@@ -22,12 +22,17 @@ RUN python /tmp/beobench/installer.py \
     && rm -rf /tmp/beobench
 ENV PYTHONPATH = "${MAIN_PYTHONPATH}"
 
-# This enables that BOPTEST example files work. Note that this adds
+# [Optional] This enables that BOPTEST example files work. Note that this adds
 # potentially some not so easily identifiable paths to the Python namespace.
 # E.g. `examples`
-ENV PYTHONPATH "${PYTHONPATH}:/opt/beobench/boptest:/opt/beobench/boptest_gym:/opt/beobench"
+# ENV PYTHONPATH "${PYTHONPATH}:/opt/beobench/boptest:/opt/beobench/boptest_gym:/opt/beobench"
+
 
 # Install background dependencies for OpenCV (for BOPTEST gym)
 # See https://stackoverflow.com/a/63377623
-RUN apt-get update
-RUN apt-get install ffmpeg libsm6 libxext6  -y
+# This should no longer be necessary - as BOPTEST gym has reduced dependencies now
+#RUN apt-get update
+#RUN apt-get install ffmpeg libsm6 libxext6  -y
+
+# Install boptest gym
+RUN pip3 --disable-pip-version-check --no-cache-dir git+https://github.com/rdnfn/project1-boptest-gym.git@rdnfn/feature-packaging

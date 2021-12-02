@@ -48,7 +48,9 @@ def install(
 
 
 def install_boptest(
-    install_path: str = DEFAULT_INSTALL_PATH, pip_install_dep: bool = True
+    install_path: str = DEFAULT_INSTALL_PATH,
+    pip_install_dep: bool = True,
+    include_gym_repo: bool = False,
 ):
     """Install the BOPTEST libraries into the `install_path` directory.
 
@@ -57,6 +59,9 @@ def install_boptest(
             Defaults to DEFAULT_INSTALL_PATH.
         pip_install_dep (bool, optional): whether to install python dependencies
             via pip. Defaults to True.
+        include_gym_repo (bool, optional): whether to also clone the BOPTEST gym
+            repo. Defaults to False as the gym can be installed as pip package.
+            See the dockerfile for details of installing boptest_gym via pip.
     """
     install_path = pathlib.Path(install_path)
 
@@ -73,16 +78,17 @@ def install_boptest(
     if pip_install_dep:
         _install_pip_dependencies(BOPTEST_PIP_DEP)
 
-    _clone_repo(
-        BOPTEST_GYM_REPO_URL,
-        BOPTEST_GYM_REPO_NAME,
-        install_path,
-        BOPTEST_GYM_COMMIT,
-        alt_name="boptest_gym",
-    )
+    if include_gym_repo:
+        _clone_repo(
+            BOPTEST_GYM_REPO_URL,
+            BOPTEST_GYM_REPO_NAME,
+            install_path,
+            BOPTEST_GYM_COMMIT,
+            alt_name="boptest_gym",
+        )
 
-    if pip_install_dep:
-        _install_pip_dependencies(BOPTEST_GYM_PIP_DEP)
+        if pip_install_dep:
+            _install_pip_dependencies(BOPTEST_GYM_PIP_DEP)
 
     # Warning about BOPTEST PYTHONPATH requirement
     boptest_path = install_path / "boptest"
