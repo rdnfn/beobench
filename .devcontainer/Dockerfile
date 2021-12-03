@@ -35,4 +35,5 @@ ENV PYTHONPATH = "${MAIN_PYTHONPATH}"
 #RUN apt-get install ffmpeg libsm6 libxext6  -y
 
 # Install boptest gym
-RUN pip3 --disable-pip-version-check --no-cache-dir install git+https://github.com/rdnfn/project1-boptest-gym.git@rdnfn/feature-packaging
+# No long necessary: installer installs this now as well
+#RUN pip3 --disable-pip-version-check --no-cache-dir install git+https://github.com/rdnfn/project1-boptest-gym.git@rdnfn/feature-packaging

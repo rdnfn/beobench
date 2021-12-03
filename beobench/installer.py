@@ -16,10 +16,7 @@ from beobench.constants import (
     BOPTEST_REPO_NAME,
     BOPTEST_COMMIT,
     BOPTEST_PIP_DEP,
-    BOPTEST_GYM_REPO_URL,
-    BOPTEST_GYM_REPO_NAME,
-    BOPTEST_GYM_COMMIT,
-    BOPTEST_GYM_PIP_DEP,
+    BOPTEST_GYM_PIP_PATH,
 )
 
 
@@ -77,18 +74,7 @@ def install_boptest(
 
     if pip_install_dep:
         _install_pip_dependencies(BOPTEST_PIP_DEP)
-
-    if include_gym_repo:
-        _clone_repo(
-            BOPTEST_GYM_REPO_URL,
-            BOPTEST_GYM_REPO_NAME,
-            install_path,
-            BOPTEST_GYM_COMMIT,
-            alt_name="boptest_gym",
-        )
-
-        if pip_install_dep:
-            _install_pip_dependencies(BOPTEST_GYM_PIP_DEP)
+        _install_pip_dependencies([BOPTEST_GYM_PIP_PATH])
 
     # Warning about BOPTEST PYTHONPATH requirement
     boptest_path = install_path / "boptest"

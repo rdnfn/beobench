@@ -19,16 +19,6 @@ BOPTEST_PIP_DEP = [
     "flask_cors==3.0.10",
 ]
 
-BOPTEST_GYM_REPO_URL = "https://github.com/ibpsa/project1-boptest-gym.git"
-BOPTEST_GYM_REPO_NAME = "project1-boptest-gym"
-BOPTEST_GYM_COMMIT = "7906edff7c6b7cd521637c110bddd7f26236f3c6"
-BOPTEST_GYM_PIP_DEP = [
-    "matplotlib",
-    "gym",
-    "requests",
-    "numpy",
-    "pandas",
-    "scipy",
-    "stable-baselines",
-    "tensorflow==1.15",
-]
+BOPTEST_GYM_PIP_PATH = (
+    "git+https://github.com/rdnfn/project1-boptest-gym.git@rdnfn/feature-packaging"
+)
