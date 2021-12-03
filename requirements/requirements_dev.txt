@@ -18,9 +18,9 @@ click       # command line interface
 # Jupyter notebooks
 jupyterlab
 
-# RL tools
+# ML & RL tools
 gym
-
+torch
 
 # Convex solver tools (OPTIONAL)
 # cvxpy
