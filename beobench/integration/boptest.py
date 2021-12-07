@@ -179,4 +179,4 @@ def shutdown() -> None:
             container.stop(timeout=0)
             container_num += 1
 
-    print(f"Stopped {container_num} containers.")
+    print(f"Stopped {container_num} container(s).")
