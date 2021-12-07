@@ -110,3 +110,4 @@ ENV/
 
 # Ray RLLib
 tmp/
+wandb/
