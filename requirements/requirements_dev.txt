@@ -22,6 +22,7 @@ jupyterlab
 gym
 torch
 ray[rllib]
+wandb
 
 # Convex solver tools (OPTIONAL)
 # cvxpy
