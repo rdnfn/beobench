@@ -1,10 +1,11 @@
-"""Module for managing BOPTEST testcase servers"""
+"""Module for creating boptest testcases and managing their docker containers"""
 
 import pathlib
 import subprocess
 import time
 import uuid
 import docker
+import boptest_gym
 
 from beobench.constants import DEFAULT_INSTALL_PATH
 
@@ -13,7 +14,7 @@ def build_testcase(
     testcase: str = "testcase1",
     install_path: pathlib.Path = DEFAULT_INSTALL_PATH,
 ) -> None:
-    """Build a docker image for a BOPTEST tescase.
+    """Build a docker image for a BOPTEST testcase.
 
     A built image is required before running a testcase.
 
@@ -60,7 +61,7 @@ def run_testcase(
     # In order to be able to change the port
     # this command is executed directly
     # without the using the make file.
-    print(f"Creating boptest testcase in container named '{container_name}'...")
+    print(f"Creating BOPTEST testcase in container named '{container_name}'...")
     args = [
         "docker",
         "run",
@@ -95,7 +96,7 @@ def run_testcase(
     host_port = container.ports["5000/tcp"][0]["HostPort"]
     url = f"http://{host_ip}:{host_port}"
 
-    print(f"Container created. The boptest API is exposed at '{url}'.")
+    print(f"Container created. The BOPTEST API is exposed at '{url}'.")
 
     return container_name, url
 
@@ -112,12 +113,54 @@ def stop_container(container_name: str) -> None:
 
 
 def _get_boptest_path(install_path: pathlib.Path) -> pathlib.Path:
-    """Get boptest path from beobench install path.
+    """Get BOPTEST path from beobench install path.
 
     Args:
         install_path (str): path of beobench installation.
 
     Returns:
-        pathlib.Path: path to boptest installation.
+        pathlib.Path: path to BOPTEST installation.
     """
     return install_path / "boptest"
+
+
+def create_env(env_config: dict = None) -> boptest_gym.BoptestGymEnv:
+    """Create BOPTEST gym environment.
+
+    Args:
+        env_config (dict, optional): configuration kwargs of BOPTEST gym.
+            Defaults to None.
+
+    Returns:
+        boptest_gym.BoptestGymEnv: a gym environment.
+    """
+
+    if not env_config:
+        env_config = {
+            "boptest_testcase": "bestest_hydronic_heat_pump",
+            "gym_kwargs": {
+                "actions": ["oveHeaPumY_u"],
+                "observations": {"reaTZon_y": (280.0, 310.0)},
+                "random_start_time": True,
+                "max_episode_length": 86400,
+                "warmup_period": 10,
+                "step_period": 900,
+            },
+            "normalize": True,
+        }
+
+    container_name, url = run_testcase(env_config["boptest_testcase"])
+    print("cname", container_name)
+    env = boptest_gym.BoptestGymEnv(url=url, **env_config["gym_kwargs"])
+
+    # ensure that the container is stopped once env closed
+    def custom_stop_container():
+        stop_container(container_name)
+
+    env.close = custom_stop_container
+
+    if "normalize" in env_config and env_config["normalize"] == True:
+        env = boptest_gym.NormalizedActionWrapper(env)
+        env = boptest_gym.NormalizedObservationWrapper(env)
+
+    return env
