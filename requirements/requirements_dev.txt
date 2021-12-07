@@ -21,6 +21,7 @@ jupyterlab
 # ML & RL tools
 gym
 torch
+ray[rllib]
 
 # Convex solver tools (OPTIONAL)
 # cvxpy
