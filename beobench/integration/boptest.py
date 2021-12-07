@@ -55,7 +55,7 @@ def run_testcase(
 
     img_name = f"boptest_{testcase}"
     unique_id = uuid.uuid4().hex[:6]
-    container_name = f"{img_name}_{unique_id}"
+    container_name = f"auto_{img_name}_{unique_id}"
     ip_plus_port = f"127.0.0.1:{local_port}"
 
     # In order to be able to change the port
@@ -164,3 +164,19 @@ def create_env(env_config: dict = None) -> boptest_gym.BoptestGymEnv:
         env = boptest_gym.NormalizedObservationWrapper(env)
 
     return env
+
+
+def shutdown() -> None:
+    """Shutdown all BOPTEST containers."""
+
+    print("Stopping any remaining BOPTEST docker containers...")
+
+    client = docker.from_env()
+    container_num = 0
+    for container in client.containers.list():
+        if "auto_boptest" in container.name:
+            print(f"Stopping container {container.name}")
+            container.stop(timeout=0)
+            container_num += 1
+
+    print(f"Stopped {container_num} containers.")
