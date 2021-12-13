@@ -89,7 +89,7 @@ def run_testcase(
 
     # Getting the API port on the host machine.
     # This is necessary because, if local_port is set to 0,
-    # a random port is allocated.
+    # a random free port is allocated.
     client = docker.from_env()
     container = client.containers.get(container_name)
     host_ip = container.ports["5000/tcp"][0]["HostIp"]
