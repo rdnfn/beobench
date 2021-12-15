@@ -1,8 +1,0 @@
-matplotlib
-gym
-requests
-numpy
-pandas
-scipy
-stable-baselines
-tensorflow==1.15
