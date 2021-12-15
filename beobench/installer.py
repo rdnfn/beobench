@@ -47,7 +47,6 @@ def install(
 def install_boptest(
     install_path: str = DEFAULT_INSTALL_PATH,
     pip_install_dep: bool = True,
-    include_gym_repo: bool = False,
 ):
     """Install the BOPTEST libraries into the `install_path` directory.
 
@@ -56,9 +55,6 @@ def install_boptest(
             Defaults to DEFAULT_INSTALL_PATH.
         pip_install_dep (bool, optional): whether to install python dependencies
             via pip. Defaults to True.
-        include_gym_repo (bool, optional): whether to also clone the BOPTEST gym
-            repo. Defaults to False as the gym can be installed as pip package.
-            See the dockerfile for details of installing boptest_gym via pip.
     """
     install_path = pathlib.Path(install_path)
 
