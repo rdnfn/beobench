@@ -1,9 +1,49 @@
-"""Module that schedules experiments."""
+"""Module to schedule experiments."""
 
 import ray.tune
+import ray.tune.integration.wandb
 
 import beobench.experiment_definitions
 import beobench.utils
+import beobench.integrations.boptest
+from beobench.experiment_definitions import (
+    PROBLEM_001_BOPTEST_HEATPUMP,
+    METHOD_001_PPO,
+    RLLIB_SETUP,
+)
+
+
+def run_standard_experiments(
+    use_wandb: bool = True,
+    wandb_project: str = "initial_experiments",
+    wandb_entity: str = "beobench",
+):
+    if use_wandb:
+        wandb_callback = ray.tune.integration.wandb.WandbLoggerCallback(
+            project=wandb_project, log_config=True, entity=wandb_entity
+        )
+        callbacks = [wandb_callback]
+    else:
+        callbacks = None
+
+    run_experiment(
+        problem_def=PROBLEM_001_BOPTEST_HEATPUMP,
+        method_def=METHOD_001_PPO,
+        rllib_setup=RLLIB_SETUP,
+        rllib_callbacks=callbacks,
+    )
+
+
+def restart() -> None:
+    """Clean up remaining beobench processes before running
+    new experiments.
+
+    This stops all docker containers still running. This
+    function is not called by other scheduler functions
+    to enable the parrallel running of experiments.
+    """
+
+    beobench.integrations.boptest.shutdown()
 
 
 def run_experiment(
