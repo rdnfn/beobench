@@ -70,6 +70,29 @@ RLLIB_SETUP = {
 def get_experiment_config(
     problem_def: dict, method_def: dict, rllib_setup: dict
 ) -> dict:
+    """Combine partial ray tune experiment definitions into single definition.
+
+    This recursively merges the dictionaries.
+
+    Additional info: note that RLlib is a submodule of the ray package, i.e. it is
+    imported as `ray.rllib`. For experiment definitions it uses the `ray.tune`
+    submodule. Therefore ray tune experiment definition means the same as ray rllib
+    experiment defintions. To avoid confusion all variable/argument names use rllib
+    instead of ray tune but strictly speaking these are ray tune experiment
+    definitions.
+
+    Args:
+        problem_def (dict): definition of problem. This is an incomplete
+            ray tune experiment defintion that only defines the problem side.
+        method_def (dict): definition of method. This is an incomplete
+            ray tune experiment defintion that only defines the method side.
+        rllib_setup (dict): rllib setup. This is an incomplete
+            ray tune experiment defintion that only defines the ray tune/rllib setup
+            (e.g. number of workers, etc.).
+
+    Returns:
+        dict: combined dictionary.
+    """
 
     exp_config = {}
 
