@@ -2,6 +2,7 @@
 
 import ray.tune
 import ray.tune.integration.wandb
+import click
 
 import beobench.experiment_definitions
 import beobench.utils
@@ -11,6 +12,44 @@ from beobench.experiment_definitions import (
     METHOD_001_PPO,
     RLLIB_SETUP,
 )
+
+
+@click.command()
+@click.option(
+    "--name",
+    default="standard",
+    help="Name of experiment collection to run.",
+)
+@click.option(
+    "--use-wandb",
+    is_flag=True,
+    help=(
+        "Use weights and biases (wandb) to log experiments. "
+        "Requires being logged into wandb."
+    ),
+)
+@click.option(
+    "--wandb_project",
+    default="initial_experiments",
+    help="Weights and biases project name to log runs to.",
+)
+@click.option(
+    "--wandb_entity",
+    default="beobench",
+    help="Weights and biases entity name to log runs under.",
+)
+def run_experiments_from_cli(
+    name: str = "standard",
+    use_wandb: bool = True,
+    wandb_project: str = "initial_experiments",
+    wandb_entity: str = "beobench",
+) -> None:
+    if name == "standard":
+        run_standard_experiments(
+            use_wandb,
+            wandb_project,
+            wandb_entity,
+        )
 
 
 def run_standard_experiments(
@@ -101,3 +140,7 @@ def run_experiment(
     )
 
     return analysis
+
+
+if __name__ == "__main__":
+    run_experiments_from_cli()
