@@ -10,7 +10,7 @@ with open("README.rst", encoding="UTF-8") as readme_file:
 with open("HISTORY.rst", encoding="UTF-8") as history_file:
     history = history_file.read()
 
-requirements = []
+requirements = ["wandb"]
 
 test_requirements = []
 
