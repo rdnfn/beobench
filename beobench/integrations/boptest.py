@@ -6,15 +6,7 @@ import time
 import uuid
 import docker
 import warnings
-
-try:
-    import boptest_gym
-except ModuleNotFoundError:
-    warnings.warn(
-        "boptest_gym does not appear to be installed."
-        " You can use `python -m beobench.installer` to"
-        " install boptest_gym and BOPTEST."
-    )
+import boptest_gym
 
 from beobench.constants import DEFAULT_INSTALL_PATH
 
