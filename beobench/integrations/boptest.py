@@ -71,7 +71,7 @@ def run_testcase(
         # "-it",
         "-p",
         f"{ip_plus_port}:5000",
-        "--detach=true",
+        "-network=beobench-net" "--detach=true",
         img_name,
         "/bin/bash",
         "-c",
@@ -94,7 +94,8 @@ def run_testcase(
     container = client.containers.get(container_name)
     host_ip = container.ports["5000/tcp"][0]["HostIp"]
     host_port = container.ports["5000/tcp"][0]["HostPort"]
-    url = f"http://{host_ip}:{host_port}"
+    # url = f"http://{host_ip}:{host_port}"
+    url = f"http://{container_name}:5000"
 
     print(f"Container created. The BOPTEST API is exposed at '{url}'.")
 
