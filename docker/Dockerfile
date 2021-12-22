@@ -19,3 +19,7 @@ COPY beobench/installer.py beobench/constants.py /tmp/beobench/
 RUN python /tmp/beobench/installer.py \
     && rm -rf /tmp/beobench
 ENV PYTHONPATH = "${MAIN_PYTHONPATH}"
+
+RUN wget -O tmp/docker-ce-cli.deb https://download.docker.com/linux/debian/dists/bullseye/pool/stable/amd64/docker-ce-cli_20.10.11~3-0~debian-bullseye_amd64.deb \
+    && dpkg -i tmp/docker-ce-cli.deb \
+    && rm tmp/docker-ce-cli.deb
