@@ -5,7 +5,16 @@ import subprocess
 import time
 import uuid
 import docker
-import boptest_gym
+import warnings
+
+try:
+    import boptest_gym
+except ModuleNotFoundError:
+    warnings.warn(
+        "boptest_gym does not appear to be installed."
+        " You can use `python -m beobench.installer` to"
+        " install boptest_gym and BOPTEST."
+    )
 
 from beobench.constants import DEFAULT_INSTALL_PATH
 
@@ -32,7 +41,6 @@ def build_testcase(
 
 def run_testcase(
     testcase: str = "testcase1",
-    local_port: int = 0,
     install_path: pathlib.Path = DEFAULT_INSTALL_PATH,
     add_wait_time: bool = True,
 ) -> str:
@@ -40,8 +48,6 @@ def run_testcase(
 
     Args:
         testcase (str, optional): testcase to run. Defaults to "testcase1".
-        local_port (int, optional): port on local machine for experiment API.
-            Defaults to 5000.
         install_path (pathlib.Path, optional): path of beobench installation.
             Defaults to DEFAULT_INSTALL_PATH.
         add_wait_time (bool, optional): wether to add some wait time for
@@ -161,7 +167,7 @@ def create_env(env_config: dict = None) -> boptest_gym.BoptestGymEnv:
 
     env.close = custom_stop_container
 
-    if "normalize" in env_config and env_config["normalize"] == True:
+    if "normalize" in env_config and env_config["normalize"] is True:
         env = boptest_gym.NormalizedActionWrapper(env)
         env = boptest_gym.NormalizedObservationWrapper(env)
 
