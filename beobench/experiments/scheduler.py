@@ -4,10 +4,10 @@ import ray.tune
 import ray.tune.integration.wandb
 import click
 
-import beobench.experiment_definitions
+import beobench.experiments.definitions
 import beobench.utils
 import beobench.integrations.boptest
-from beobench.experiment_definitions import (
+from beobench.experiments.definitions import (
     PROBLEM_001_BOPTEST_HEATPUMP,
     METHOD_001_PPO,
     RLLIB_SETUP,
@@ -116,7 +116,7 @@ def run_experiment(
 
     # combine the three incomplete ray tune experiment
     # definitions into a single complete one.
-    exp_config = beobench.experiment_definitions.get_experiment_config(
+    exp_config = beobench.experiments.definitions.get_experiment_config(
         problem_def, method_def, rllib_setup
     )
 
@@ -140,6 +140,12 @@ def run_experiment(
     )
 
     return analysis
+
+
+def run_experiment_in_container():
+    # TODO: create function that creates exp container
+    # and runs experiment in it.
+    pass
 
 
 if __name__ == "__main__":
