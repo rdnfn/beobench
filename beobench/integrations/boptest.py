@@ -56,7 +56,7 @@ def run_testcase(
     img_name = f"boptest_{testcase}"
     unique_id = uuid.uuid4().hex[:6]
     container_name = f"auto_{img_name}_{unique_id}"
-    ip_plus_port = f"127.0.0.1:{local_port}"
+    # ip_plus_port = f"127.0.0.1:{local_port}"
 
     # In order to be able to change the port
     # this command is executed directly
@@ -66,12 +66,13 @@ def run_testcase(
         "docker",
         "run",
         "--name",
-        f"{container_name}",
+        container_name,
         "--rm",
         # "-it",
-        "-p",
-        f"{ip_plus_port}:5000",
-        "-network=beobench-net" "--detach=true",
+        # "-p",
+        # f"{ip_plus_port}:5000",
+        "--network=beobench-net",
+        "--detach=true",
         img_name,
         "/bin/bash",
         "-c",
