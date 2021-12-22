@@ -5,7 +5,6 @@ import subprocess
 import time
 import uuid
 import docker
-import warnings
 import boptest_gym
 
 from beobench.constants import DEFAULT_INSTALL_PATH
