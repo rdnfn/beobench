@@ -17,7 +17,10 @@ requirements = [
     "click",
     "torch",
     "gym",
-    "git+https://github.com/rdnfn/project1-boptest-gym.git@rdnfn/feature-packaging",
+    (
+        "boptest_gym@git+"
+        "https://github.com/rdnfn/project1-boptest-gym.git@rdnfn/feature-packaging"
+    ),
 ]
 
 
