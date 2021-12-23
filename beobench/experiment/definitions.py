@@ -51,18 +51,18 @@ METHOD_001_PPO = {
 
 RLLIB_SETUP = {
     "rllib_experiment_config": {
-        "run_or_experiment": "PPO",
         "config": {
             # Utilities settings
             "framework": "torch",
             "log_level": "WARNING",
-            "num_workers": 1,  # 1 for silent mode, can at least be 6
+            "num_workers": 6,  # 1 for silent mode, can at least be 6
             "num_gpus": 0,
             "seed": ray.tune.randint(0, 10000000),
         },
         "local_dir": "./tmp/tune/",
         "log_to_file": True,
         "checkpoint_freq": 10000,
+        "num_samples": 5,
     },
 }
 
