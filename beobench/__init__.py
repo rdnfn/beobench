@@ -4,7 +4,7 @@ __author__ = """rdnfn"""
 __email__ = "-"
 __version__ = "0.1.0"
 
-import beobench.experiments.scheduler
+import beobench.experiment.scheduler
 
 from beobench.core import Env
-from beobench.experiments.scheduler import restart
+from beobench.experiment.scheduler import restart
