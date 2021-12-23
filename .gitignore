@@ -111,3 +111,6 @@ ENV/
 # Ray RLLib
 tmp/
 wandb/
+
+# Nohup
+nohup.out
