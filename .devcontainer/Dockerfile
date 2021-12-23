@@ -22,6 +22,15 @@ RUN python /tmp/beobench/installer.py \
     && rm -rf /tmp/beobench
 ENV PYTHONPATH = "${MAIN_PYTHONPATH}"
 
+# Install nvidia container runtime
+RUN wget -O tmp/nvidia-container-toolkit.deb https://nvidia.github.io/libnvidia-container/stable/debian10/amd64/nvidia-container-toolkit_1.7.0-1_amd64.deb \
+    && wget -O tmp/nvidia-container-tools.deb https://nvidia.github.io/libnvidia-container/stable/debian10/amd64/libnvidia-container-tools_1.7.0-1_amd64.deb \
+    && wget -O tmp/libnvidia-container.deb https://nvidia.github.io/libnvidia-container/stable/debian10/amd64/libnvidia-container1_1.7.0-1_amd64.deb \
+    && dpkg -recursive tmp \
+    && rm tmp/nvidia-container-toolkit.deb
+
+
+
 # [Optional] This enables that BOPTEST example files work. Note that this adds
 # potentially some not so easily identifiable paths to the Python namespace.
 # E.g. `examples`
