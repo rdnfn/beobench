@@ -56,7 +56,7 @@ RLLIB_SETUP = {
             "framework": "torch",
             "log_level": "WARNING",
             "num_workers": 6,  # 1 for silent mode, can at least be 6
-            "num_gpus": 0,
+            "num_gpus": 1,
             "seed": ray.tune.randint(0, 10000000),
         },
         "local_dir": "./tmp/tune/",
