@@ -19,7 +19,7 @@ from beobench.experiment.definitions import (
 
 @click.command()
 @click.option(
-    "--name",
+    "--collection",
     default="standard",
     help="Name of experiment collection to run.",
 )
@@ -52,20 +52,37 @@ from beobench.experiment.definitions import (
     help="Do not run another container to do experiments in.",
 )
 def run_experiments_from_cli(
-    name: str = "standard",
+    collection: str = "standard",
     use_wandb: bool = True,
     wandb_project: str = "initial_experiments",
     wandb_entity: str = "beobench",
     wandb_api_key: str = None,
     no_additional_container: bool = False,
 ) -> None:
+    """Run experiments from command line interface (CLI).
+
+    This function allows the use to run experiment collections from the command line.
+
+    Args:
+        collection (str, optional): name of collection. Defaults to "standard".
+        use_wandb (bool, optional): whether to use weights and biases (wandb) for
+            logging experiments. Defaults to True.
+        wandb_project (str, optional): Name of wandb project. Defaults to
+            "initial_experiments".
+        wandb_entity (str, optional): Name of wandb entity. Defaults to "beobench".
+        wandb_api_key (str, optional): wandb API key. Defaults to None.
+        no_additional_container (bool, optional): wether not to start another container
+            to run experiments in. Defaults to False, which means that another container
+            is started to run experiments in.
+    """
+    if use_wandb:
+        callbacks = [_create_wandb_callback(wandb_project, wandb_entity)]
+    else:
+        callbacks = []
+
     if no_additional_container:
-        if name == "standard":
-            run_standard_experiments(
-                use_wandb,
-                wandb_project,
-                wandb_entity,
-            )
+        if collection == "standard":
+            run_standard_experiments(callbacks)
     else:
         # Building and running experiments in docker container
         beobench.experiment.containers.build_experiment_container()
@@ -75,8 +92,8 @@ def run_experiments_from_cli(
         container_name = f"auto_beobench_experiment_{unique_id}"
 
         flags = []
-        if name:
-            flags.append(f"--name {name}")
+        if collection:
+            flags.append(f"--collection {collection}")
         if use_wandb:
             flags.append("--use-wandb")
         if wandb_project:
@@ -111,18 +128,17 @@ def run_experiments_from_cli(
         subprocess.check_call(args)
 
 
-def run_standard_experiments(
-    use_wandb: bool = True,
-    wandb_project: str = "initial_experiments",
-    wandb_entity: str = "beobench",
+def _create_wandb_callback(
+    wandb_project: str,
+    wandb_entity: str,
 ):
-    if use_wandb:
-        wandb_callback = ray.tune.integration.wandb.WandbLoggerCallback(
-            project=wandb_project, log_config=True, entity=wandb_entity
-        )
-        callbacks = [wandb_callback]
-    else:
-        callbacks = None
+    wandb_callback = ray.tune.integration.wandb.WandbLoggerCallback(
+        project=wandb_project, log_config=True, entity=wandb_entity
+    )
+    return wandb_callback
+
+
+def run_standard_experiments(callbacks):
 
     run_experiment(
         problem_def=PROBLEM_001_BOPTEST_HEATPUMP,
@@ -187,12 +203,6 @@ def run_experiment(
     )
 
     return analysis
-
-
-def run_experiment_in_container():
-    # TODO: create function that creates exp container
-    # and runs experiment in it.
-    pass
 
 
 if __name__ == "__main__":
