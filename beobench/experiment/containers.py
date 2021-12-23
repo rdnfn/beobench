@@ -4,10 +4,15 @@ import subprocess
 import os
 
 
-def build_experiment_container() -> None:
+def build_experiment_container(use_no_cache: bool = False) -> None:
     """Build experiment container from beobench/docker/Dockerfile.experiments."""
 
     print("Building experiment container ...")
+
+    flags = []
+    if use_no_cache:
+        flags.append("--no-cache")
+
     args = [
         "docker",
         "build",
@@ -15,6 +20,7 @@ def build_experiment_container() -> None:
         "beobench-experiment:latest",
         "-f",
         "Dockerfile.experiments",  # change to non-default name
+        *flags,
         "https://github.com/rdnfn/beobench.git#:docker",
     ]
     env = os.environ.copy()

@@ -51,6 +51,11 @@ from beobench.experiment.definitions import (
     is_flag=True,
     help="Do not run another container to do experiments in.",
 )
+@click.option(
+    "--use-no-cache",
+    is_flag=True,
+    help="Whether to use cache to build experiment container.",
+)
 def run_experiments_from_cli(
     collection: str = "standard",
     use_wandb: bool = True,
@@ -58,6 +63,7 @@ def run_experiments_from_cli(
     wandb_entity: str = "beobench",
     wandb_api_key: str = None,
     no_additional_container: bool = False,
+    use_no_cache: bool = False,
 ) -> None:
     """Run experiments from command line interface (CLI).
 
@@ -74,6 +80,8 @@ def run_experiments_from_cli(
         no_additional_container (bool, optional): wether not to start another container
             to run experiments in. Defaults to False, which means that another container
             is started to run experiments in.
+        use_no_cache (bool, optional): whether to use cache to build experiment
+            container.
     """
     if use_wandb:
         callbacks = [_create_wandb_callback(wandb_project, wandb_entity)]
@@ -85,7 +93,7 @@ def run_experiments_from_cli(
             run_standard_experiments(callbacks)
     else:
         # Building and running experiments in docker container
-        beobench.experiment.containers.build_experiment_container()
+        beobench.experiment.containers.build_experiment_container(use_no_cache)
         beobench.experiment.containers.create_docker_network("beobench-net")
 
         unique_id = uuid.uuid4().hex[:6]
