@@ -89,8 +89,12 @@ def run_experiments_from_cli(
         args = [
             "docker",
             "run",
+            # The mounted socket allows access to docker
             "-v",
             "/var/run/docker.sock:/var/run/docker.sock",
+            # Network allows access to BOPTEST API in other containers
+            "--network",
+            "beobench-net",
             "--name",
             container_name,
             "beobench-experiment",
