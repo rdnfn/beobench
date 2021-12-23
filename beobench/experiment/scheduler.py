@@ -128,16 +128,6 @@ def run_experiments_from_cli(
         subprocess.check_call(args)
 
 
-def _create_wandb_callback(
-    wandb_project: str,
-    wandb_entity: str,
-):
-    wandb_callback = ray.tune.integration.wandb.WandbLoggerCallback(
-        project=wandb_project, log_config=True, entity=wandb_entity
-    )
-    return wandb_callback
-
-
 def run_standard_experiments(callbacks):
 
     run_experiment(
@@ -203,6 +193,16 @@ def run_experiment(
     )
 
     return analysis
+
+
+def _create_wandb_callback(
+    wandb_project: str,
+    wandb_entity: str,
+):
+    wandb_callback = ray.tune.integration.wandb.WandbLoggerCallback(
+        project=wandb_project, log_config=True, entity=wandb_entity
+    )
+    return wandb_callback
 
 
 if __name__ == "__main__":
