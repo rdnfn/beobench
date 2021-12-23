@@ -48,7 +48,6 @@ from beobench.experiment.definitions import (
 )
 @click.option(
     "--no-additional-container",
-    default="beobench",
     is_flag=True,
     help="Do not run another container to do experiments in.",
 )
