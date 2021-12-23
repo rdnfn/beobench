@@ -1,6 +1,7 @@
 """Module for managing experiment containers."""
 
 import subprocess
+import os
 
 
 def build_experiment_container() -> None:
@@ -8,7 +9,6 @@ def build_experiment_container() -> None:
 
     print("Building experiment container ...")
     args = [
-        "DOCKER_BUILDKIT=0",  # this enables accessing dockerfile in subdir
         "docker",
         "build",
         "-t",
@@ -17,7 +17,12 @@ def build_experiment_container() -> None:
         "Dockerfile.experiments",  # change to non-default name
         "https://github.com/rdnfn/beobench.git#:docker",
     ]
-    subprocess.check_call(args)
+    env = os.environ.copy()
+    env["DOCKER_BUILDKIT"] = "0"
+    subprocess.check_call(
+        args,
+        env=env,  # this enables accessing dockerfile in subdir
+    )
 
     print("Experiment container build finished.")
 
@@ -33,7 +38,9 @@ def create_docker_network(network_name: str) -> None:
     """
 
     print("Creating docker network ...")
-    args = ["docker", "network", "create", network_name]
-    subprocess.check_call(args)
-
-    print("Docker network created.")
+    try:
+        args = ["docker", "network", "create", network_name]
+        subprocess.check_call(args)
+        print("Docker network created.")
+    except subprocess.CalledProcessError:
+        print("No new network created. Network may already exist.")
