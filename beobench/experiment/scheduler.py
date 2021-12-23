@@ -3,8 +3,11 @@
 import ray.tune
 import ray.tune.integration.wandb
 import click
+import uuid
+import subprocess
 
 import beobench.experiment.definitions
+import beobench.experiment.containers
 import beobench.utils
 import beobench.integrations.boptest
 from beobench.experiment.definitions import (
@@ -29,27 +32,78 @@ from beobench.experiment.definitions import (
     ),
 )
 @click.option(
-    "--wandb_project",
+    "--wandb-project",
     default="initial_experiments",
     help="Weights and biases project name to log runs to.",
 )
 @click.option(
-    "--wandb_entity",
+    "--wandb-entity",
     default="beobench",
     help="Weights and biases entity name to log runs under.",
+)
+@click.option(
+    "--wandb-api-key",
+    default="beobench",
+    help="Weights and biases API key.",
+)
+@click.option(
+    "--no-additional-container",
+    default="beobench",
+    is_flag=True,
+    help="Do not run another container to do experiments in.",
 )
 def run_experiments_from_cli(
     name: str = "standard",
     use_wandb: bool = True,
     wandb_project: str = "initial_experiments",
     wandb_entity: str = "beobench",
+    wandb_api_key: str = None,
+    no_additional_container: bool = False,
 ) -> None:
-    if name == "standard":
-        run_standard_experiments(
-            use_wandb,
-            wandb_project,
-            wandb_entity,
-        )
+    if no_additional_container:
+        if name == "standard":
+            run_standard_experiments(
+                use_wandb,
+                wandb_project,
+                wandb_entity,
+            )
+    else:
+        # Building and running experiments in docker container
+        beobench.experiment.containers.build_experiment_container()
+        beobench.experiment.containers.create_docker_network("beobench-net")
+
+        unique_id = uuid.uuid4().hex[:6]
+        container_name = f"auto_beobench_experiment_{unique_id}"
+
+        flags = []
+        if name:
+            flags.append(f"--name {name}")
+        if use_wandb:
+            flags.append("--use-wandb")
+        if wandb_project:
+            flags.append(f"--wandb-project {wandb_project}")
+        if wandb_entity:
+            flags.append(f"--wandb-entity {wandb_entity}")
+
+        flag_str = " ".join(flags)
+
+        args = [
+            "docker",
+            "run",
+            "-v",
+            "/var/run/docker.sock:/var/run/docker.sock",
+            "--name",
+            container_name,
+            "beobench-experiment",
+            "/bin/bash",
+            "-c",
+            (
+                f"export WANDB_API_KEY={wandb_api_key} && python -m "
+                f"beobench.experiments.scheduler {flag_str} "
+                "--no-additional-container && bash"
+            ),
+        ]
+        subprocess.check_call(args)
 
 
 def run_standard_experiments(
