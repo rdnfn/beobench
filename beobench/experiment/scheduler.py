@@ -114,6 +114,8 @@ def run_experiments_from_cli(
             # network allows access to BOPTEST API in other containers
             "--network",
             "beobench-net",
+            # add more memory
+            "--shm-size=20.48gb",
             "--name",
             container_name,
             "beobench-experiment",
