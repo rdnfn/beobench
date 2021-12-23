@@ -12,7 +12,7 @@ def build_experiment_container() -> None:
         "docker",
         "build",
         "-t",
-        "beobench:latest",
+        "beobench-experiment:latest",
         "-f",
         "Dockerfile.experiments",  # change to non-default name
         "https://github.com/rdnfn/beobench.git#:docker",
