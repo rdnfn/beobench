@@ -116,7 +116,8 @@ def run_experiments_from_cli(
             "beobench-net",
             # add more memory
             "--shm-size=20.48gb",
-            "--name",
+            # add available GPUs,
+            "--gpus=all" "--name",
             container_name,
             "beobench-experiment",
             "/bin/bash",
