@@ -99,7 +99,7 @@ def run_experiments_from_cli(
             "-c",
             (
                 f"export WANDB_API_KEY={wandb_api_key} && python -m "
-                f"beobench.experiments.scheduler {flag_str} "
+                f"beobench.experiment.scheduler {flag_str} "
                 "--no-additional-container && bash"
             ),
         ]
