@@ -1,5 +1,7 @@
 """Module with a number of utility functions."""
 
+import docker
+
 
 def check_if_in_notebook() -> bool:
     """Check if code is executed from jupyter notebook.
@@ -57,3 +59,31 @@ def merge_dicts(a: dict, b: dict, path: list = None, mutate_a: bool = False) -> 
         else:
             a[key] = b[key]
     return a
+
+
+def shutdown() -> None:
+    """Shut down all beobench and BOPTEST containers."""
+
+    print("Stopping any remaining beobench and BOPTEST docker containers...")
+
+    client = docker.from_env()
+    container_num = 0
+    for container in client.containers.list():
+        if "auto_boptest" in container.name or "auto_beobench" in container.name:
+            print(f"Stopping container {container.name}")
+            container.stop(timeout=0)
+            container_num += 1
+
+    print(f"Stopped {container_num} container(s).")
+
+
+def restart() -> None:
+    """Clean up remaining beobench processes and containers
+    before running new experiments.
+
+    This stops all docker containers still running. This
+    function is not called by other scheduler functions
+    to enable the parallel running of experiments.
+    """
+
+    shutdown()

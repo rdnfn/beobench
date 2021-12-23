@@ -7,4 +7,4 @@ __version__ = "0.1.0"
 import beobench.experiment.scheduler
 
 from beobench.core import Env
-from beobench.experiment.scheduler import restart
+from beobench.utils import restart

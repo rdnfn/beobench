@@ -163,19 +163,3 @@ def create_env(env_config: dict = None) -> boptest_gym.BoptestGymEnv:
         env = boptest_gym.NormalizedObservationWrapper(env)
 
     return env
-
-
-def shutdown() -> None:
-    """Shutdown all BOPTEST containers."""
-
-    print("Stopping any remaining BOPTEST docker containers...")
-
-    client = docker.from_env()
-    container_num = 0
-    for container in client.containers.list():
-        if "auto_boptest" in container.name:
-            print(f"Stopping container {container.name}")
-            container.stop(timeout=0)
-            container_num += 1
-
-    print(f"Stopped {container_num} container(s).")

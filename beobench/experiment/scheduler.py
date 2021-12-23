@@ -130,18 +130,6 @@ def run_standard_experiments(
     )
 
 
-def restart() -> None:
-    """Clean up remaining beobench processes before running
-    new experiments.
-
-    This stops all docker containers still running. This
-    function is not called by other scheduler functions
-    to enable the parrallel running of experiments.
-    """
-
-    beobench.integrations.boptest.shutdown()
-
-
 def run_experiment(
     problem_def: dict, method_def: dict, rllib_setup: dict, rllib_callbacks: list = None
 ) -> ray.tune.ExperimentAnalysis:
