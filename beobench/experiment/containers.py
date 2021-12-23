@@ -1,12 +1,39 @@
-def start_experiment_container() -> None:
+"""Module for managing experiment containers."""
 
-    # build container
-    # docker build -t beobench:latest -f ./docker/Dockerfile.experiments .
+import subprocess
 
-    # create docker network
-    # docker network create beobench-net
 
-    # run docker container
-    # docker run -v /var/run/docker.sock:/var/run/docker.sock --network=beobench-net --name exp1 beobench /bin/bash -c "python -m pip install git+https://github.com/rdnfn/beobench && export WANDB_API_KEY=XYZZZZZZZZZZZZZ && python -m beobench.scheduler --use-wandb && bash"
+def build_experiment_container() -> None:
+    """Build experiment container from beobench/docker/Dockerfile.experiments."""
 
-    pass
+    print("Building experiment container ...")
+    args = [
+        "DOCKER_BUILDKIT=0",  # this enables accessing dockerfile in subdir
+        "docker",
+        "build",
+        "-t",
+        "beobench:latest",
+        "-f",
+        "Dockerfile.experiments",  # change to non-default name
+        "https://github.com/rdnfn/beobench.git#:docker",
+    ]
+    subprocess.check_call(args)
+
+    print("Experiment container build finished.")
+
+
+def create_docker_network(network_name: str) -> None:
+    """Create docker network.
+
+    For more details see
+    https://docs.docker.com/engine/reference/run/#network-settings
+
+    Args:
+        network_name (str): name of docker network.
+    """
+
+    print("Creating docker network ...")
+    args = ["docker", "network", "create", network_name]
+    subprocess.check_call(args)
+
+    print("Docker network created.")
