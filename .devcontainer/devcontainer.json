@@ -61,6 +61,6 @@
 		"docker-in-docker": "20.10"
 	},
 	"runArgs": [
-		"--shm-size=20.48gb"
+		"--shm-size=32gb"
 	]
 }
