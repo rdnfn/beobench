@@ -133,13 +133,13 @@ def run_experiments_from_cli(
         # define flags for beobench scheduler call inside experiment container
         beobench_flags = []
         if experiment_file:
-            beobench_flags.append(f"--experiment-file {exp_file_on_docker}")
+            beobench_flags.append(f"--experiment-file={exp_file_on_docker}")
         if use_wandb:
             beobench_flags.append("--use-wandb")
         if wandb_project:
-            beobench_flags.append(f"--wandb-project {wandb_project}")
+            beobench_flags.append(f"--wandb-project={wandb_project}")
         if wandb_entity:
-            beobench_flags.append(f"--wandb-entity {wandb_entity}")
+            beobench_flags.append(f"--wandb-entity={wandb_entity}")
         beobench_flag_str = " ".join(beobench_flags)
 
         args = [
