@@ -16,7 +16,6 @@ from beobench.constants import (
     BOPTEST_REPO_NAME,
     BOPTEST_COMMIT,
     BOPTEST_PIP_DEP,
-    BOPTEST_GYM_PIP_PATH,
 )
 
 
