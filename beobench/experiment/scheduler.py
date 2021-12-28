@@ -124,13 +124,11 @@ def run_experiments_from_cli(
         docker_flags = []
         if experiment_file is not None:
             exp_file_abs = experiment_file.absolute()
-            exp_file_on_docker = f"tmp/beobench/{experiment_file.name}"
-            docker_flags.append(
-                [
-                    "-v",
-                    f"{exp_file_abs}:{exp_file_on_docker}:ro",
-                ]
-            )
+            exp_file_on_docker = f"/tmp/beobench/{experiment_file.name}"
+            docker_flags += [
+                "-v",
+                f"{exp_file_abs}:{exp_file_on_docker}:ro",
+            ]
 
         # define flags for beobench scheduler call inside experiment container
         beobench_flags = []
