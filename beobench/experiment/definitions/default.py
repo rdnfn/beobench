@@ -108,3 +108,8 @@ def get_experiment_config(
     # Get combine the two dict into single experiment
     # conf file for ray.tune.run()
     return exp_config
+
+
+problem_def = PROBLEM_001_BOPTEST_HEATPUMP
+method_def = METHOD_001_PPO
+rllib_setup = RLLIB_SETUP
