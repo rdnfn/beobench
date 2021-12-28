@@ -70,7 +70,6 @@ def install_boptest(
 
     if pip_install_dep:
         _install_pip_dependencies(BOPTEST_PIP_DEP)
-        _install_pip_dependencies([BOPTEST_GYM_PIP_PATH])
 
     # Warning about BOPTEST PYTHONPATH requirement
     boptest_path = install_path / "boptest"

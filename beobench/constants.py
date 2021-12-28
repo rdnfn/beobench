@@ -18,7 +18,3 @@ BOPTEST_PIP_DEP = [
     "pandas==1.3.4",
     "flask_cors==3.0.10",
 ]
-
-BOPTEST_GYM_PIP_PATH = (
-    "git+https://github.com/rdnfn/project1-boptest-gym.git@rdnfn/feature-packaging"
-)
