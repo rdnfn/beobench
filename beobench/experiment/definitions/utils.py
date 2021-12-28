@@ -40,7 +40,7 @@ def get_experiment_config(
     )
 
     exp_config["name"] = problem_def["name"] + "_" + method_def["name"]
-    exp_config["beobench"] = {
+    exp_config["config"]["beobench"] = {
         "problem_def": problem_def,
         "method_def": method_def,
         "rllib_setup": rllib_setup_def,
