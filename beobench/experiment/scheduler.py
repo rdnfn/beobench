@@ -42,7 +42,7 @@ import beobench.integrations.boptest
 )
 @click.option(
     "--wandb-api-key",
-    default="beobench",
+    default="",
     help="Weights and biases API key.",
 )
 @click.option(
