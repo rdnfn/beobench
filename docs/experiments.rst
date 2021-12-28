@@ -12,4 +12,4 @@ Then outside of dev container, start dev container::
 
 And then::
 
-    nohup docker exec <dev_container_name> python -m beobench.experiment.scheduler --use-wandb --wandb-api-key=<your_api_key> &
+    docker exec <dev_container_name> nohup python -m beobench.experiment.scheduler --use-wandb --wandb-api-key=<your_api_key> &
