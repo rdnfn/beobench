@@ -171,6 +171,7 @@ def run_experiments_from_cli(
                 "--no-additional-container && bash"
             ),
         ]
+        print("Executing docker command: ", " ".join(args))
         subprocess.check_call(args)
 
 
