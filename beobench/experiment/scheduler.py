@@ -5,23 +5,22 @@ import ray.tune.integration.wandb
 import click
 import uuid
 import subprocess
+import pathlib
+import importlib.util
 
-import beobench.experiment.definitions
+import beobench.experiment.definitions.utils
+import beobench.experiment.definitions.default
 import beobench.experiment.containers
 import beobench.utils
 import beobench.integrations.boptest
-from beobench.experiment.definitions import (
-    PROBLEM_001_BOPTEST_HEATPUMP,
-    METHOD_001_PPO,
-    RLLIB_SETUP,
-)
 
 
 @click.command()
 @click.option(
-    "--collection",
-    default="standard",
-    help="Name of experiment collection to run.",
+    "--experiment-file",
+    default=None,
+    help="File that defines beobench experiment.",
+    type=click.Path(exists=True, file_okay=True, dir_okay=False),
 )
 @click.option(
     "--use-wandb",
@@ -57,7 +56,7 @@ from beobench.experiment.definitions import (
     help="Whether to use cache to build experiment container.",
 )
 def run_experiments_from_cli(
-    collection: str = "standard",
+    experiment_file: str = None,
     use_wandb: bool = True,
     wandb_project: str = "initial_experiments",
     wandb_entity: str = "beobench",
@@ -67,10 +66,11 @@ def run_experiments_from_cli(
 ) -> None:
     """Run experiments from command line interface (CLI).
 
-    This function allows the use to run experiment collections from the command line.
+    This function allows the use to run experiments from the command line.
 
     Args:
-        collection (str, optional): name of collection. Defaults to "standard".
+        experiment_file (str, optional): File that defines experiment.
+            Defaults to None.
         use_wandb (bool, optional): whether to use weights and biases (wandb) for
             logging experiments. Defaults to True.
         wandb_project (str, optional): Name of wandb project. Defaults to
@@ -83,33 +83,66 @@ def run_experiments_from_cli(
         use_no_cache (bool, optional): whether to use cache to build experiment
             container.
     """
+
+    if experiment_file is not None:
+        experiment_file = pathlib.Path(experiment_file)
+
     if use_wandb:
         callbacks = [_create_wandb_callback(wandb_project, wandb_entity)]
     else:
         callbacks = []
 
     if no_additional_container:
-        if collection == "standard":
-            run_standard_experiments(callbacks)
+        if experiment_file is None:
+            experiment_def = beobench.experiment.definitions.default
+        else:
+            # import experiment definition file as module
+            spec = importlib.util.spec_from_file_location(
+                "experiment_definition",
+                str(experiment_file.absolute()),
+            )
+            experiment_def = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(experiment_def)
+
+        # run experiment
+        run_experiment(
+            problem_def=experiment_def.problem,
+            method_def=experiment_def.method,
+            rllib_setup=experiment_def.rllib_setup,
+            rllib_callbacks=callbacks,
+        )
     else:
-        # Building and running experiments in docker container
+        # build and run experiments in docker container
+
         beobench.experiment.containers.build_experiment_container(use_no_cache)
         beobench.experiment.containers.create_docker_network("beobench-net")
 
+        # define docker arguments/options/flags
         unique_id = uuid.uuid4().hex[:6]
         container_name = f"auto_beobench_experiment_{unique_id}"
 
-        flags = []
-        if collection:
-            flags.append(f"--collection {collection}")
-        if use_wandb:
-            flags.append("--use-wandb")
-        if wandb_project:
-            flags.append(f"--wandb-project {wandb_project}")
-        if wandb_entity:
-            flags.append(f"--wandb-entity {wandb_entity}")
+        docker_flags = []
+        if experiment_file is not None:
+            exp_file_abs = experiment_file.absolute()
+            exp_file_on_docker = f"tmp/beobench/{experiment_file.name}"
+            docker_flags.append(
+                [
+                    "-v",
+                    f"{exp_file_abs}:{exp_file_on_docker}:ro",
+                ]
+            )
 
-        flag_str = " ".join(flags)
+        # define flags for beobench scheduler call inside experiment container
+        beobench_flags = []
+        if experiment_file:
+            beobench_flags.append(f"--experiment-file {exp_file_on_docker}")
+        if use_wandb:
+            beobench_flags.append("--use-wandb")
+        if wandb_project:
+            beobench_flags.append(f"--wandb-project {wandb_project}")
+        if wandb_entity:
+            beobench_flags.append(f"--wandb-entity {wandb_entity}")
+        beobench_flag_str = " ".join(beobench_flags)
 
         args = [
             "docker",
@@ -128,26 +161,17 @@ def run_experiments_from_cli(
             "--gpus=all",
             "--name",
             container_name,
+            *docker_flags,
             "beobench-experiment",
             "/bin/bash",
             "-c",
             (
                 f"export WANDB_API_KEY={wandb_api_key} && python -m "
-                f"beobench.experiment.scheduler {flag_str} "
+                f"beobench.experiment.scheduler {beobench_flag_str} "
                 "--no-additional-container && bash"
             ),
         ]
         subprocess.check_call(args)
-
-
-def run_standard_experiments(callbacks):
-
-    run_experiment(
-        problem_def=PROBLEM_001_BOPTEST_HEATPUMP,
-        method_def=METHOD_001_PPO,
-        rllib_setup=RLLIB_SETUP,
-        rllib_callbacks=callbacks,
-    )
 
 
 def run_experiment(
@@ -181,7 +205,7 @@ def run_experiment(
 
     # combine the three incomplete ray tune experiment
     # definitions into a single complete one.
-    exp_config = beobench.experiment.definitions.get_experiment_config(
+    exp_config = beobench.experiment.definitions.utils.get_experiment_config(
         problem_def, method_def, rllib_setup
     )
 
