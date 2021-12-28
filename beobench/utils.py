@@ -69,7 +69,7 @@ def shutdown() -> None:
     client = docker.from_env()
     container_num = 0
     for container in client.containers.list():
-        if "auto_boptest" in container.name or "auto_beobench" in container.name:
+        if "auto_beobench" in container.name or "auto_boptest" in container.name:
             print(f"Stopping container {container.name}")
             container.stop(timeout=0)
             container_num += 1
