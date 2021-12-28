@@ -40,13 +40,14 @@ method = {
     "rllib_experiment_config": {
         "run_or_experiment": "DQN",
         "config": {
-            "lr": 0.0001,
+            "lr": ray.tune.choice([0.001, 0.0001, 0.00001]),
             "model": {
                 "fcnet_hiddens": [256, 256, 256, 256],
                 "fcnet_activation": ray.tune.choice(["tanh", "linear", "relu"]),
                 "post_fcnet_activation": ray.tune.choice(["tanh", "linear"]),
             },
         },
+        "num_samples": 20,
     },
 }
 
