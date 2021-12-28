@@ -162,4 +162,7 @@ def create_env(env_config: dict = None) -> boptest_gym.BoptestGymEnv:
         env = boptest_gym.NormalizedActionWrapper(env)
         env = boptest_gym.NormalizedObservationWrapper(env)
 
+    if "discretize" in env_config and env_config["discretize"] is True:
+        env = boptest_gym.core.DiscretizedActionWrapper(env)
+
     return env
