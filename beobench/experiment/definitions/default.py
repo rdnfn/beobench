@@ -29,7 +29,7 @@ PROBLEM_001_BOPTEST_HEATPUMP = {
             },
             "gamma": 0.999,
         },
-        "stop": {"training_iteration": 50},
+        "stop": {"timesteps_total": 400000},
     },
 }
 
@@ -55,7 +55,7 @@ RLLIB_SETUP = {
             # Utilities settings
             "framework": "torch",
             "log_level": "WARNING",
-            "num_workers": 6,  # 1 for silent mode, can at least be 6
+            "num_workers": 10,  # 1 for silent mode, can at least be 6
             "num_gpus": 1,
             "seed": ray.tune.randint(0, 10000000),
         },
