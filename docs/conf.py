@@ -153,3 +153,14 @@ texinfo_documents = [
         "Miscellaneous",
     ),
 ]
+
+
+## Custom elements
+# html_logo = "img/beobench_logo.png"
+
+html_theme_options = {
+    # "logo_only": True,
+    "logo_name": False,  # logo_only for alabaster theme
+    "display_version": True,
+    "logo": "/beobench_logo.png",
+}

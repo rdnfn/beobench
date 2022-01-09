@@ -1,11 +1,13 @@
 Welcome to beobench's documentation!
 ======================================
 
+.. include:: ../README.rst
+   :start-line: 14
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   readme
    installation
    usage
    modules
