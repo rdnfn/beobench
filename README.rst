@@ -11,16 +11,18 @@
 
    </p>
 
+.. start-in-sphinx-docs
 
 .. image:: https://img.shields.io/pypi/v/beobench.svg
         :target: https://pypi.python.org/pypi/beobench
 
-.. image:: https://img.shields.io/travis/rdnfn/beobench.svg
-        :target: https://travis-ci.com/rdnfn/beobench
-
 .. image:: https://readthedocs.org/projects/beobench/badge/?version=latest
         :target: https://beobench.readthedocs.io/en/latest/?version=latest
         :alt: Documentation Status
+
+.. image:: https://img.shields.io/badge/License-MIT-blue.svg
+        :target: https://opensource.org/licenses/MIT
+        :alt: License
 
 A toolbox for benchmarking reinforcement learning (RL) algorithms on building energy optimisation (BEO) problems. Beobench does not replace existing libraries defining BEO problems (such as `BOPTEST <https://github.com/ibpsa/project1-boptest>`_) — instead it makes working with them easier.
 
@@ -33,6 +35,8 @@ Features
 - *Installers:* avoid having to manage messy Python namespaces yourself — just install beobench via pip and use its pre-configured docker containers to take care of managing other BEO packages and their dependencies.
 
 .. _Weights and Biases: https://wandb.ai/
+
+.. end-in-sphinx-docs
 
 Documentation
 -------------
