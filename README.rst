@@ -1,7 +1,15 @@
+.. raw:: html
+
+   <p align="center">
+   
 .. image:: ./docs/img/beobench_logo.png
         :align: center
         :width: 300 px
         :alt: Beobench
+        
+.. raw:: html
+
+   </p>
 
 
 .. image:: https://img.shields.io/pypi/v/beobench.svg
