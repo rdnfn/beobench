@@ -1,6 +1,7 @@
-========
-beobench
-========
+.. image:: ./docs/img/beobench_logo.png
+        :align: center
+        :width: 300 px
+        :alt: Beobench
 
 
 .. image:: https://img.shields.io/pypi/v/beobench.svg
