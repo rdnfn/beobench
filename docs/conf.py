@@ -163,4 +163,9 @@ html_theme_options = {
     "logo_name": False,  # logo_only for alabaster theme
     "display_version": True,
     "logo": "/beobench_logo.png",
+    "github_repo": "beobench",
+    "github_user": "rdnfn",
+    "github_button": True,
+    "github_count": False,
+    "github_type": "star",
 }
