@@ -11,6 +11,7 @@
 
    </p>
 
+.. start-in-sphinx-docs
 
 .. image:: https://img.shields.io/pypi/v/beobench.svg
         :target: https://pypi.python.org/pypi/beobench
@@ -33,6 +34,8 @@ Features
 - *Installers:* avoid having to manage messy Python namespaces yourself — just install beobench via pip and use its pre-configured docker containers to take care of managing other BEO packages and their dependencies.
 
 .. _Weights and Biases: https://wandb.ai/
+
+.. end-in-sphinx-docs
 
 Documentation
 -------------

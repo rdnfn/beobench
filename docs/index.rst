@@ -2,11 +2,14 @@ Welcome to beobench's documentation!
 ======================================
 
 .. include:: ../README.rst
-   :start-line: 14
+   :start-after: start-in-sphinx-docs
+   :end-before: end-in-sphinx-docs
+
+Contents
+--------
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    installation
    usage
