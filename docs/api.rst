@@ -2,7 +2,16 @@ API
 ===
 
 .. autosummary::
-   :toctree: generated
-   :recursive:
+    :toctree: generated
+    :recursive:
 
-   beobench
+    beobench.core
+    beobench.constants
+    beobench.experiment
+    beobench.installer
+    beobench.integrations
+    beobench.utils
+
+
+
+
