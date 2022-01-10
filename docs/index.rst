@@ -1,4 +1,4 @@
-Home - Beobench Documentation
+Home - Beobench Docs
 =============================
 
 .. include:: ../README.rst
@@ -11,7 +11,7 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-   index
+   self
    installation
    usage
    api
