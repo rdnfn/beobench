@@ -163,13 +163,13 @@ texinfo_documents = [
 # html_logo = "img/beobench_logo.png"
 
 html_theme_options = {
-    # "logo_only": True,
-    "logo_name": False,  # logo_only for alabaster theme
-    "display_version": True,
+    "logo_name": False,
     "logo": "/beobench_logo.png",
     "github_repo": "beobench",
     "github_user": "rdnfn",
     "github_button": True,
     "github_count": False,
     "github_type": "star",
+    "fixed_sidebar": True,
+    # "sidebar_width": "200pt",
 }
