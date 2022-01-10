@@ -5,7 +5,17 @@ import subprocess
 import time
 import uuid
 import docker
-import boptest_gym
+
+try:
+    import boptest_gym
+except ImportError as error:
+    raise ImportError(
+        (
+            "boptest_gym package is not installed. "
+            "You may want to use `python -m beobench.installer` "
+            "to install BOPTEST including the boptest_gym package."
+        )
+    ) from error
 
 from beobench.constants import DEFAULT_INSTALL_PATH
 

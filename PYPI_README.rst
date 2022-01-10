@@ -1,4 +1,4 @@
-.. image:: ./docs/_static/beobench_logo.png
+.. image:: https://github.com/rdnfn/beobench/raw/master/docs/_static/beobench_logo.png
         :align: center
         :width: 300 px
         :alt: Beobench

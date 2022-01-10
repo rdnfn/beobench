@@ -8,13 +8,13 @@ Installation
 Recommended method
 ------------------
 
-To install beobench, run this command in your terminal:
+To install beobench, simply run this command in your terminal:
 
 .. code-block:: console
 
-    pip install git+https://github.com/rdnfn/beobench
+    pip install beobench
 
-Additionally, it is necessary to have `docker <https://www.docker.com/get-started>`_ installed on the machine.
+To complete the installation, ensure that `docker <https://www.docker.com/get-started>`_ is also installed.
 
 .. This is the preferred method to install beobench, as it will always install the most recent stable release.
 
