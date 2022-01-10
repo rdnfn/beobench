@@ -160,7 +160,8 @@ texinfo_documents = [
 
 
 ## Custom elements
-# html_logo = "img/beobench_logo.png"
+
+html_favicon = "_static/beobench_favicon.png"
 
 html_theme_options = {
     "logo_name": False,
