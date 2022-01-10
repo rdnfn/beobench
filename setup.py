@@ -35,7 +35,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    description="Extension to OpenAI Gym interface for building energy optimisation allowing diverse controllers, including RL and MPC.",  # pylint: disable=line-too-long
+    description="Beobench is a toolbox for benchmarking reinforcement learning (RL) algorithms on building energy optimisation (BEO) problems.",  # pylint: disable=line-too-long
     install_requires=requirements,
     license="MIT license",
     long_description=readme + "\n\n" + history,
