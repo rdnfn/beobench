@@ -161,7 +161,7 @@ texinfo_documents = [
 
 ## Custom elements
 
-html_favicon = "_static/beobench_favicon.png"
+html_favicon = "_static/beobench_favicon_v2.png"
 
 html_theme_options = {
     "logo_name": False,
