@@ -1,4 +1,4 @@
-"""Various configuration constants"""
+"""Module with various configuration constants"""
 
 import pathlib
 
