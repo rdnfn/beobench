@@ -4,7 +4,7 @@
 
 from setuptools import setup, find_packages
 
-with open("README.rst", encoding="UTF-8") as readme_file:
+with open("PYPI_README.rst", encoding="UTF-8") as readme_file:
     readme = readme_file.read()
 
 with open("HISTORY.rst", encoding="UTF-8") as history_file:
@@ -17,10 +17,6 @@ requirements = [
     "click",
     "torch",
     "gym",
-    (
-        "boptest_gym@git+"
-        "https://github.com/rdnfn/project1-boptest-gym.git@rdnfn/feature-packaging"
-    ),
 ]
 
 

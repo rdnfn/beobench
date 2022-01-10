@@ -3,7 +3,6 @@
 import ray.tune
 
 import beobench.integrations.boptest
-import beobench.utils
 
 PROBLEM_001_BOPTEST_HEATPUMP = {
     "name": "problem_001",

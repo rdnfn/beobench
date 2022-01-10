@@ -1,4 +1,4 @@
-"""Installer for the different problem defining gym libraries"""
+"""Module to install different problem defining gym libraries"""
 
 # For python 3.7
 from __future__ import annotations

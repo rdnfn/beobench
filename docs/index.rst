@@ -1,5 +1,5 @@
-Welcome to beobench's documentation!
-======================================
+Home - Beobench Documentation
+=============================
 
 .. include:: ../README.rst
    :start-after: start-in-sphinx-docs
@@ -11,9 +11,10 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   index
    installation
    usage
-   modules
+   api
    contributing
    authors
    history

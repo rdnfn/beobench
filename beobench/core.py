@@ -1,4 +1,4 @@
-"""Core functions of beobench."""
+"""Module with core functions of beobench."""
 import gym
 
 

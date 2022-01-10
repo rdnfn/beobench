@@ -114,3 +114,4 @@ wandb/
 
 # Nohup
 *nohup.out
+docs/generated/
