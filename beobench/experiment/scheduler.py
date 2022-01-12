@@ -16,7 +16,6 @@ import beobench.utils
 
 def run_experiment(
     experiment_file: str = None,
-    use_wandb: bool = True,
     wandb_project: str = "initial_experiments",
     wandb_entity: str = "beobench",
     wandb_api_key: str = "",
@@ -30,8 +29,6 @@ def run_experiment(
     Args:
         experiment_file (str, optional): File that defines experiment.
             Defaults to None.
-        use_wandb (bool, optional): whether to use weights and biases (wandb) for
-            logging experiments. Defaults to True.
         wandb_project (str, optional): Name of wandb project. Defaults to
             "initial_experiments".
         wandb_entity (str, optional): Name of wandb entity. Defaults to "beobench".
@@ -46,8 +43,12 @@ def run_experiment(
     if experiment_file is not None:
         experiment_file = pathlib.Path(experiment_file)
 
-    if use_wandb:
+    if wandb_project and wandb_entity:
         callbacks = [_create_wandb_callback(wandb_project, wandb_entity)]
+    elif wandb_project or wandb_entity:
+        raise ValueError(
+            "Only one of wandb_project or wandb_entity given, but both required"
+        )
     else:
         callbacks = []
 
@@ -97,8 +98,6 @@ def run_experiment(
         beobench_flags = []
         if experiment_file:
             beobench_flags.append(f"--experiment-file={exp_file_on_docker}")
-        if use_wandb:
-            beobench_flags.append("--use-wandb")
         if wandb_project:
             beobench_flags.append(f"--wandb-project={wandb_project}")
         if wandb_entity:
@@ -136,56 +135,62 @@ def run_experiment(
         subprocess.check_call(args)
 
 
-if not beobench.utils.check_if_in_notebook():
-    # Add click decorators only if NOT in notebook
-    # to avoid bugs relating to the use of
-    # stdin in jupyter kernels.
-    # This allows usage in notebooks.
-    decorators = [
-        click.command(),
-        click.option(
-            "--experiment-file",
-            default=None,
-            help="File that defines beobench experiment.",
-            type=click.Path(exists=True, file_okay=True, dir_okay=False),
-        ),
-        click.option(
-            "--use-wandb",
-            is_flag=True,
-            help=(
-                "Use weights and biases (wandb) to log experiments. "
-                "Requires being logged into wandb."
-            ),
-        ),
-        click.option(
-            "--wandb-project",
-            default="initial_experiments",
-            help="Weights and biases project name to log runs to.",
-        ),
-        click.option(
-            "--wandb-entity",
-            default="beobench",
-            help="Weights and biases entity name to log runs under.",
-        ),
-        click.option(
-            "--wandb-api-key",
-            default="",
-            help="Weights and biases API key.",
-        ),
-        click.option(
-            "--no-additional-container",
-            is_flag=True,
-            help="Do not run another container to do experiments in.",
-        ),
-        click.option(
-            "--use-no-cache",
-            is_flag=True,
-            help="Whether to use cache to build experiment container.",
-        ),
-    ]
+@click.command()
+@click.option(
+    "--experiment-file",
+    default=None,
+    help="File that defines beobench experiment.",
+    type=click.Path(exists=True, file_okay=True, dir_okay=False),
+)
+@click.option(
+    "--wandb-project",
+    default="initial_experiments",
+    help="Weights and biases project name to log runs to.",
+)
+@click.option(
+    "--wandb-entity",
+    default="beobench",
+    help="Weights and biases entity name to log runs under.",
+)
+@click.option(
+    "--wandb-api-key",
+    default="",
+    help="Weights and biases API key.",
+)
+@click.option(
+    "--no-additional-container",
+    is_flag=True,
+    help="Do not run another container to do experiments in.",
+)
+@click.option(
+    "--use-no-cache",
+    is_flag=True,
+    help="Whether to use cache to build experiment container.",
+)
+def run_experiment_command(
+    experiment_file: str = None,
+    wandb_project: str = "initial_experiments",
+    wandb_entity: str = "beobench",
+    wandb_api_key: str = "",
+    no_additional_container: bool = False,
+    use_no_cache: bool = False,
+) -> None:
+    """Run experiment from command line.
 
-    for decorator in decorators:
-        run_experiment = decorator(run_experiment)
+    Command line version of run_experiment function. This appears to be
+    the best (but not great) way to have a parallel python and command
+    line interface.
+
+    See https://stackoverflow.com/a/40094408.
+    """
+    run_experiment(
+        experiment_file,
+        wandb_project,
+        wandb_entity,
+        wandb_api_key,
+        no_additional_container,
+        use_no_cache,
+    )
 
 
 def run_experiment_in_tune(
@@ -259,4 +264,4 @@ def _create_wandb_callback(
 
 
 if __name__ == "__main__":
-    run_experiment()
+    run_experiment_command()
