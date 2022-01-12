@@ -14,58 +14,18 @@ import beobench.experiment.containers
 import beobench.utils
 
 
-@click.command()
-@click.option(
-    "--experiment-file",
-    default=None,
-    help="File that defines beobench experiment.",
-    type=click.Path(exists=True, file_okay=True, dir_okay=False),
-)
-@click.option(
-    "--use-wandb",
-    is_flag=True,
-    help=(
-        "Use weights and biases (wandb) to log experiments. "
-        "Requires being logged into wandb."
-    ),
-)
-@click.option(
-    "--wandb-project",
-    default="initial_experiments",
-    help="Weights and biases project name to log runs to.",
-)
-@click.option(
-    "--wandb-entity",
-    default="beobench",
-    help="Weights and biases entity name to log runs under.",
-)
-@click.option(
-    "--wandb-api-key",
-    default="",
-    help="Weights and biases API key.",
-)
-@click.option(
-    "--no-additional-container",
-    is_flag=True,
-    help="Do not run another container to do experiments in.",
-)
-@click.option(
-    "--use-no-cache",
-    is_flag=True,
-    help="Whether to use cache to build experiment container.",
-)
 def run_experiment(
     experiment_file: str = None,
     use_wandb: bool = True,
     wandb_project: str = "initial_experiments",
     wandb_entity: str = "beobench",
-    wandb_api_key: str = None,
+    wandb_api_key: str = "",
     no_additional_container: bool = False,
     use_no_cache: bool = False,
 ) -> None:
-    """Run experiments from command line interface (CLI).
+    """Run experiment.
 
-    This function allows the use to run experiments from the command line.
+    This function allows the use to run experiments from the command line or python interface.
 
     Args:
         experiment_file (str, optional): File that defines experiment.
@@ -91,18 +51,19 @@ def run_experiment(
     else:
         callbacks = []
 
-    if no_additional_container:
-        if experiment_file is None:
-            experiment_def = beobench.experiment.definitions.default
-        else:
-            # import experiment definition file as module
-            spec = importlib.util.spec_from_file_location(
-                "experiment_definition",
-                str(experiment_file.absolute()),
-            )
-            experiment_def = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(experiment_def)
+    # Load experiment definition file
+    if experiment_file is None:
+        experiment_def = beobench.experiment.definitions.default
+    else:
+        # import experiment definition file as module
+        spec = importlib.util.spec_from_file_location(
+            "experiment_definition",
+            str(experiment_file.absolute()),
+        )
+        experiment_def = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(experiment_def)
 
+    if no_additional_container:
         # run experiment in ray tune
         run_experiment_in_tune(
             problem_def=experiment_def.problem,
@@ -113,7 +74,10 @@ def run_experiment(
     else:
         # build and run experiments in docker container
 
-        beobench.experiment.containers.build_experiment_container(use_no_cache)
+        image_tag = beobench.experiment.containers.build_experiment_container(
+            build_context=experiment_def.problem["problem_library"],
+            use_no_cache=use_no_cache,
+        )
         beobench.experiment.containers.create_docker_network("beobench-net")
 
         # define docker arguments/options/flags
@@ -159,7 +123,7 @@ def run_experiment(
             "--name",
             container_name,
             *docker_flags,
-            "beobench-experiment",
+            image_tag,
             "/bin/bash",
             "-c",
             (
@@ -170,6 +134,58 @@ def run_experiment(
         ]
         print("Executing docker command: ", " ".join(args))
         subprocess.check_call(args)
+
+
+if not beobench.utils.check_if_in_notebook():
+    # Add click decorators only if NOT in notebook
+    # to avoid bugs relating to the use of
+    # stdin in jupyter kernels.
+    # This allows usage in notebooks.
+    decorators = [
+        click.command(),
+        click.option(
+            "--experiment-file",
+            default=None,
+            help="File that defines beobench experiment.",
+            type=click.Path(exists=True, file_okay=True, dir_okay=False),
+        ),
+        click.option(
+            "--use-wandb",
+            is_flag=True,
+            help=(
+                "Use weights and biases (wandb) to log experiments. "
+                "Requires being logged into wandb."
+            ),
+        ),
+        click.option(
+            "--wandb-project",
+            default="initial_experiments",
+            help="Weights and biases project name to log runs to.",
+        ),
+        click.option(
+            "--wandb-entity",
+            default="beobench",
+            help="Weights and biases entity name to log runs under.",
+        ),
+        click.option(
+            "--wandb-api-key",
+            default="",
+            help="Weights and biases API key.",
+        ),
+        click.option(
+            "--no-additional-container",
+            is_flag=True,
+            help="Do not run another container to do experiments in.",
+        ),
+        click.option(
+            "--use-no-cache",
+            is_flag=True,
+            help="Whether to use cache to build experiment container.",
+        ),
+    ]
+
+    for decorator in decorators:
+        run_experiment = decorator(run_experiment)
 
 
 def run_experiment_in_tune(
@@ -208,9 +224,12 @@ def run_experiment_in_tune(
     )
 
     # register the problem environment with ray tune
+    # env_creator is a module available in experiment containers
+    import env_creator  # pylint: disable=import-outside-toplevel
+
     ray.tune.registry.register_env(
         problem_def["rllib_experiment_config"]["config"]["env"],
-        problem_def["env_creator_to_register"],
+        env_creator.create_env,
     )
 
     # if run in notebook, change the output reported throughout experiment.

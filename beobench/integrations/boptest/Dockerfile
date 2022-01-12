@@ -13,5 +13,10 @@ RUN wget -O tmp/docker-ce-cli.deb https://download.docker.com/linux/debian/dists
 # install beobench
 RUN pip3 --disable-pip-version-check --no-cache-dir install git+https://github.com/rdnfn/beobench
 
+# add env creator
+COPY env_creator.py /opt/beobench/experiment_setup/
+# add env creator to python path
+ENV PYTHONPATH "${PYTHONPATH}:/opt/beobench/experiment_setup/"
+
 # use beobench to install BOPTEST
 RUN python -m beobench.installer

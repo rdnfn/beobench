@@ -2,18 +2,19 @@
 
 import ray.tune
 
-import beobench.integrations.boptest
-
 PROBLEM_001_BOPTEST_HEATPUMP = {
     "name": "problem_001",
     "description": (
         "Control problem corresponding to "
         "the BOPTEST testcase 'bestest_hydronic_heat_pump'."
     ),
-    "env_creator_to_register": beobench.integrations.boptest.create_env,
+    # Either name of officially integrated problem library or path/url
+    # to docker context of integration
+    "problem_library": "boptest",
     "rllib_experiment_config": {
         "config": {
-            "env": "beobench.integrations.boptest.create_env",
+            # Choose the name you want to give the environment
+            "env": "boptest_bestest_hydronic_heat_pump",
             "env_config": {
                 "boptest_testcase": "bestest_hydronic_heat_pump",
                 "gym_kwargs": {
