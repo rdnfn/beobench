@@ -16,7 +16,6 @@ import beobench.utils
 
 def run_experiment(
     experiment_file: str = None,
-    use_wandb: bool = True,
     wandb_project: str = "initial_experiments",
     wandb_entity: str = "beobench",
     wandb_api_key: str = "",
@@ -30,8 +29,6 @@ def run_experiment(
     Args:
         experiment_file (str, optional): File that defines experiment.
             Defaults to None.
-        use_wandb (bool, optional): whether to use weights and biases (wandb) for
-            logging experiments. Defaults to True.
         wandb_project (str, optional): Name of wandb project. Defaults to
             "initial_experiments".
         wandb_entity (str, optional): Name of wandb entity. Defaults to "beobench".
@@ -46,8 +43,12 @@ def run_experiment(
     if experiment_file is not None:
         experiment_file = pathlib.Path(experiment_file)
 
-    if use_wandb:
+    if wandb_project and wandb_entity:
         callbacks = [_create_wandb_callback(wandb_project, wandb_entity)]
+    elif wandb_project or wandb_entity:
+        raise ValueError(
+            "Only one of wandb_project or wandb_entity given, but both required"
+        )
     else:
         callbacks = []
 
@@ -97,8 +98,6 @@ def run_experiment(
         beobench_flags = []
         if experiment_file:
             beobench_flags.append(f"--experiment-file={exp_file_on_docker}")
-        if use_wandb:
-            beobench_flags.append("--use-wandb")
         if wandb_project:
             beobench_flags.append(f"--wandb-project={wandb_project}")
         if wandb_entity:
@@ -144,14 +143,6 @@ def run_experiment(
     type=click.Path(exists=True, file_okay=True, dir_okay=False),
 )
 @click.option(
-    "--use-wandb",
-    is_flag=True,
-    help=(
-        "Use weights and biases (wandb) to log experiments. "
-        "Requires being logged into wandb."
-    ),
-)
-@click.option(
     "--wandb-project",
     default="initial_experiments",
     help="Weights and biases project name to log runs to.",
@@ -178,7 +169,6 @@ def run_experiment(
 )
 def run_experiment_command(
     experiment_file: str = None,
-    use_wandb: bool = True,
     wandb_project: str = "initial_experiments",
     wandb_entity: str = "beobench",
     wandb_api_key: str = "",
@@ -195,7 +185,6 @@ def run_experiment_command(
     """
     run_experiment(
         experiment_file,
-        use_wandb,
         wandb_project,
         wandb_entity,
         wandb_api_key,
