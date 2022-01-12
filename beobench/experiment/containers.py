@@ -21,8 +21,6 @@ def build_experiment_container(
     if use_no_cache:
         flags.append("--no-cache")
 
-    print(f"Building experiment container `{docker_tag}`...")
-
     AVAILABLE_INTEGRATIONS = ["boptest"]  # pylint: disable=invalid-name
 
     if build_context in AVAILABLE_INTEGRATIONS:
@@ -36,6 +34,8 @@ def build_experiment_container(
             # get alphanumeric name from context
             context_name = "".join(e for e in build_context if e.isalnum())
             docker_tag = f"beobench_custom_{context_name}:latest"
+
+    print(f"Building experiment container `{docker_tag}`...")
 
     args = [
         "docker",
