@@ -12,7 +12,6 @@ import beobench.experiment.definitions.utils
 import beobench.experiment.definitions.default
 import beobench.experiment.containers
 import beobench.utils
-import beobench.integrations.boptest
 
 
 @click.command()
