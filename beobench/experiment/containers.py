@@ -56,6 +56,8 @@ def build_experiment_container(
 
     print("Experiment container build finished.")
 
+    return docker_tag
+
 
 def create_docker_network(network_name: str) -> None:
     """Create docker network.
