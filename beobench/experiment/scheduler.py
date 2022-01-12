@@ -12,7 +12,6 @@ import beobench.experiment.definitions.utils
 import beobench.experiment.definitions.default
 import beobench.experiment.containers
 import beobench.utils
-import beobench.integrations.boptest
 
 
 @click.command()
@@ -55,7 +54,7 @@ import beobench.integrations.boptest
     is_flag=True,
     help="Whether to use cache to build experiment container.",
 )
-def run_experiments_from_cli(
+def run_experiment(
     experiment_file: str = None,
     use_wandb: bool = True,
     wandb_project: str = "initial_experiments",
@@ -104,8 +103,8 @@ def run_experiments_from_cli(
             experiment_def = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(experiment_def)
 
-        # run experiment
-        run_experiment(
+        # run experiment in ray tune
+        run_experiment_in_tune(
             problem_def=experiment_def.problem,
             method_def=experiment_def.method,
             rllib_setup=experiment_def.rllib_setup,
@@ -173,7 +172,7 @@ def run_experiments_from_cli(
         subprocess.check_call(args)
 
 
-def run_experiment(
+def run_experiment_in_tune(
     problem_def: dict, method_def: dict, rllib_setup: dict, rllib_callbacks: list = None
 ) -> ray.tune.ExperimentAnalysis:
     """Run beobench experiment.
@@ -241,4 +240,4 @@ def _create_wandb_callback(
 
 
 if __name__ == "__main__":
-    run_experiments_from_cli()
+    run_experiment()

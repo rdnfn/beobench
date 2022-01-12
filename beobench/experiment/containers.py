@@ -5,7 +5,7 @@ import os
 
 
 def build_experiment_container(use_no_cache: bool = False) -> None:
-    """Build experiment container from beobench/docker/Dockerfile.experiments."""
+    """Build experiment container from beobench/integrations/boptest/Dockerfile."""
 
     print("Building experiment container ...")
 
@@ -19,9 +19,9 @@ def build_experiment_container(use_no_cache: bool = False) -> None:
         "-t",
         "beobench-experiment:latest",
         "-f",
-        "Dockerfile.experiments",  # change to non-default name
+        "Dockerfile",  # change to non-default name
         *flags,
-        "https://github.com/rdnfn/beobench.git#:docker",
+        "https://github.com/rdnfn/beobench.git#:beobench/integrations/boptest",
     ]
     env = os.environ.copy()
     env["DOCKER_BUILDKIT"] = "0"

@@ -1,6 +1,6 @@
 # Beobench main docker file for experiments
 # To build this use
-# > DOCKER_BUILDKIT=0 docker build --no-cache -t beobench:latest -f Dockerfile.experiments https://github.com/rdnfn/beobench.git#:docker
+# > DOCKER_BUILDKIT=0 docker build --no-cache -t beobench:latest -f Dockerfile.boptest https://github.com/rdnfn/beobench.git#:docker
 
 FROM python:3.7
 
