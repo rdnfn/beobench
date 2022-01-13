@@ -18,5 +18,7 @@ COPY env_creator.py /opt/beobench/experiment_setup/
 # add env creator to python path
 ENV PYTHONPATH "${PYTHONPATH}:/opt/beobench/experiment_setup/"
 
-# use beobench to install BOPTEST
-RUN python -m beobench.installer
+# use installer script to install BOPTEST
+COPY installer.py tmp/
+RUN python tmp/installer.py
+RUN rm tmp/installer.py

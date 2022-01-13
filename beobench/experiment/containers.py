@@ -25,10 +25,12 @@ def build_experiment_container(
 
     if build_context in AVAILABLE_INTEGRATIONS:
         docker_tag = f"beobench_{build_context}:latest"
+        integration_name = build_context
         build_context = (
             f"https://github.com/rdnfn/"
             f"beobench.git#:beobench/integrations/{build_context}"
         )
+        print(f"Building {integration_name} experiment container from {build_context}")
     else:
         if docker_tag is None:
             # get alphanumeric name from context
