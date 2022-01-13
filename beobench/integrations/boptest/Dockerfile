@@ -20,5 +20,5 @@ ENV PYTHONPATH "${PYTHONPATH}:/opt/beobench/experiment_setup/"
 
 # use installer script to install BOPTEST
 COPY installer.py tmp/
-RUN python tmp/installer.py
-RUN rm tmp/installer.py
+RUN python tmp/installer.py \
+    && rm tmp/installer.py
