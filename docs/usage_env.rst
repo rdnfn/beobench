@@ -40,19 +40,6 @@ Running experiment
 
 With a complete experiment definition file ``example_experiment_def.py``, we can then use the standard command below to start the experiment:
 
-.. tabs::
-
-    .. code-tab:: console Console
-
-            python -m beobench.experiment.scheduler \
-                --experiment-file example_experiment_def.py
-
-    .. code-tab:: python
-
-        import beobench.experiment.scheduler
-
-        beobench.experiment.scheduler.run_experiment(
-            experiment_file = "example_experiment_def.py",
-        )
+.. include:: snippets/run_standard_experiment.rst
 
 Done! You have now successfully integrated your RL environment with beobench.
