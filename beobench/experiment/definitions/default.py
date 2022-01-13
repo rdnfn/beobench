@@ -2,7 +2,7 @@
 
 import ray.tune
 
-PROBLEM_001_BOPTEST_HEATPUMP = {
+problem = {
     "name": "problem_001",
     "description": (
         "Control problem corresponding to "
@@ -33,7 +33,7 @@ PROBLEM_001_BOPTEST_HEATPUMP = {
     },
 }
 
-METHOD_001_PPO = {
+method = {
     "name": "PPO",
     "description": "Proximal policy optimisation.",
     "rllib_experiment_config": {
@@ -49,7 +49,7 @@ METHOD_001_PPO = {
     },
 }
 
-RLLIB_SETUP = {
+rllib_setup = {
     "rllib_experiment_config": {
         "config": {
             # Utilities settings
@@ -64,8 +64,3 @@ RLLIB_SETUP = {
         "checkpoint_freq": 10000,
     },
 }
-
-
-problem = PROBLEM_001_BOPTEST_HEATPUMP
-method = METHOD_001_PPO
-rllib_setup = RLLIB_SETUP
