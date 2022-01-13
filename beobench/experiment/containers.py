@@ -31,7 +31,10 @@ def build_experiment_container(
             f"beobench.git#master:beobench/integrations/{build_context}"
         )
         print(
-            f"Recognised integration named {integration_name}: using build context {build_context}"
+            (
+                f"Recognised integration named {integration_name}: using build"
+                f" context {build_context}"
+            )
         )
     else:
         if docker_tag is None:
