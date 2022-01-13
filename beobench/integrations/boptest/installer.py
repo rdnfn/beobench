@@ -1,4 +1,4 @@
-"""Module to install different problem defining gym libraries"""
+"""Module to install different boptest libraries"""
 
 # For python 3.7
 from __future__ import annotations
@@ -10,13 +10,27 @@ import click
 import subprocess
 import warnings
 
-from beobench.constants import (
-    DEFAULT_INSTALL_PATH,
-    BOPTEST_REPO_URL,
-    BOPTEST_REPO_NAME,
-    BOPTEST_COMMIT,
-    BOPTEST_PIP_DEP,
-)
+# Constants
+DEFAULT_INSTALL_PATH = pathlib.Path("/opt/beobench")
+
+
+# Repo URLs and dependencies
+BOPTEST_REPO_URL = "https://github.com/ibpsa/project1-boptest.git"
+BOPTEST_REPO_NAME = "project1-boptest"
+BOPTEST_COMMIT = "703daf26a9e9e18de7141c021cbfe36aa3578ea8"
+BOPTEST_PIP_DEP = [
+    "flask-restful==0.3.9",
+    "pandas==1.3.4",
+    "flask_cors==3.0.10",
+    # BOPTEST gym cannot be added as a direct or extra
+    # dependency in setup.py because pypi does not accept
+    # such direct dependencies. Therefore it is installed
+    # here.
+    (
+        "boptest_gym@git+"
+        "https://github.com/rdnfn/project1-boptest-gym.git@rdnfn/feature-packaging"
+    ),
+]
 
 
 @click.command()
@@ -29,21 +43,6 @@ from beobench.constants import (
     help="whether to install python dependencies via pip. Defaults to True.",
 )
 def install(
-    install_path: str = DEFAULT_INSTALL_PATH, pip_install_dep: bool = True
-) -> None:
-    """Install all beobench dependencies.
-
-    Args:
-        install_path (str, optional): Path of installation.
-            Defaults to DEFAULT_INSTALL_PATH.
-        pip_install_dep (bool, optional): whether to install python dependencies
-            via pip. Defaults to True.
-    """
-
-    install_boptest(install_path=install_path, pip_install_dep=pip_install_dep)
-
-
-def install_boptest(
     install_path: str = DEFAULT_INSTALL_PATH,
     pip_install_dep: bool = True,
 ):
