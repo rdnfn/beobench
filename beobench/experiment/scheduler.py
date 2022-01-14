@@ -17,8 +17,8 @@ import beobench.utils
 def run(
     experiment_file: str = None,
     local_dir: str = "./beobench_results/ray_results",
-    wandb_project: str = "initial_experiments",
-    wandb_entity: str = "beobench",
+    wandb_project: str = "",
+    wandb_entity: str = "",
     wandb_api_key: str = "",
     no_additional_container: bool = False,
     use_no_cache: bool = False,
@@ -164,12 +164,12 @@ def run(
 )
 @click.option(
     "--wandb-project",
-    default="initial_experiments",
+    default="",
     help="Weights and biases project name to log runs to.",
 )
 @click.option(
     "--wandb-entity",
-    default="beobench",
+    default="",
     help="Weights and biases entity name to log runs under.",
 )
 @click.option(
