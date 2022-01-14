@@ -1,5 +1,5 @@
 =====
-Usage
+Guides
 =====
 
 Welcome to beobench's usage guides!
@@ -10,3 +10,4 @@ Welcome to beobench's usage guides!
    guides/quickstart
    guides/intro_experiment
    guides/add_env
+   guides/dev_env

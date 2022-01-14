@@ -1,29 +1,6 @@
 .. highlight:: shell
 
-============
-Installation
-============
-
-
-.. _sec-installation:
-
-Recommended method
-------------------
-
-To install beobench, simply run this command in your terminal:
-
-.. code-block:: console
-
-    pip install beobench
-
-To complete the installation, ensure that `docker <https://www.docker.com/get-started>`_ is also installed.
-
-.. This is the preferred method to install beobench, as it will always install the most recent stable release.
-
-
-
-
-Development environment
+Setting up development environment
 -----------------------
 
 Requirements
