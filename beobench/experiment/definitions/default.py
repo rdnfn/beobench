@@ -59,7 +59,6 @@ rllib_setup = {
             "num_gpus": 1,
             "seed": ray.tune.randint(0, 10000000),
         },
-        "local_dir": "./tmp/tune/",
         "log_to_file": True,
         "checkpoint_freq": 10000,
     },
