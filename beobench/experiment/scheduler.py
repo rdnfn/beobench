@@ -14,7 +14,7 @@ import beobench.experiment.containers
 import beobench.utils
 
 
-def run_experiment(
+def run(
     experiment_file: str = None,
     wandb_project: str = "initial_experiments",
     wandb_entity: str = "beobench",
@@ -66,7 +66,7 @@ def run_experiment(
 
     if no_additional_container:
         # run experiment in ray tune
-        run_experiment_in_tune(
+        run_in_tune(
             problem_def=experiment_def.problem,
             method_def=experiment_def.method,
             rllib_setup=experiment_def.rllib_setup,
@@ -167,7 +167,7 @@ def run_experiment(
     is_flag=True,
     help="Whether to use cache to build experiment container.",
 )
-def run_experiment_command(
+def run_command(
     experiment_file: str = None,
     wandb_project: str = "initial_experiments",
     wandb_entity: str = "beobench",
@@ -177,13 +177,13 @@ def run_experiment_command(
 ) -> None:
     """Run experiment from command line.
 
-    Command line version of run_experiment function. This appears to be
+    Command line version of run function. This appears to be
     the best (but not great) way to have a parallel python and command
     line interface.
 
     See https://stackoverflow.com/a/40094408.
     """
-    run_experiment(
+    run(
         experiment_file,
         wandb_project,
         wandb_entity,
@@ -193,7 +193,7 @@ def run_experiment_command(
     )
 
 
-def run_experiment_in_tune(
+def run_in_tune(
     problem_def: dict, method_def: dict, rllib_setup: dict, rllib_callbacks: list = None
 ) -> ray.tune.ExperimentAnalysis:
     """Run beobench experiment.
@@ -264,4 +264,4 @@ def _create_wandb_callback(
 
 
 if __name__ == "__main__":
-    run_experiment_command()
+    run_command()

@@ -9,6 +9,6 @@
 
         import beobench.experiment.scheduler
 
-        beobench.experiment.scheduler.run_experiment(
+        beobench.experiment.scheduler.run(
             experiment_file = "example_experiment_def.py",
         )
