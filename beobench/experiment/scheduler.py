@@ -160,7 +160,7 @@ def run(
     "--local-dir",
     default="./beobench_results/ray_results",
     help="Local directory to write results to.",
-    type=click.Path(exists=True, file_okay=True, dir_okay=False),
+    type=click.Path(exists=False, file_okay=False, dir_okay=True),
 )
 @click.option(
     "--wandb-project",
