@@ -33,7 +33,7 @@ Features
 
 **Main features**
 
-- *RL algorithms collection:* what's the best RL method for your BEO problem? Building on `Ray RLlib <https://github.com/ray-project/ray/tree/master/rllib>`_, beobench provides a large collection of pre-configured RL algorithm experiments that can be easily applied to your new BEO problem.
+- *RL algorithm collection:* what's the best RL method for your BEO problem? Building on `Ray RLlib <https://github.com/ray-project/ray/tree/master/rllib>`_, beobench provides a large collection of pre-configured RL algorithm experiments that can be easily applied to your new BEO problem.
 - *Problem collection:* beobench provides ready-to-use docker containers for popular BEO gym-type problem libraries. By enforcing a strict OpenAI ``gym.Env`` it makes testing your method on different libraries easy.
 
 **Other features**
