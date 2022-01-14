@@ -1,6 +1,16 @@
 Creating new experiments
 ------------------------
 
+Overview
+^^^^^^^^
+
+The diagram below gives an overview of how beobench experiment work. The ``beobench.scheduler.run()`` function builds and starts an *experiment container*. Within this container all experiments are being run using the *Ray RLlib* and *Ray Tune* libraries. Results are saved to a local folder (by default ``./beobench_results``), and optionally addionally to Weights and Biases (wandb).
+
+.. image:: ../_static/experiment_run_flow.png
+   :width: 450 px
+   :alt: experiment run diagram
+   :align: center
+
 Experiment configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -15,7 +25,7 @@ Beobench defines experiments using three separate dictionaries for problem, meth
 
 Given this configuration file ``example_experiment_def.py``, we can the experiment using the following commands:
 
-.. include:: snippets/run_standard_experiment.rst
+.. include:: ../snippets/run_standard_experiment.rst
 
 
 Hyperparameter Search Spaces
