@@ -44,4 +44,12 @@ Although the ``./beobench_results`` folder already contains a lot of information
                 wandb_entity=<your_entity>,
                 wandb_api_key=<your_api_key>
         )
-where you replace ``<your_project_name>``, ``<your_entity>`` and ``<your_api_key>`` with your own wandb information. See `this guide <https://docs.wandb.ai/quickstart>`_ to get started with wandb. With this setup you will now be able to see the experiment progress on your wandb dashboard.
+where you replace ``<your_project_name>``, ``<your_entity>`` and ``<your_api_key>`` with your own wandb information. See `this guide <https://docs.wandb.ai/quickstart>`_ to get started with wandb. With this setup you will now be able to see the experiment progress on your wandb dashboard, similar to the one shown below. You can `find a live dashboard of another run of this experiment here <https://wandb.ai/beobench/doc-test/runs/66299_00000>`_.
+
+.. image:: ../_static/wandb_demo.png
+   :width: 550 px
+   :alt: wandb website
+   :align: center
+   :target: `example wandb`_
+
+.. _example wandb: https://wandb.ai/beobench/doc-test/runs/66299_00000
