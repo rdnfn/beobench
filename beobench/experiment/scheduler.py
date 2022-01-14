@@ -14,8 +14,9 @@ import beobench.experiment.containers
 import beobench.utils
 
 
-def run_experiment(
+def run(
     experiment_file: str = None,
+    local_dir: str = "./beobench_results/ray_results",
     wandb_project: str = "initial_experiments",
     wandb_entity: str = "beobench",
     wandb_api_key: str = "",
@@ -24,11 +25,15 @@ def run_experiment(
 ) -> None:
     """Run experiment.
 
-    This function allows the use to run experiments from the command line or python interface.
+    This function allows the use to run experiments from the command line or python
+    interface.
 
     Args:
         experiment_file (str, optional): File that defines experiment.
             Defaults to None.
+        local_dir (str, optional): Directory to write experiment files to. This argument
+            is equivalent to the `local_dir` argument in `tune.run()`. Defaults to
+            `"./beobench_results/ray_results"`.
         wandb_project (str, optional): Name of wandb project. Defaults to
             "initial_experiments".
         wandb_entity (str, optional): Name of wandb entity. Defaults to "beobench".
@@ -40,22 +45,11 @@ def run_experiment(
             container.
     """
 
-    if experiment_file is not None:
-        experiment_file = pathlib.Path(experiment_file)
-
-    if wandb_project and wandb_entity:
-        callbacks = [_create_wandb_callback(wandb_project, wandb_entity)]
-    elif wandb_project or wandb_entity:
-        raise ValueError(
-            "Only one of wandb_project or wandb_entity given, but both required"
-        )
-    else:
-        callbacks = []
-
     # Load experiment definition file
     if experiment_file is None:
         experiment_def = beobench.experiment.definitions.default
     else:
+        experiment_file = pathlib.Path(experiment_file)
         # import experiment definition file as module
         spec = importlib.util.spec_from_file_location(
             "experiment_definition",
@@ -65,8 +59,19 @@ def run_experiment(
         spec.loader.exec_module(experiment_def)
 
     if no_additional_container:
+
+        # Add wandb callback if sufficient information
+        # TODO: add earlier check to see that also API key available
+        if wandb_project and wandb_entity:
+            callbacks = [_create_wandb_callback(wandb_project, wandb_entity)]
+        elif wandb_project or wandb_entity:
+            raise ValueError(
+                "Only one of wandb_project or wandb_entity given, but both required."
+            )
+        else:
+            callbacks = []
         # run experiment in ray tune
-        run_experiment_in_tune(
+        run_in_tune(
             problem_def=experiment_def.problem,
             method_def=experiment_def.method,
             rllib_setup=experiment_def.rllib_setup,
@@ -75,6 +80,12 @@ def run_experiment(
     else:
         # build and run experiments in docker container
 
+        # Ensure local_dir exists, and create otherwise
+        local_dir_path = pathlib.Path(local_dir)
+        local_dir_path.mkdir(parents=True, exist_ok=True)
+        local_dir_abs = str(local_dir_path.absolute())
+
+        # docker setup
         image_tag = beobench.experiment.containers.build_experiment_container(
             build_context=experiment_def.problem["problem_library"],
             use_no_cache=use_no_cache,
@@ -110,6 +121,9 @@ def run_experiment(
             # the mounted socket allows access to docker
             "-v",
             "/var/run/docker.sock:/var/run/docker.sock",
+            # mount experiment data dir
+            "-v",
+            f"{local_dir_abs}:/root/ray_results",
             # automatically remove container when stopped/exited
             "--rm",
             # network allows access to BOPTEST API in other containers
@@ -143,6 +157,12 @@ def run_experiment(
     type=click.Path(exists=True, file_okay=True, dir_okay=False),
 )
 @click.option(
+    "--local-dir",
+    default="./beobench_results/ray_results",
+    help="Local directory to write results to.",
+    type=click.Path(exists=True, file_okay=True, dir_okay=False),
+)
+@click.option(
     "--wandb-project",
     default="initial_experiments",
     help="Weights and biases project name to log runs to.",
@@ -167,33 +187,35 @@ def run_experiment(
     is_flag=True,
     help="Whether to use cache to build experiment container.",
 )
-def run_experiment_command(
-    experiment_file: str = None,
-    wandb_project: str = "initial_experiments",
-    wandb_entity: str = "beobench",
-    wandb_api_key: str = "",
-    no_additional_container: bool = False,
-    use_no_cache: bool = False,
+def run_command(
+    experiment_file: str,
+    local_dir: str,
+    wandb_project: str,
+    wandb_entity: str,
+    wandb_api_key: str,
+    no_additional_container: bool,
+    use_no_cache: bool,
 ) -> None:
     """Run experiment from command line.
 
-    Command line version of run_experiment function. This appears to be
+    Command line version of run function. This appears to be
     the best (but not great) way to have a parallel python and command
     line interface.
 
     See https://stackoverflow.com/a/40094408.
     """
-    run_experiment(
-        experiment_file,
-        wandb_project,
-        wandb_entity,
-        wandb_api_key,
-        no_additional_container,
-        use_no_cache,
+    run(
+        experiment_file=experiment_file,
+        local_dir=local_dir,
+        wandb_project=wandb_project,
+        wandb_entity=wandb_entity,
+        wandb_api_key=wandb_api_key,
+        no_additional_container=no_additional_container,
+        use_no_cache=use_no_cache,
     )
 
 
-def run_experiment_in_tune(
+def run_in_tune(
     problem_def: dict, method_def: dict, rllib_setup: dict, rllib_callbacks: list = None
 ) -> ray.tune.ExperimentAnalysis:
     """Run beobench experiment.
@@ -264,4 +286,4 @@ def _create_wandb_callback(
 
 
 if __name__ == "__main__":
-    run_experiment_command()
+    run_command()  # pylint: disable=no-value-for-parameter

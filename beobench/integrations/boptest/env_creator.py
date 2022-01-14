@@ -12,7 +12,7 @@ except ImportError as error:
     raise ImportError(
         (
             "boptest_gym package is not installed. "
-            "You may want to use `python -m beobench.installer` "
+            "You may want to use `installer.py` in the boptest integration"
             "to install BOPTEST including the boptest_gym package."
         )
     ) from error
