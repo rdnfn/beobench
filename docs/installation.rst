@@ -5,6 +5,8 @@ Installation
 ============
 
 
+.. _sec-installation:
+
 Recommended method
 ------------------
 

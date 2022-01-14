@@ -1,5 +1,5 @@
-Adding an environment to beobench
-=====================================
+Adding your own environment
+-----------------------------
 
 This guide explains how to add a new reinforcement learning (RL) environment to beobench.
 
@@ -9,7 +9,7 @@ This guide explains how to add a new reinforcement learning (RL) environment to 
 
 
 Creating build context
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To add an environment to beobench we need to create a special *docker build context* (for more details `see the official docker build documentation <https://docs.docker.com/engine/reference/commandline/build/>`_). Such a beobench-specific *docker build context* consists of least the following two files in a folder ``<your_gym_name>/``:
 
@@ -22,7 +22,7 @@ The path to the folder with these two files, ``path/to/folder/<your_gym_name>/``
 
 
 Defining experiment
----------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In order run an experiment on your gym, we need to add the build context to an experiment definition. This can be done by adding/changing the following parameter in your experiment definition file ``example_experiment_def.py`` (see the :doc:`usage` page for how to create a complete experiment definition file):
 
@@ -36,7 +36,7 @@ In order run an experiment on your gym, we need to add the build context to an e
 For example, we could set the ``problem_library`` key to ``"https://github.com/rdnfn/beobench.git#master:beobench/integrations/boptest"``.
 
 Running experiment
----------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 With a complete experiment definition file ``example_experiment_def.py``, we can then use the standard command below to start the experiment:
 
