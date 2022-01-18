@@ -8,7 +8,7 @@ Requirements
 
 Beobench uses `vscode dev containers <https://code.visualstudio.com/docs/remote/containers-tutorial>`_ for its development environment. The installation has the following pre-requisites on the local machine:
 
-1. `Docker <https://www.docker.com/get-started>`_
+1. `Docker <https://docs.docker.com/get-docker/>`_
 2. `Visual Studio Code (vscode) <https://code.visualstudio.com/>`_
 3. `vscode remote extension pack <https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack>`_
 
