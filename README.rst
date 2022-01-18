@@ -55,13 +55,13 @@ Quickstart
 
 Run your first beobench experiment in three steps:
 
-1. Install *docker* on your machine (`get it from docker.com <https://docs.docker.com/get-docker/>`_ and, if on linux, go through the `post-installation steps <https://docs.docker.com/engine/install/linux-postinstall/>`_).
+1. `Install docker <https://docs.docker.com/get-docker/>`_ on your machine (if on Linux, check the `additional installation steps <https://beobench.readthedocs.io/en/latest/guides/installation_linux.html>`_)
 2. Install *beobench* using:
 
         .. code-block:: console
 
                 pip install beobench
-
+                
 3. Finally, start your first experiment using:
 
         .. code-block:: console
