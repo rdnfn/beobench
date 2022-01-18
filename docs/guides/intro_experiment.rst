@@ -4,7 +4,7 @@ Creating new experiments
 Overview
 ^^^^^^^^
 
-The diagram below gives an overview of how beobench experiment work. The ``beobench.experiment.scheduler.run()`` function builds and starts an *experiment container*. Within this container all experiments are being run using the *Ray RLlib* and *Ray Tune* libraries. Results are saved to a local folder (by default ``./beobench_results``), and optionally addionally to Weights and Biases (wandb).
+The diagram below gives an overview of how beobench experiments work. The ``beobench.experiment.scheduler.run()`` function builds and starts an *experiment container*. Within this container all experiments are being run using the *Ray RLlib* and *Ray Tune* libraries. Results are saved to a local folder (by default ``./beobench_results``), and optionally to Weights and Biases (wandb) as well.
 
 .. image:: ../_static/experiment_run_flow.png
    :width: 450 px
