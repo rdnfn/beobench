@@ -19,7 +19,7 @@ Let's run your first experiment with beobench. After installing beobench using t
 
         beobench.experiment.scheduler.run()
 
-This will run the default experiment `defined here <beobench/experiment/definitions/default.py>`_: Proximal Policy Optimisation (PPO) applied a testcase in the BOPTEST library. The results of this experiment will be logged in a newly created ``./beobench_results`` directory.
+This will run the default experiment `defined here <beobench/experiment/definitions/default.py>`_: applying the reinforcement learning method `Proximal Policy Optimisation (PPO) <https://arxiv.org/pdf/1707.06347.pdf>`_ to control a residential `HVAC system <https://en.wikipedia.org/wiki/Heating,_ventilation,_and_air_conditioning>`_ (defined in the `BOPTEST bestest_hydronic testcase <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/bestest_hydronic/doc/index.html>`_). The results of this experiment will be logged in a newly created ``./beobench_results`` directory.
 
 Visualize experiment results
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
