@@ -10,6 +10,8 @@ with open("PYPI_README.rst", encoding="UTF-8") as readme_file:
 with open("HISTORY.rst", encoding="UTF-8") as history_file:
     history = history_file.read()
 
+version = "0.1.0"
+
 requirements = [
     "wandb",
     "docker",
@@ -46,6 +48,5 @@ setup(
     test_suite="tests",
     tests_require=test_requirements,
     url="https://github.com/rdnfn/beobench",
-    version="0.1.0",
     zip_safe=False,
 )
