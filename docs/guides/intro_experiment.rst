@@ -14,7 +14,7 @@ The diagram below gives an overview of how beobench experiments work. The ``beob
 Experiment configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Beobench defines experiments using three separate dictionaries for problem, method and machine configuration. Each defines the parameters relevant to one of these configurations. Internally, beobench then merges these three dictionaries into a single dictionary that is passed to the ``ray.tune.run()`` method. A beobench configuration file is a ``.py`` file that defines the variables ``problem``, ``method`` and ``rllib_setup``. For example, let the following be the content of a file named ``example_experiment_def.py``:
+Beobench defines experiments using three separate dictionaries for problem, method and machine configuration. Each defines the parameters relevant to one of these configurations. Internally, beobench then merges these three dictionaries into a single dictionary that is passed to the ``ray.tune.run()`` function. A beobench configuration file is a ``.py`` file that defines the variables ``problem``, ``method`` and ``rllib_setup``. For example, let the following be the content of a file named ``example_experiment_def.py``:
 
 
 .. include:: ../../beobench/experiment/definitions/default.py
