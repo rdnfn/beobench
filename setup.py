@@ -49,4 +49,5 @@ setup(
     tests_require=test_requirements,
     url="https://github.com/rdnfn/beobench",
     zip_safe=False,
+    version=version,
 )
