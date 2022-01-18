@@ -40,7 +40,7 @@ Features
 
 - *Experiment logging:* log experiment results in a reproducible and shareable manner via `Weights and Biases`_.
 - *Hyperparameter tuning:* easily tune hyperparameters using the extensive `Ray Tune Search API <https://docs.ray.io/en/master/tune/index.html>`_.
-- *Simple installation:* beobench can be installed via pip.
+- *Simple installation:* beobench can be installed via pip and only requires docker as an additional non-python dependency.
 - *Easily extendable:* beobench is designed for the user to add both environments and methods.
 
 .. _Weights and Biases: https://wandb.ai/
