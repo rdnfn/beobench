@@ -18,6 +18,8 @@ Recommended method
 
                 pip install beobench
 
+Look at the :doc:`getting started <getting_started>` guide to run your first beobench experiment.
+
 Directly from GitHub
 ^^^^^^^^^^^^^^^^^^^^
 
