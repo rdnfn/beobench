@@ -40,12 +40,37 @@ Features
 
 - *Experiment logging:* log experiment results in a reproducible and shareable manner via `Weights and Biases`_.
 - *Hyperparameter tuning:* easily tune hyperparameters using the extensive `Ray Tune Search API <https://docs.ray.io/en/master/tune/index.html>`_.
-- *Simple installation:* beobench can be installed via pip.
+- *Simple installation:* beobench can be installed via pip and only requires docker as an additional non-python dependency.
 - *Easily extendable:* beobench is designed for the user to add both environments and methods.
 
 .. _Weights and Biases: https://wandb.ai/
 
 .. end-in-sphinx-docs
+
+
+.. start-quickstart
+
+Quickstart
+----------
+
+Run your first beobench experiment in three steps:
+
+1. Install *docker* on your machine (`get it from docker.com <https://docs.docker.com/get-docker/>`_ and, if on linux, go through the `post-installation steps <https://docs.docker.com/engine/install/linux-postinstall/>`_).
+2. Install *beobench* using:
+
+        .. code-block:: console
+
+                pip install beobench
+
+3. Finally, start your first experiment using:
+
+        .. code-block:: console
+
+                python -m beobench.experiment.scheduler
+
+Done, you have just started your first experiment... congrats! Check out the `full getting started guide in the documentation <https://beobench.readthedocs.io/en/latest/guides/getting_started.html>`_ for the next steps.
+
+.. end-quickstart
 
 Documentation
 -------------

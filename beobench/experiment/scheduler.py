@@ -7,6 +7,7 @@ import uuid
 import subprocess
 import pathlib
 import importlib.util
+import os
 
 import beobench.experiment.definitions.utils
 import beobench.experiment.definitions.default
@@ -114,6 +115,11 @@ def run(
         if wandb_entity:
             beobench_flags.append(f"--wandb-entity={wandb_entity}")
         beobench_flag_str = " ".join(beobench_flags)
+
+        # if no wandb API key is given try to get it from env
+        if not wandb_api_key:
+            # this will return "" if env var not set
+            wandb_api_key = os.getenv("WANDB_API_KEY", "")
 
         args = [
             "docker",

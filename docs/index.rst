@@ -12,8 +12,8 @@ Contents
    :maxdepth: 2
 
    self
-   installation
-   usage
+   guides/installation
+   guides
    api
    contributing
    authors

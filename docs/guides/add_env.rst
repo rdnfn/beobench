@@ -35,6 +35,10 @@ In order run an experiment on your gym, we need to add the build context to an e
 
 For example, we could set the ``problem_library`` key to ``"https://github.com/rdnfn/beobench.git#master:beobench/integrations/boptest"``.
 
+.. warning::
+
+    Only set ``problem_library`` to experiment build contexts from authors that you trust. This setting can create an arbitrary docker container on your system.
+
 Running experiment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

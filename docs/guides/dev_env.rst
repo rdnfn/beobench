@@ -1,29 +1,6 @@
 .. highlight:: shell
 
-============
-Installation
-============
-
-
-.. _sec-installation:
-
-Recommended method
-------------------
-
-To install beobench, simply run this command in your terminal:
-
-.. code-block:: console
-
-    pip install beobench
-
-To complete the installation, ensure that `docker <https://www.docker.com/get-started>`_ is also installed.
-
-.. This is the preferred method to install beobench, as it will always install the most recent stable release.
-
-
-
-
-Development environment
+Setting up development environment
 -----------------------
 
 Requirements
@@ -31,7 +8,7 @@ Requirements
 
 Beobench uses `vscode dev containers <https://code.visualstudio.com/docs/remote/containers-tutorial>`_ for its development environment. The installation has the following pre-requisites on the local machine:
 
-1. `Docker <https://www.docker.com/get-started>`_
+1. `Docker <https://docs.docker.com/get-docker/>`_
 2. `Visual Studio Code (vscode) <https://code.visualstudio.com/>`_
 3. `vscode remote extension pack <https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack>`_
 
