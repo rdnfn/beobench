@@ -11,14 +11,14 @@ Installation
 Recommended method
 ^^^^^^^^^^^^^^^^^^
 
-1. Install *docker* on your machine (`get it from docker.com <https://docs.docker.com/get-docker/>`_ and, if on linux, go through the `post-installation steps <https://docs.docker.com/engine/install/linux-postinstall/>`_).
+1. `Install docker <https://docs.docker.com/get-docker/>`_ on your machine (if on Linux, check the :doc:`additional installation steps <installation_linux>`)
 2. Install *beobench* using:
 
         .. code-block:: console
 
                 pip install beobench
 
-Look at the :doc:`getting started <getting_started>` guide to run your first beobench experiment.
+Look at the :doc:`getting started guide <getting_started>` to run your first beobench experiment.
 
 Directly from GitHub
 ^^^^^^^^^^^^^^^^^^^^
