@@ -28,7 +28,7 @@ def build_experiment_container(
         integration_name = build_context
         build_context = (
             f"https://github.com/rdnfn/"
-            f"beobench.git#master:beobench/integrations/{build_context}"
+            f"beobench_contrib.git#main:gyms/{build_context}"
         )
         print(
             (
