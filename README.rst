@@ -31,12 +31,12 @@ Features
 
 *Some of the features are work in progress*
 
-**Main features**
+Main features
 
 - *RL algorithm collection:* what's the best RL method for your BEO problem? Building on `Ray RLlib <https://github.com/ray-project/ray/tree/master/rllib>`_, beobench provides a large collection of pre-configured RL algorithm experiments that can be easily applied to your new BEO problem.
 - *Problem collection:* beobench provides ready-to-use docker containers for popular BEO gym-type problem libraries. By enforcing a strict OpenAI ``gym.Env`` it makes testing your method on different libraries easy.
 
-**Additional features**
+Additional features
 
 - *Experiment logging:* log experiment results in a reproducible and shareable manner via `Weights and Biases`_.
 - *Hyperparameter tuning:* easily tune hyperparameters using the extensive `Ray Tune Search API <https://docs.ray.io/en/master/tune/index.html>`_.
@@ -61,7 +61,7 @@ Run your first beobench experiment in three steps:
         .. code-block:: console
 
                 pip install beobench
-                
+
 3. Finally, start your first experiment using:
 
         .. code-block:: console
