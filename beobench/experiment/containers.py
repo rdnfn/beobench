@@ -21,7 +21,7 @@ def build_experiment_container(
     if use_no_cache:
         flags.append("--no-cache")
 
-    AVAILABLE_INTEGRATIONS = ["boptest"]  # pylint: disable=invalid-name
+    AVAILABLE_INTEGRATIONS = ["boptest","sinergym"]  # pylint: disable=invalid-name
 
     if build_context in AVAILABLE_INTEGRATIONS:
         docker_tag = f"beobench_{build_context}:latest"
