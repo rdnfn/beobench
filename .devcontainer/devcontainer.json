@@ -23,7 +23,7 @@
 		"source=/home/rdnfn-docker/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached",
 		"source=/home/rdnfn-docker/main/repos/github/beobench_contrib,target=/workspace/beobench_contrib/,type=bind,consistency=cached"
 	],
-	"postCreateCommand": "pwd && pip install -e .",
+	"postCreateCommand": "cd beobench && pip install -e .",
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
 		"python.defaultInterpreterPath": "/usr/local/bin/python",
