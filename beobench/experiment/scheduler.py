@@ -59,6 +59,16 @@ def run(
         experiment_def = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(experiment_def)
 
+        # check if all attributes present and replace with default if not
+        if not hasattr(experiment_def, "problem"):
+            experiment_def.problem = beobench.experiment.definitions.default.problem
+        if not hasattr(experiment_def, "method"):
+            experiment_def.method = beobench.experiment.definitions.default.method
+        if not hasattr(experiment_def, "rllib_setup"):
+            experiment_def.rllib_setup = (
+                beobench.experiment.definitions.default.rllib_setup
+            )
+
     if no_additional_container:
 
         # Add wandb callback if sufficient information
