@@ -17,12 +17,13 @@
 	"workspaceFolder": "/workspace",
 	// "workspaceMount": "source=remote-workspace,target=/workspace,type=volume",
 	// ADAPT: the mount must be adapted to cloned repo location
-	"workspaceMount": "source=/home/rdnfn-docker/main/repos/github/beobench/,target=/workspace,type=bind,consistency=cached",
+	"workspaceMount": "source=/home/rdnfn-docker/main/repos/github/beobench/,target=/workspace/beobench/,type=bind,consistency=cached",
 	// ADAPT: the mount must be adapted to the gitconfig location on the remote machine
 	"mounts": [
-		"source=/home/rdnfn-docker/.gitconfig,target=/.gitconfig,type=bind,consistency=cached"
+		"source=/home/rdnfn-docker/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached",
+		"source=/home/rdnfn-docker/main/repos/github/beobench_contrib,target=/workspace/beobench_contrib/,type=bind,consistency=cached"
 	],
-	"postCreateCommand": "pwd && pip install -e .",
+	"postCreateCommand": "cd ./beobench && pip install -e .",
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
 		"python.defaultInterpreterPath": "/usr/local/bin/python",

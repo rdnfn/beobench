@@ -2,6 +2,13 @@
 History
 =======
 
+0.2.1 (2022-02-03)
+------------------
+
+* Add integration with sinergym
+* Move gym integrations to separate beobench_contrib repo
+* Make usage of GPUs in containers optional
+
 0.2.0 (2022-01-18)
 ------------------
 

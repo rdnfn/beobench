@@ -14,14 +14,6 @@ RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requ
     -r /tmp/pip-tmp/boptest_requirements.txt \
     && rm -rf /tmp/pip-tmp
 
-# Install beobench problem set libraries
-ENV MAIN_PYTHONPATH = "${PYTHONPATH}"
-ENV PYTHONPATH "${PYTHONPATH}:/tmp"
-COPY beobench/installer.py beobench/constants.py /tmp/beobench/
-RUN python /tmp/beobench/installer.py \
-    && rm -rf /tmp/beobench
-ENV PYTHONPATH = "${MAIN_PYTHONPATH}"
-
 # Install nvidia container runtime
 RUN wget -O tmp/nvidia-container-toolkit.deb https://nvidia.github.io/libnvidia-container/stable/debian10/amd64/nvidia-container-toolkit_1.7.0-1_amd64.deb \
     && wget -O tmp/nvidia-container-tools.deb https://nvidia.github.io/libnvidia-container/stable/debian10/amd64/libnvidia-container-tools_1.7.0-1_amd64.deb \
