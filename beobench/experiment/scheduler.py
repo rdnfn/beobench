@@ -21,6 +21,8 @@ def run(
     wandb_project: str = "",
     wandb_entity: str = "",
     wandb_api_key: str = "",
+    use_gpu: bool = False,
+    docker_shm_size: str = "2gb",
     no_additional_container: bool = False,
     use_no_cache: bool = False,
 ) -> None:
@@ -39,6 +41,10 @@ def run(
             "initial_experiments".
         wandb_entity (str, optional): Name of wandb entity. Defaults to "beobench".
         wandb_api_key (str, optional): wandb API key. Defaults to None.
+        use_gpu (bool, optional): whether to use GPU from the host system. Defaults to
+            False.
+        docker_shm_size(str, optional): size of the shared memory available to the
+            container. Defaults to '2gb'."
         no_additional_container (bool, optional): wether not to start another container
             to run experiments in. Defaults to False, which means that another container
             is started to run experiments in.
@@ -101,7 +107,6 @@ def run(
             build_context=experiment_def.problem["problem_library"],
             use_no_cache=use_no_cache,
         )
-        beobench.experiment.containers.create_docker_network("beobench-net")
 
         # define docker arguments/options/flags
         unique_id = uuid.uuid4().hex[:6]
@@ -114,6 +119,28 @@ def run(
             docker_flags += [
                 "-v",
                 f"{exp_file_abs}:{exp_file_on_docker}:ro",
+            ]
+
+        # enable docker-from-docker access only for built-in boptest integration.
+        if experiment_def.problem["problem_library"] == "boptest":
+
+            # Create docker network (only useful if starting other containers)
+            beobench.experiment.containers.create_docker_network("beobench-net")
+
+            docker_flags += [
+                # enable access to docker-from-docker
+                "-v",
+                "/var/run/docker.sock:/var/run/docker.sock",
+                # network allows access to BOPTEST API in other containers
+                "--network",
+                "beobench-net",
+            ]
+
+        # enabling GPU access in docker container
+        if use_gpu:
+            docker_flags += [
+                # add all available GPUs
+                "--gpus=all",
             ]
 
         # define flags for beobench scheduler call inside experiment container
@@ -134,21 +161,13 @@ def run(
         args = [
             "docker",
             "run",
-            # the mounted socket allows access to docker
-            "-v",
-            "/var/run/docker.sock:/var/run/docker.sock",
             # mount experiment data dir
             "-v",
             f"{local_dir_abs}:/root/ray_results",
             # automatically remove container when stopped/exited
             "--rm",
-            # network allows access to BOPTEST API in other containers
-            "--network",
-            "beobench-net",
             # add more memory
-            "--shm-size=20.48gb",
-            # add available GPUs,
-            "--gpus=all",
+            f"--shm-size={docker_shm_size}",
             "--name",
             container_name,
             *docker_flags,
@@ -194,6 +213,16 @@ def run(
     help="Weights and biases API key.",
 )
 @click.option(
+    "--use-gpu",
+    is_flag=True,
+    help="Whether to use GPUs from the host system in experiment container.",
+)
+@click.option(
+    "--docker-shm-size",
+    default="2gb",
+    help="Size of shared memory available to experiment container.",
+)
+@click.option(
     "--no-additional-container",
     is_flag=True,
     help="Do not run another container to do experiments in.",
@@ -209,6 +238,8 @@ def run_command(
     wandb_project: str,
     wandb_entity: str,
     wandb_api_key: str,
+    use_gpu: bool,
+    docker_shm_size: str,
     no_additional_container: bool,
     use_no_cache: bool,
 ) -> None:
@@ -226,6 +257,8 @@ def run_command(
         wandb_project=wandb_project,
         wandb_entity=wandb_entity,
         wandb_api_key=wandb_api_key,
+        use_gpu=use_gpu,
+        docker_shm_size=docker_shm_size,
         no_additional_container=no_additional_container,
         use_no_cache=use_no_cache,
     )
