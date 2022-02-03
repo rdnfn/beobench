@@ -87,11 +87,17 @@ def run(
             )
         else:
             callbacks = []
+
+        # change RLlib setup if GPU used
+        rllib_setup = experiment_def.rllib_setup
+        if use_gpu:
+            rllib_setup["rllib_experiment_config"]["config"]["num_gpus"] = 1
+
         # run experiment in ray tune
         run_in_tune(
             problem_def=experiment_def.problem,
             method_def=experiment_def.method,
-            rllib_setup=experiment_def.rllib_setup,
+            rllib_setup=rllib_setup,
             rllib_callbacks=callbacks,
         )
     else:
@@ -151,6 +157,8 @@ def run(
             beobench_flags.append(f"--wandb-project={wandb_project}")
         if wandb_entity:
             beobench_flags.append(f"--wandb-entity={wandb_entity}")
+        if use_gpu:
+            beobench_flags.append("--use-gpu")
         beobench_flag_str = " ".join(beobench_flags)
 
         # if no wandb API key is given try to get it from env
