@@ -21,14 +21,14 @@ def build_experiment_container(
     if use_no_cache:
         flags.append("--no-cache")
 
-    AVAILABLE_INTEGRATIONS = ["boptest"]  # pylint: disable=invalid-name
+    AVAILABLE_INTEGRATIONS = ["boptest","sinergym"]  # pylint: disable=invalid-name
 
     if build_context in AVAILABLE_INTEGRATIONS:
         docker_tag = f"beobench_{build_context}:latest"
         integration_name = build_context
         build_context = (
             f"https://github.com/rdnfn/"
-            f"beobench.git#master:beobench/integrations/{build_context}"
+            f"beobench_contrib.git#main:gyms/{build_context}"
         )
         print(
             (
