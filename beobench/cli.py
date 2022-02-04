@@ -18,6 +18,16 @@ def cli():
     type=click.Path(exists=True, file_okay=True, dir_okay=False),
 )
 @click.option(
+    "--method",
+    default="",
+    help="Name of RL method to use in experiment.",
+)
+@click.option(
+    "--env",
+    default="",
+    help="Name of RL environment to use in experiment.",
+)
+@click.option(
     "--local-dir",
     default="./beobench_results/ray_results",
     help="Local directory to write results to.",
@@ -60,6 +70,8 @@ def cli():
 )
 def run(
     experiment_file: str,
+    method: str,
+    env: str,
     local_dir: str,
     wandb_project: str,
     wandb_entity: str,
@@ -81,6 +93,8 @@ def run(
 
     beobench.experiment.scheduler.run(
         experiment_file=experiment_file,
+        method=method,
+        env=env,
         local_dir=local_dir,
         wandb_project=wandb_project,
         wandb_entity=wandb_entity,
