@@ -11,12 +11,15 @@ import ray.tune.integration.wandb
 
 import beobench.experiment.definitions.utils
 import beobench.experiment.definitions.default
+import beobench.experiment.definitions.methods
 import beobench.experiment.containers
 import beobench.utils
 
 
 def run(
     experiment_file: str = None,
+    method: str = None,
+    env: str = None,
     local_dir: str = "./beobench_results/ray_results",
     wandb_project: str = "",
     wandb_entity: str = "",
@@ -34,6 +37,10 @@ def run(
     Args:
         experiment_file (str, optional): File that defines experiment.
             Defaults to None.
+        method (str, optional): RL method to use in experiment. This overwrites any
+            method that is set in experiment file. For example 'PPO'. Defaults to None.
+        env (str, optional): environment to apply method to in experiment. This
+            overwrites any env set in experiment file. Defaults to None.
         local_dir (str, optional): Directory to write experiment files to. This argument
             is equivalent to the `local_dir` argument in `tune.run()`. Defaults to
             `"./beobench_results/ray_results"`.
@@ -52,30 +59,12 @@ def run(
             container.
     """
 
-    # Load experiment definition file
-    if experiment_file is None:
-        experiment_def = beobench.experiment.definitions.default
-    else:
-        experiment_file = pathlib.Path(experiment_file)
-        # import experiment definition file as module
-        spec = importlib.util.spec_from_file_location(
-            "experiment_definition",
-            str(experiment_file.absolute()),
-        )
-        experiment_def = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(experiment_def)
-
-        # check if all attributes present and replace with default if not
-        if not hasattr(experiment_def, "problem"):
-            experiment_def.problem = beobench.experiment.definitions.default.problem
-        if not hasattr(experiment_def, "method"):
-            experiment_def.method = beobench.experiment.definitions.default.method
-        if not hasattr(experiment_def, "rllib_setup"):
-            experiment_def.rllib_setup = (
-                beobench.experiment.definitions.default.rllib_setup
-            )
+    # Create a definition of experiment from inputs
+    experiment_def = _create_experiment_def(experiment_file, method, env)
 
     if no_additional_container:
+        # Execute experiment
+        # (this is usually reached from inside an experiment container)
 
         # Add wandb callback if sufficient information
         # TODO: add earlier check to see that also API key available
@@ -89,15 +78,16 @@ def run(
             callbacks = []
 
         # change RLlib setup if GPU used
-        rllib_setup = experiment_def.rllib_setup
         if use_gpu:
-            rllib_setup["rllib_experiment_config"]["config"]["num_gpus"] = 1
+            experiment_def["rllib_setup"]["rllib_experiment_config"]["config"][
+                "num_gpus"
+            ] = 1
 
         # run experiment in ray tune
         run_in_tune(
-            problem_def=experiment_def.problem,
-            method_def=experiment_def.method,
-            rllib_setup=rllib_setup,
+            problem_def=experiment_def["problem"],
+            method_def=experiment_def["method"],
+            rllib_setup=experiment_def["rllib_setup"],
             rllib_callbacks=callbacks,
         )
     else:
@@ -110,7 +100,7 @@ def run(
 
         # docker setup
         image_tag = beobench.experiment.containers.build_experiment_container(
-            build_context=experiment_def.problem["problem_library"],
+            build_context=experiment_def["problem"]["problem_library"],
             use_no_cache=use_no_cache,
         )
 
@@ -128,7 +118,7 @@ def run(
             ]
 
         # enable docker-from-docker access only for built-in boptest integration.
-        if experiment_def.problem["problem_library"] == "boptest":
+        if experiment_def["problem"]["problem_library"] == "boptest":
 
             # Create docker network (only useful if starting other containers)
             beobench.experiment.containers.create_docker_network("beobench-net")
@@ -229,7 +219,7 @@ def run_in_tune(
 
     # register the problem environment with ray tune
     # env_creator is a module available in experiment containers
-    import env_creator  # pylint: disable=import-outside-toplevel
+    import env_creator  # pylint: disable=import-outside-toplevel,import-error
 
     ray.tune.registry.register_env(
         problem_def["rllib_experiment_config"]["config"]["env"],
@@ -256,7 +246,77 @@ def _create_wandb_callback(
     wandb_project: str,
     wandb_entity: str,
 ):
+    """Create an RLlib weights and biases (wandb) callback.
+
+    Args:
+        wandb_project (str): name of wandb project.
+        wandb_entity (str): name of wandb entity that owns project.
+
+    Returns:
+        : a wandb callback
+    """
     wandb_callback = ray.tune.integration.wandb.WandbLoggerCallback(
         project=wandb_project, log_config=True, entity=wandb_entity
     )
     return wandb_callback
+
+
+def _create_experiment_def(experiment_file: str, method: str, env: str) -> dict:
+    """Create a Beobench experiment definition.
+
+    Args:
+        experiment_file (str): path to experiment file.
+        method (str): name of RL method.
+        env (str): name of environment.
+    """
+    experiment_def = _load_experiment_file(experiment_file)
+
+    # Replace method if available
+    if method is not None:
+        if method == "PPO":
+            experiment_def["method"] = beobench.experiment.definitions.methods.PPO
+        else:
+            raise ValueError(
+                (
+                    f"The supplied method '{method}' does not match any of "
+                    "the pre-configured beobench methods."
+                )
+            )
+
+    return experiment_def
+
+
+def _load_experiment_file(experiment_file: str) -> dict:
+    """Load a Beobench experiment file.
+
+    Args:
+        experiment_file (str): path to experiment file.
+    """
+
+    # Load experiment definition file
+    if experiment_file is None:
+        experiment_file_mod = beobench.experiment.definitions.default
+    else:
+        experiment_file = pathlib.Path(experiment_file)
+        # import experiment definition file as module
+        spec = importlib.util.spec_from_file_location(
+            "experiment_definition",
+            str(experiment_file.absolute()),
+        )
+        experiment_file_mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(experiment_file_mod)
+
+    experiment_def = dict()
+
+    # Create experiment def dictionary, and set default values if not available
+    # from experiment_file (module).
+    for exp_part in ["problem", "method", "rllib_setup"]:
+        if hasattr(experiment_file_mod, exp_part):
+            experiment_def[exp_part] = getattr(experiment_file_mod, exp_part)
+        else:
+            experiment_def[exp_part] = getattr(
+                beobench.experiment.definitions.default,
+                exp_part,
+            )
+
+    return experiment_def
