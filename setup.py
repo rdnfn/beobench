@@ -45,6 +45,11 @@ setup(
     keywords="beobench",
     name="beobench",
     packages=find_packages(include=["beobench", "beobench.*"]),
+    entry_points={
+        "console_scripts": [
+            "beobench = beobench.cli:cli",
+        ],
+    },
     test_suite="tests",
     tests_require=test_requirements,
     url="https://github.com/rdnfn/beobench",
