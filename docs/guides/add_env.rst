@@ -44,6 +44,6 @@ Running experiment
 
 With a complete experiment definition file ``example_experiment_def.py``, we can then use the standard command below to start the experiment:
 
-.. include:: snippets/run_standard_experiment.rst
+.. include:: ../snippets/run_standard_experiment.rst
 
 Done! You have now successfully integrated your RL environment with beobench.
