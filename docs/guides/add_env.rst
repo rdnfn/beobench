@@ -11,7 +11,7 @@ This guide explains how to add a new reinforcement learning (RL) environment to 
 Creating build context
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To add an environment to beobench we need to create a special *docker build context* (for more details `see the official docker build documentation <https://docs.docker.com/engine/reference/commandline/build/>`_). Such a beobench-specific *docker build context* consists of least the following two files in a folder ``<your_gym_name>/``:
+To add an environment to beobench we need to create a special *docker build context* (for more details `see the official docker build documentation <https://docs.docker.com/engine/reference/commandline/build/>`_). Such a beobench-specific *docker build context* consists at least of the following two files in a folder ``<your_gym_name>/``:
 
 1. A dockerfile ``Dockerfile`` that defines a docker container that has everything necessary for your environment installed. In addition to any of your packages/modules, the dockerfile must also install `beobench` via pip.
 2. A ``env_creator.py`` file that defines a function with the signature ``create_env(env_config: dict = None) -> gym.Env``. This ``create_env()`` function should take an ``env_config`` dictionary (that completely configures your environment) as input and return an instance of your environment with this configuration. If your environment is not yet implementing the commonly used ``gym.Env`` class (`see here <https://github.com/openai/gym/blob/e9df4932434516c9f7956cc8010679a33835b204/gym/core.py#L17>`_), you will need to wrap your environment in a class that implements this ``gym.Env`` class within the ``create_env()`` function.
