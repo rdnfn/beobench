@@ -14,6 +14,7 @@ black
 pre-commit
 pylint
 click       # command line interface
+build       # PyPA build tool
 
 # Jupyter notebooks
 jupyterlab
