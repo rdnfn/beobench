@@ -60,6 +60,7 @@ def run(
     """
 
     # Create a definition of experiment from inputs
+    experiment_file = pathlib.Path(experiment_file)
     experiment_def = _create_experiment_def(experiment_file, method, env)
 
     if no_additional_container:
@@ -261,7 +262,9 @@ def _create_wandb_callback(
     return wandb_callback
 
 
-def _create_experiment_def(experiment_file: str, method: str, env: str) -> dict:
+def _create_experiment_def(
+    experiment_file: pathlib.Path, method: str, env: str
+) -> dict:
     """Create a Beobench experiment definition.
 
     Args:
@@ -286,7 +289,7 @@ def _create_experiment_def(experiment_file: str, method: str, env: str) -> dict:
     return experiment_def
 
 
-def _load_experiment_file(experiment_file: str) -> dict:
+def _load_experiment_file(experiment_file: pathlib.Path) -> dict:
     """Load a Beobench experiment file.
 
     Args:
@@ -297,7 +300,6 @@ def _load_experiment_file(experiment_file: str) -> dict:
     if experiment_file is None:
         experiment_file_mod = beobench.experiment.definitions.default
     else:
-        experiment_file = pathlib.Path(experiment_file)
         # import experiment definition file as module
         spec = importlib.util.spec_from_file_location(
             "experiment_definition",
