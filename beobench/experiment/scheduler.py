@@ -174,8 +174,8 @@ def run(
             "/bin/bash",
             "-c",
             (
-                f"export WANDB_API_KEY={wandb_api_key} && python -m "
-                f"beobench.experiment.scheduler {beobench_flag_str} "
+                f"export WANDB_API_KEY={wandb_api_key} && "
+                f"beobench run {beobench_flag_str} "
                 "--no-additional-container && bash"
             ),
         ]
