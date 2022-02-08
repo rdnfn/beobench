@@ -66,7 +66,8 @@ def run(
     """
 
     # Create a definition of experiment from inputs
-    experiment_file = pathlib.Path(experiment_file)
+    if experiment_file is not None:
+        experiment_file = pathlib.Path(experiment_file)
     experiment_def = _create_experiment_def(experiment_file, method, env)
 
     if no_additional_container:
@@ -292,7 +293,7 @@ def _create_experiment_def(
 
     # methods
     if method:
-        if method == "PPO":
+        if method == "ppo":
             experiment_def["method"] = beobench.experiment.definitions.methods.PPO
         else:
             raise ValueError(
