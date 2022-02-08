@@ -28,6 +28,7 @@ def run(
     docker_shm_size: str = "2gb",
     no_additional_container: bool = False,
     use_no_cache: bool = False,
+    _dev_beobench_location: str = None,
 ) -> None:
     """Run experiment.
 
@@ -57,6 +58,10 @@ def run(
             is started to run experiments in.
         use_no_cache (bool, optional): whether to use cache to build experiment
             container.
+        _dev_beobench_location (str, optional): github path to beobench package. For
+            developement purpose only. This will install a custom beobench version
+            inside the experiment container. By default the latest PyPI version is
+            installed.
     """
 
     # Create a definition of experiment from inputs
@@ -157,6 +162,14 @@ def run(
             # this will return "" if env var not set
             wandb_api_key = os.getenv("WANDB_API_KEY", "")
 
+        cmd_list_in_container = [""]
+        # dev mode where custom beobench is installed directly from git
+        if _dev_beobench_location is not None:
+            cmd_list_in_container.append(f"pip uninstall --yes beobench")
+            cmd_list_in_container.append(f"pip install {_dev_beobench_location}")
+
+        cmd_in_container = " && ".join(cmd_list_in_container)
+
         args = [
             "docker",
             "run",
@@ -174,7 +187,7 @@ def run(
             "/bin/bash",
             "-c",
             (
-                f"export WANDB_API_KEY={wandb_api_key} && "
+                f"export WANDB_API_KEY={wandb_api_key} {cmd_in_container} && "
                 f"beobench run {beobench_flag_str} "
                 "--no-additional-container && bash"
             ),
