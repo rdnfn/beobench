@@ -12,6 +12,7 @@ import ray.tune.integration.wandb
 import beobench.experiment.definitions.utils
 import beobench.experiment.definitions.default
 import beobench.experiment.definitions.methods
+import beobench.experiment.definitions.envs
 import beobench.experiment.containers
 import beobench.utils
 
@@ -165,7 +166,7 @@ def run(
         cmd_list_in_container = [""]
         # dev mode where custom beobench is installed directly from git
         if _dev_beobench_location is not None:
-            cmd_list_in_container.append(f"pip uninstall --yes beobench")
+            cmd_list_in_container.append("pip uninstall --yes beobench")
             cmd_list_in_container.append(f"pip install {_dev_beobench_location}")
 
         cmd_in_container = " && ".join(cmd_list_in_container)
@@ -287,7 +288,9 @@ def _create_experiment_def(
     """
     experiment_def = _load_experiment_file(experiment_file)
 
-    # Replace method if available
+    # parsing high level interface options
+
+    # methods
     if method:
         if method == "PPO":
             experiment_def["method"] = beobench.experiment.definitions.methods.PPO
@@ -297,6 +300,18 @@ def _create_experiment_def(
                     f"The supplied method '{method}' does not match any of "
                     "the pre-configured beobench methods."
                 )
+            )
+
+    if env:
+        if env == "boptest_bestest-hydronic-heat-pump-v1":
+            experiment_def["problem"] = getattr(
+                beobench.experiment.definitions.envs,
+                env.replace("-", "_"),
+            )
+        if env == "sinergym_eplus-5zone-hot-continous-v1":
+            experiment_def["problem"] = getattr(
+                beobench.experiment.definitions.envs,
+                env.replace("-", "_"),
             )
 
     return experiment_def
