@@ -288,7 +288,7 @@ def _create_experiment_def(
     experiment_def = _load_experiment_file(experiment_file)
 
     # Replace method if available
-    if method is not None:
+    if method:
         if method == "PPO":
             experiment_def["method"] = beobench.experiment.definitions.methods.PPO
         else:
