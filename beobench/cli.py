@@ -68,6 +68,11 @@ def cli():
     is_flag=True,
     help="Whether to use cache to build experiment container.",
 )
+@click.option(
+    "--dev-beobench-location",
+    default=None,
+    help="For developer use only: location of custom beobench package version.",
+)
 def run(
     experiment_file: str,
     method: str,
@@ -80,6 +85,7 @@ def run(
     docker_shm_size: str,
     no_additional_container: bool,
     use_no_cache: bool,
+    dev_beobench_location: str,
 ) -> None:
     """Run beobench experiment from command line.
 
@@ -103,6 +109,7 @@ def run(
         docker_shm_size=docker_shm_size,
         no_additional_container=no_additional_container,
         use_no_cache=use_no_cache,
+        _dev_beobench_location=dev_beobench_location,
     )
 
 
