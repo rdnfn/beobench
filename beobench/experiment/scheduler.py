@@ -20,6 +20,7 @@ import beobench.utils
 
 def run(
     experiment_file: str = None,
+    agent_file: str = None,
     method: str = None,
     env: str = None,
     local_dir: str = "./beobench_results/ray_results",
@@ -41,6 +42,8 @@ def run(
     Args:
         experiment_file (str, optional): File that defines experiment.
             Defaults to None.
+        agent_file (str, optional): File that defines custom agent. This script is
+            executed inside the gym container.
         method (str, optional): RL method to use in experiment. This overwrites any
             method that is set in experiment file. For example 'PPO'. Defaults to None.
         env (str, optional): environment to apply method to in experiment. This
@@ -71,6 +74,8 @@ def run(
     # Create a definition of experiment from inputs
     if experiment_file is not None:
         experiment_file = pathlib.Path(experiment_file)
+    if agent_file is not None:
+        agent_file = pathlib.Path(agent_file)
     experiment_def = _create_experiment_def(experiment_file, method, env)
 
     if no_additional_container:
@@ -97,12 +102,18 @@ def run(
             ] = 1
 
         # run experiment in ray tune
-        run_in_tune(
-            problem_def=experiment_def["problem"],
-            method_def=experiment_def["method"],
-            rllib_setup=experiment_def["rllib_setup"],
-            rllib_callbacks=callbacks,
-        )
+        if not agent_file:
+            run_in_tune(
+                problem_def=experiment_def["problem"],
+                method_def=experiment_def["method"],
+                rllib_setup=experiment_def["rllib_setup"],
+                rllib_callbacks=callbacks,
+            )
+        else:
+            # run custom RL agent
+            args = ["python -m", f"/tmp/beobench/{agent_file.name}"]
+            subprocess.check_call(args)
+
     else:
         # build and run experiments in docker container
 
@@ -128,6 +139,14 @@ def run(
             docker_flags += [
                 "-v",
                 f"{exp_file_abs}:{exp_file_on_docker}:ro",
+            ]
+
+        if agent_file is not None:
+            ag_file_abs = agent_file.absolute()
+            ag_file_on_docker = f"/tmp/beobench/{agent_file.name}"
+            docker_flags += [
+                "-v",
+                f"{ag_file_abs}:{ag_file_on_docker}:ro",
             ]
 
         # enable docker-from-docker access only for built-in boptest integration.
@@ -162,6 +181,8 @@ def run(
             beobench_flags.append(f"--wandb-entity={wandb_entity}")
         if use_gpu:
             beobench_flags.append("--use-gpu")
+        if agent_file:
+            beobench_flags.append(f"--agent-file={agent_file}")
         beobench_flag_str = " ".join(beobench_flags)
 
         # if no wandb API key is given try to get it from env
