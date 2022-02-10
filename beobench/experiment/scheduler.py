@@ -7,6 +7,7 @@ import pathlib
 import importlib.util
 import ray.tune
 import ray.tune.integration.wandb
+import ray.tune.integration.mlflow
 
 
 import beobench.experiment.definitions.utils
@@ -25,6 +26,7 @@ def run(
     wandb_project: str = "",
     wandb_entity: str = "",
     wandb_api_key: str = "",
+    mlflow_name: str = None,
     use_gpu: bool = False,
     docker_shm_size: str = "2gb",
     no_additional_container: bool = False,
@@ -52,6 +54,7 @@ def run(
         wandb_api_key (str, optional): wandb API key. Defaults to None.
         use_gpu (bool, optional): whether to use GPU from the host system. Defaults to
             False.
+        mlflow_name (str, optional): name of MLflow experiment.
         docker_shm_size(str, optional): size of the shared memory available to the
             container. Defaults to '2gb'."
         no_additional_container (bool, optional): wether not to start another container
@@ -82,6 +85,8 @@ def run(
             raise ValueError(
                 "Only one of wandb_project or wandb_entity given, but both required."
             )
+        elif mlflow_name:
+            callbacks = [_create_mlflow_callback(mlflow_name)]
         else:
             callbacks = []
 
@@ -275,6 +280,23 @@ def _create_wandb_callback(
         project=wandb_project, log_config=True, entity=wandb_entity
     )
     return wandb_callback
+
+
+def _create_mlflow_callback(
+    mlflow_name: str,
+):
+    """Create an RLlib MLflow callback.
+
+    Args:
+        mlflow_name (str, optional): name of MLflow experiment.
+
+    Returns:
+        : a wandb callback
+    """
+    mlflow_callback = ray.tune.integration.mlflow.MLflowLoggerCallback(
+        experiment_name=mlflow_name, tracking_uri="file:/root/ray_results/mlflow"
+    )
+    return mlflow_callback
 
 
 def _create_experiment_def(

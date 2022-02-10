@@ -49,6 +49,11 @@ def cli():
     help="Weights and biases API key.",
 )
 @click.option(
+    "--mlflow-name",
+    default=None,
+    help="Name of MLflow experiment.",
+)
+@click.option(
     "--use-gpu",
     is_flag=True,
     help="Whether to use GPUs from the host system in experiment container.",
@@ -81,6 +86,7 @@ def run(
     wandb_project: str,
     wandb_entity: str,
     wandb_api_key: str,
+    mlflow_name: str,
     use_gpu: bool,
     docker_shm_size: str,
     no_additional_container: bool,
@@ -105,6 +111,7 @@ def run(
         wandb_project=wandb_project,
         wandb_entity=wandb_entity,
         wandb_api_key=wandb_api_key,
+        mlflow_name=mlflow_name,
         use_gpu=use_gpu,
         docker_shm_size=docker_shm_size,
         no_additional_container=no_additional_container,
