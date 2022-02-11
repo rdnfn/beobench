@@ -49,3 +49,31 @@ sinergym_eplus_5zone_hot_continous_v1 = {
         "stop": {"timesteps_total": 400000},
     },
 }
+
+energym_mixed_use_fan_fcu_v0 = {
+    "name": "energym_mixed_use_fan_fcu_v0",
+    "description": "",
+    "problem_library": "energym",
+    "rllib_experiment_config": {
+        "config": {
+            "env": "energym_mixed_use_fan_fcu_v0",
+            "env_config": {
+                "energym_environment": "MixedUseFanFCU-v0",
+                "weather": "GRC_A_Athens",
+                "days": 365,
+                "gym_kwargs": {
+                    "max_episode_length": 35040,
+                    "step_period": 15,
+                    "normalize": True,
+                },
+            },
+            "gamma": 0.999,
+            "output": "/root/ray_results/debug_energym/",
+            "output_compress_columns": [],
+            "batch_mode": "complete_episodes",
+            "horizon": 1000,
+            "metrics_smoothing_episodes": 5,
+        },
+        "stop": {"timesteps_total": 400000},
+    },
+}

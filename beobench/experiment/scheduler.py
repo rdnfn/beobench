@@ -357,6 +357,11 @@ def _create_experiment_def(
                 beobench.experiment.definitions.envs,
                 env.replace("-", "_"),
             )
+        if env == "energym_mixed-use-fan-fcu-v0":
+            experiment_def["problem"] = getattr(
+                beobench.experiment.definitions.envs,
+                env.replace("-", "_"),
+            )
 
     return experiment_def
 
