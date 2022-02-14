@@ -52,7 +52,11 @@ setup(
     },
     test_suite="tests",
     tests_require=test_requirements,
-    url="https://github.com/rdnfn/beobench",
+    project_urls={
+        "Documentation": "https://beobench.readthedocs.io/",
+        "Code": "https://github.com/rdnfn/beobench",
+        "Issue tracker": "https://github.com/rdnfn/beobench/issues",
+    },
     zip_safe=False,
     version=version,
 )
