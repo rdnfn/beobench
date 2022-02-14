@@ -9,9 +9,9 @@ ARG NODE_VERSION="none"
 RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
-COPY requirements/requirements_dev.txt requirements/boptest_requirements.txt /tmp/pip-tmp/
-RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements_dev.txt \
-    -r /tmp/pip-tmp/boptest_requirements.txt \
+COPY requirements/dev_requirements.txt requirements/doc_requirements.txt /tmp/pip-tmp/
+RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/dev_requirements.txt \
+    -r /tmp/pip-tmp/doc_requirements.txt \
     && rm -rf /tmp/pip-tmp
 
 # Install nvidia container runtime

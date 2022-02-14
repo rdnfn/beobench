@@ -66,7 +66,7 @@ Run your first beobench experiment in three steps:
 
         .. code-block:: console
 
-                python -m beobench.experiment.scheduler
+                beobench run
 
 Done, you have just started your first experiment... congrats! Check out the `full getting started guide in the documentation <https://beobench.readthedocs.io/en/latest/guides/getting_started.html>`_ for the next steps.
 

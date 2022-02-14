@@ -10,7 +10,7 @@ with open("PYPI_README.rst", encoding="UTF-8") as readme_file:
 with open("HISTORY.rst", encoding="UTF-8") as history_file:
     history = history_file.read()
 
-version = "0.2.1"
+version = "0.3.0"
 
 requirements = [
     "wandb",
@@ -45,9 +45,18 @@ setup(
     keywords="beobench",
     name="beobench",
     packages=find_packages(include=["beobench", "beobench.*"]),
+    entry_points={
+        "console_scripts": [
+            "beobench = beobench.cli:cli",
+        ],
+    },
     test_suite="tests",
     tests_require=test_requirements,
-    url="https://github.com/rdnfn/beobench",
+    project_urls={
+        "Documentation": "https://beobench.readthedocs.io/",
+        "Code": "https://github.com/rdnfn/beobench",
+        "Issue tracker": "https://github.com/rdnfn/beobench/issues",
+    },
     zip_safe=False,
     version=version,
 )

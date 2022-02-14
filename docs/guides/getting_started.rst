@@ -11,15 +11,15 @@ Let's run your first experiment with beobench. After installing beobench using t
 
     .. code-tab:: console Console
 
-            python -m beobench.experiment.scheduler
+            beobench run
 
     .. code-tab:: python
 
-        import beobench.experiment.scheduler
+        import beobench
 
-        beobench.experiment.scheduler.run()
+        beobench.run()
 
-This will run the default experiment `defined here <beobench/experiment/definitions/default.py>`_: applying the reinforcement learning method `Proximal Policy Optimisation (PPO) <https://arxiv.org/pdf/1707.06347.pdf>`_ to control a residential `HVAC system <https://en.wikipedia.org/wiki/Heating,_ventilation,_and_air_conditioning>`_ (defined in the `BOPTEST bestest_hydronic testcase <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/bestest_hydronic/doc/index.html>`_). The results of this experiment will be logged in a newly created ``./beobench_results`` directory.
+This will run the default experiment `defined here <https://github.com/rdnfn/beobench/blob/master/beobench/experiment/definitions/default.py>`_: applying the reinforcement learning method `Proximal Policy Optimisation (PPO) <https://arxiv.org/pdf/1707.06347.pdf>`_ to control a residential `HVAC system <https://en.wikipedia.org/wiki/Heating,_ventilation,_and_air_conditioning>`_ (defined in the `BOPTEST bestest_hydronic testcase <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/bestest_hydronic/doc/index.html>`_). The results of this experiment will be logged in a newly created ``./beobench_results`` directory.
 
 Visualize experiment results
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -30,16 +30,16 @@ Although the ``./beobench_results`` folder already contains a lot of information
 
     .. code-tab:: console Console
 
-            python -m beobench.experiment.scheduler \
+            beobench run \
                 --wandb-project=<your_project_name> \
                 --wandb-entity=<your_entity> \
                 --wandb-api-key=<your_api_key>
 
     .. code-tab:: python
 
-        import beobench.experiment.scheduler
+        import beobench
 
-        beobench.experiment.scheduler.run(
+        beobench.run(
                 wandb_project=<your_project_name>,
                 wandb_entity=<your_entity>,
                 wandb_api_key=<your_api_key>
