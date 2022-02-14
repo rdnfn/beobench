@@ -2,6 +2,15 @@
 History
 =======
 
+0.3.0 (2022-02-14)
+------------------
+
+* Add complete redesign of CLI: main command changed from ``python -m beobench.experiment.scheduler`` to ``beobench run``.
+* Add support for energym environments
+* Add support for MLflow experiment tracking
+* Add support for custom agents
+
+
 0.2.1 (2022-02-03)
 ------------------
 
