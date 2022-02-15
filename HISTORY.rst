@@ -2,6 +2,11 @@
 History
 =======
 
+0.3.1 (2022-00-00)
+------------------
+
+* Make dependencies that are only used inside experiment/gym containers optional (for all dependencies install via ``pip install beobench[extended]``)
+
 0.3.0 (2022-02-14)
 ------------------
 
