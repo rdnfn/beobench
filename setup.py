@@ -10,19 +10,20 @@ with open("PYPI_README.rst", encoding="UTF-8") as readme_file:
 with open("HISTORY.rst", encoding="UTF-8") as history_file:
     history = history_file.read()
 
-version = "0.3.0"
+version = "0.3.0"  # pylint: disable=invalid-name
 
 requirements = [
-    "wandb",
     "docker",
-    "ray[rllib]",
     "click",
+]
+
+# The extended requirements are only used inside experiment/gym containers
+extended_requirements = [
+    "ray[rllib]",
+    "wandb",
     "torch",
     "gym",
 ]
-
-
-test_requirements = []
 
 setup(
     author="rdnfn",
@@ -39,6 +40,9 @@ setup(
     ],
     description="Beobench is a toolbox for benchmarking reinforcement learning (RL) algorithms on building energy optimisation (BEO) problems.",  # pylint: disable=line-too-long
     install_requires=requirements,
+    extras_require={
+        "extended": extended_requirements,
+    },
     license="MIT license",
     long_description=readme + "\n\n" + history,
     include_package_data=True,
@@ -51,7 +55,6 @@ setup(
         ],
     },
     test_suite="tests",
-    tests_require=test_requirements,
     project_urls={
         "Documentation": "https://beobench.readthedocs.io/",
         "Code": "https://github.com/rdnfn/beobench",
