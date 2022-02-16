@@ -1,7 +1,7 @@
 """An experiment to test sinergym integration."""
 
-import ray.tune
-from beobench.experiment.definitions.default import problem, method, rllib_setup
+# import ray.tune
+# from beobench.experiment.definitions.default import problem, method, rllib_setup
 
 
 problem = {
@@ -34,7 +34,7 @@ rllib_setup = {
             "log_level": "WARNING",
             "num_workers": 8,  # 1 for silent mode, can at least be 6
             "num_gpus": 1,
-            "seed": ray.tune.randint(0, 10000000),
+            # "seed": ray.tune.randint(0, 10000000),
         },
         # "log_to_file": True,
         "checkpoint_freq": 10000,
