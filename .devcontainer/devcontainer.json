@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.205.2/containers/python-3
 {
-	"name": "beobench dev (python3.10)",
+	"name": "beobench_devcontainer",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"context": "..",
@@ -24,6 +24,7 @@
 	//"mounts": [
 	//	"source=${localEnv:HOME}/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached",
 	//],
+	//"initializeCommand": "export DOCKER_BUILDKIT=0 && export COMPOSE_DOCKER_CLI_BUILD=0",
 	"postCreateCommand": "pip install -e .",
 	// Set *default* container specific settings.json values on container create.
 	"settings": {

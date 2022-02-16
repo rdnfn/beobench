@@ -20,7 +20,7 @@ RUN if [ "${NVIDIA_SUPPORT}" != "none" ]; then wget -O tmp/nvidia-container-tool
     && wget -O tmp/nvidia-container-tools.deb https://nvidia.github.io/libnvidia-container/stable/debian10/amd64/libnvidia-container-tools_1.7.0-1_amd64.deb \
     && wget -O tmp/libnvidia-container.deb https://nvidia.github.io/libnvidia-container/stable/debian10/amd64/libnvidia-container1_1.7.0-1_amd64.deb \
     && dpkg --install --recursive tmp \
-    && rm tmp/nvidia-container-toolkit.deb
+    && rm tmp/nvidia-container-toolkit.deb; fi
 
 
 
