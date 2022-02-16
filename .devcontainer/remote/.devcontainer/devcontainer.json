@@ -11,7 +11,8 @@
 			// Use -bullseye variants on local on arm64/Apple Silicon.
 			"VARIANT": "3.8",
 			// Options
-			"NODE_VERSION": "none"
+			"NODE_VERSION": "none",
+			"NVIDIA_SUPPORT": "true"
 		}
 	},
 	"workspaceFolder": "/beobench",
