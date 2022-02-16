@@ -20,10 +20,10 @@ build       # PyPA build tool
 jupyterlab
 
 # ML & RL tools
-gym
-torch
-ray[rllib]
-wandb
+# gym
+# torch
+# ray[rllib]
+# wandb
 
 # Convex solver tools (OPTIONAL)
 # cvxpy
