@@ -14,15 +14,15 @@
 			"NODE_VERSION": "none"
 		}
 	},
-	"workspaceFolder": "/workspace",
+	"workspaceFolder": "/beobench",
 	// "workspaceMount": "source=remote-workspace,target=/workspace,type=volume",
 	// ADAPT: the mount must be adapted to cloned repo location
-	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace/beobench/,type=bind,consistency=cached",
+	"workspaceMount": "source=${localWorkspaceFolder},target=/beobench,type=bind,consistency=cached",
 	// ADAPT: the mount must be adapted to the gitconfig location on the remote machine
 	//"mounts": [
 	//	"source=${localEnv:HOME}/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached",
 	//],
-	"postCreateCommand": "cd ./beobench && pip install -e .",
+	"postCreateCommand": "pip install -e .",
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
 		"python.defaultInterpreterPath": "/usr/local/bin/python",
@@ -66,7 +66,5 @@
 	"runArgs": [
 		"--shm-size=32gb",
 		"--gpus=all",
-		"--env-file",
-		".devcontainer/devcontainer.env",
 	]
 }
