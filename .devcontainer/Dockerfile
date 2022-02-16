@@ -15,7 +15,8 @@ RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/dev_
     -r /tmp/pip-tmp/doc_requirements.txt \
     && rm -rf /tmp/pip-tmp
 
-# Install nvidia container runtime
+# [Optional] install nvidia container runtime (custom to beobench, this enables gpu-using containers within devcontainer)
+ARG NVIDIA_SUPPORT="none"
 RUN if [ "${NVIDIA_SUPPORT}" != "none" ]; then wget -O tmp/nvidia-container-toolkit.deb https://nvidia.github.io/libnvidia-container/stable/debian10/amd64/nvidia-container-toolkit_1.7.0-1_amd64.deb \
     && wget -O tmp/nvidia-container-tools.deb https://nvidia.github.io/libnvidia-container/stable/debian10/amd64/libnvidia-container-tools_1.7.0-1_amd64.deb \
     && wget -O tmp/libnvidia-container.deb https://nvidia.github.io/libnvidia-container/stable/debian10/amd64/libnvidia-container1_1.7.0-1_amd64.deb \
