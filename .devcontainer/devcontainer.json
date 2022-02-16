@@ -67,7 +67,7 @@
 		"docker-in-docker": "20.10"
 	},
 	"runArgs": [
-		"--shm-size=32gb",
-		"--gpus=all",
+		//"--shm-size=32gb",
+		//"--gpus=all",
 	]
 }
