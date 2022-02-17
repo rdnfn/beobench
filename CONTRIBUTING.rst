@@ -59,33 +59,28 @@ Get Started!
 
 Ready to contribute? Here's how to set up `beobench` for local development.
 
-1. Fork the `beobench` repo on GitHub.
-2. Clone your fork locally::
+1. Follow :doc:`this guide <guides/dev_env>` to fork the repo and setup the development environment.
 
-    $ git clone git@github.com:your_name_here/beobench.git
+2. Inside the devcontainer just set up, create a branch for local development::
 
-3. Follow the :doc:`this guide <dev_env>` to setup the development environment.
-
-4. Inside the devcontainer just setup, create a branch for local development::
-
-    $ git checkout -b name-of-your-bugfix-or-feature
+    $ git checkout -b dev/name-of-your-bugfix-or-feature
 
    Now you can make your changes locally.
 
-5. When you're done making changes, check that your changes pass flake8 and the
+3. When you're done making changes, check that your changes pass flake8 and the
    tests, including testing other Python versions with tox::
 
     $ flake8 beobench tests
     $ python setup.py test
     $ tox
 
-6. Commit your changes and push your branch to GitHub::
+4. Commit your changes and push your branch to GitHub::
 
     $ git add .
     $ git commit -m "Your detailed description of your changes."
     $ git push origin name-of-your-bugfix-or-feature
 
-7. Submit a pull request through the GitHub website.
+5. Submit a pull request through the GitHub website.
 
 Pull Request Guidelines
 -----------------------
@@ -96,7 +91,7 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.
-3. The pull request should work for Python 3.6, 3.7, 3.8 and 3.9.
+.. 3. The pull request should work for Python 3.6, 3.7, 3.8 and 3.9.
 
 .. Check https://travis-ci.com/rdnfn/beobench/pull_requests
    and make sure that the tests pass for all supported Python versions.
