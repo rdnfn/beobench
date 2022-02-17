@@ -54,7 +54,8 @@
 		"ms-azuretools.vscode-docker",
 		"trond-snekvik.simple-rst",
 		"lextudio.restructuredtext",
-		"njpwerner.autodocstring"
+		"njpwerner.autodocstring",
+		"donjayamanne.githistory",
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
