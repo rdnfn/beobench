@@ -15,6 +15,7 @@ version = "0.3.0"  # pylint: disable=invalid-name
 requirements = [
     "docker",
     "click",
+    "pyyaml",
 ]
 
 # The extended requirements are only used inside experiment/gym containers

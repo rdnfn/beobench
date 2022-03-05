@@ -5,6 +5,8 @@ import uuid
 import subprocess
 import pathlib
 import importlib.util
+import warnings
+from typing import Union
 
 # RLlib integration is only available inside experiment container
 try:
@@ -18,10 +20,12 @@ import beobench.experiment.definitions.default
 import beobench.experiment.definitions.methods
 import beobench.experiment.definitions.envs
 import beobench.experiment.containers
+import beobench.experiment.config_parser
 import beobench.utils
 
 
 def run(
+    config: Union[str, dict] = None,
     experiment_file: str = None,
     agent_file: str = None,
     method: str = None,
@@ -43,8 +47,10 @@ def run(
     interface.
 
     Args:
+        config (str or dict, optional): experiment configuration. This can either be
+            a dictionary or a path to a yaml file.
         experiment_file (str, optional): File that defines experiment.
-            Defaults to None.
+            Defaults to None. DEPRECATED.
         agent_file (str, optional): File that defines custom agent. This script is
             executed inside the gym container.
         method (str, optional): RL method to use in experiment. This overwrites any
@@ -74,9 +80,14 @@ def run(
             installed.
     """
 
+    config = beobench.experiment.config_parser.parse(config)
     # Create a definition of experiment from inputs
     if experiment_file is not None:
         experiment_file = pathlib.Path(experiment_file)
+        warnings.warn(
+            "The experiment_file argmunet has been replaced by config",
+            DeprecationWarning,
+        )
     if agent_file is not None:
         agent_file = pathlib.Path(agent_file)
     experiment_def = _create_experiment_def(experiment_file, method, env)
