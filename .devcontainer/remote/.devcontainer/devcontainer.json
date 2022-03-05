@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.205.2/containers/python-3
 {
-	"name": "beobench dev (python3.10)",
+	"name": "beobench_devcontainer_remote",
 	"build": {
 		"dockerfile": "../../Dockerfile",
 		"context": "../../..",
