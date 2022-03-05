@@ -1,0 +1,29 @@
+# agent config
+agent:
+  type: rllib
+  rllib_config: # given to ray.tune.run() as kwargs
+    run_or_experiment: PPO
+    stop:
+      timesteps_total: 400000
+    config:
+      lr: 0.005
+      model:
+        fcnet_activation: relu
+        fcnet_hiddens: [256,256,256,256]
+        post_fcnet_activation: tanh
+      batch_mode: complete_episodes
+      gamma: 0.999
+      horizon: 1000
+      metrics_smoothing_episodes: 5
+# environment config
+env:
+  gym: energym
+  name: MixedUseFanFCU-v0
+  config:
+    days: 365
+    energym_environment: MixedUseFanFCU-v0
+    gym_kwargs:
+      max_episode_length: 35040
+      normalize: true
+      step_period: 15
+    weather: GRC_A_Athens
