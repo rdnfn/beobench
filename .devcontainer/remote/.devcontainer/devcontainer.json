@@ -62,7 +62,10 @@
 	// "remoteUser": "vscode",
 	"features": {
 		"git": "latest",
-		"docker-in-docker": "20.10"
+		"docker-in-docker": {
+			"version": "latest",
+			"moby": true
+		}
 	},
 	"runArgs": [
 		"--shm-size=32gb",
