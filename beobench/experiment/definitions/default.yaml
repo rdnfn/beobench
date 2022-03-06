@@ -1,7 +1,7 @@
 # agent config
 agent:
-  type: rllib
-  rllib_config: # given to ray.tune.run() as kwargs
+  origin: rllib # either path to agent script or name of agent library (rllib)
+  config: # given to ray.tune.run() as arguments (since rllib set before)
     run_or_experiment: PPO
     stop:
       timesteps_total: 400000
@@ -17,8 +17,8 @@ agent:
       metrics_smoothing_episodes: 5
 # environment config
 env:
-  gym: energym
   name: MixedUseFanFCU-v0
+  gym: energym
   config:
     days: 365
     energym_environment: MixedUseFanFCU-v0
