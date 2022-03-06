@@ -5,12 +5,11 @@ import ray.tune.integration.wandb
 import ray.tune.integration.mlflow
 
 import beobench.utils
+import beobench.experiment.config_parser
 
 
 def run_in_tune(
-    problem_def: dict,
-    method_def: dict,
-    rllib_setup: dict,
+    config: dict,
     wandb_project: str = None,
     wandb_entity: str = None,
     mlflow_name: str = None,
@@ -26,18 +25,17 @@ def run_in_tune(
     definitions.
 
     Args:
-        problem_def (dict): definition of problem. This is an incomplete
-            ray tune experiment defintion that only defines the problem side.
-        method_def (dict): definition of method. This is an incomplete
-            ray tune experiment defintion that only defines the method side.
-        rllib_setup (dict): rllib setup. This is an incomplete
-            ray tune experiment defintion that only defines the ray tune/rllib setup
-            (e.g. number of workers, etc.).
-        rllib_callbacks (list, optional): callbacks to add to ray.tune.run command.
-            Defaults to None.
+        config (dict): beobench config
+        wandb_project (str, optional): name of wandb project. Defaults to None.
+        wandb_entity (str, optional): name of wandb entirty. Defaults to None.
+        mlflow_name (str, optional): name of mlflow experiment. Defaults to None.
+        use_gpu (bool, optional): whether to use GPU. Defaults to False.
+
+    Raises:
+        ValueError: raised if only one of wandb project or wandb entity given.
 
     Returns:
-        ray.tune.ExperimentAnalysis: analysis object of completed experiment.
+        ray.tune.ExperimentAnalysis: analysis object from experiment.
     """
     if wandb_project and wandb_entity:
         callbacks = [_create_wandb_callback(wandb_project, wandb_entity)]
@@ -50,22 +48,20 @@ def run_in_tune(
     else:
         callbacks = []
 
-    # change RLlib setup if GPU used
-    if use_gpu:
-        rllib_setup["rllib_experiment_config"]["config"]["num_gpus"] = 1
-
     # combine the three incomplete ray tune experiment
     # definitions into a single complete one.
-    exp_config = beobench.experiment.definitions.utils.get_experiment_config(
-        problem_def, method_def, rllib_setup
-    )
+    rllib_config = beobench.experiment.config_parser.create_rllib_config(config)
+
+    # change RLlib setup if GPU used
+    if use_gpu:
+        rllib_config["config"]["num_gpus"] = 1
 
     # register the problem environment with ray tune
     # env_creator is a module available in experiment containers
     import env_creator  # pylint: disable=import-outside-toplevel,import-error
 
     ray.tune.registry.register_env(
-        problem_def["rllib_experiment_config"]["config"]["env"],
+        rllib_config["config"]["env"],
         env_creator.create_env,
     )
 
@@ -79,7 +75,7 @@ def run_in_tune(
     analysis = ray.tune.run(
         progress_reporter=reporter,
         callbacks=callbacks,
-        **exp_config,
+        **rllib_config,
     )
 
     return analysis
