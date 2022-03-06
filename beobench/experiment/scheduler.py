@@ -52,7 +52,7 @@ def run(
         experiment_file (str, optional): File that defines experiment.
             Defaults to None. DEPRECATED.
         agent_file (str, optional): File that defines custom agent. This script is
-            executed inside the gym container.
+            executed inside the gym container. DEPRECATED, this should be set in config.
         method (str, optional): RL method to use in experiment. This overwrites any
             method that is set in experiment file. For example 'PPO'. Defaults to None.
         env (str, optional): environment to apply method to in experiment. This
@@ -80,28 +80,39 @@ def run(
             installed.
     """
 
-    config = beobench.experiment.config_parser.parse(config)
+    # get config dict from config argument
+    if config:
+        config = beobench.experiment.config_parser.parse(config)
+    else:
+        config = beobench.experiment.config_parser.get_default_config()
     # Create a definition of experiment from inputs
     if experiment_file is not None:
-        experiment_file = pathlib.Path(experiment_file)
         warnings.warn(
             "The experiment_file argmunet has been replaced by config",
             DeprecationWarning,
         )
     if agent_file is not None:
-        agent_file = pathlib.Path(agent_file)
-    experiment_def = _create_experiment_def(experiment_file, method, env)
+        warnings.warn(
+            "The agent_file argmunet has been replaced by config",
+            DeprecationWarning,
+        )
+
+    if config["agent"]["origin"] == "rllib":
+        agent_file = None
+    else:
+        agent_file = pathlib.Path(config["agent"]["origin"])
+
+    # TODO add parsing of high level API arguments env and agent
 
     if no_additional_container:
         # Execute experiment
         # (this is usually reached from inside an experiment container)
 
         # run experiment in ray tune
-        if not agent_file:
+
+        if config["agent"]["origin"] == "rllib":
             beobench.integration.rllib.run_in_tune(
-                problem_def=experiment_def["problem"],
-                method_def=experiment_def["method"],
-                rllib_setup=experiment_def["rllib_setup"],
+                config,
                 wandb_entity=wandb_entity,
                 wandb_project=wandb_project,
                 mlflow_name=mlflow_name,
@@ -122,7 +133,7 @@ def run(
 
         # docker setup
         image_tag = beobench.experiment.containers.build_experiment_container(
-            build_context=experiment_def["problem"]["problem_library"],
+            build_context=config["env"]["gym"],
             use_no_cache=use_no_cache,
         )
 
@@ -148,7 +159,7 @@ def run(
             ]
 
         # enable docker-from-docker access only for built-in boptest integration.
-        if experiment_def["problem"]["problem_library"] == "boptest":
+        if config["env"]["gym"] == "boptest":
 
             # Create docker network (only useful if starting other containers)
             beobench.experiment.containers.create_docker_network("beobench-net")
@@ -171,16 +182,13 @@ def run(
 
         # define flags for beobench scheduler call inside experiment container
         beobench_flags = []
-        if experiment_file:
-            beobench_flags.append(f"--experiment-file={exp_file_on_docker}")
+        beobench_flags.append(f"--config={config}")
         if wandb_project:
             beobench_flags.append(f"--wandb-project={wandb_project}")
         if wandb_entity:
             beobench_flags.append(f"--wandb-entity={wandb_entity}")
         if use_gpu:
             beobench_flags.append("--use-gpu")
-        if agent_file:
-            beobench_flags.append(f"--agent-file={agent_file}")
         beobench_flag_str = " ".join(beobench_flags)
 
         # if no wandb API key is given try to get it from env
