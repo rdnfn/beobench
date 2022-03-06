@@ -67,5 +67,6 @@
 	"runArgs": [
 		"--shm-size=32gb",
 		"--gpus=all",
+		"--init"
 	]
 }
