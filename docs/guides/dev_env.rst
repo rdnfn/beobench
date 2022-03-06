@@ -25,6 +25,8 @@ Standard development
 
    (if you are a maintainer you can clone directly from the main repository)
 
+   Note that this requires having your github authentification setup, `see here <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account>`_
+
 3. Open the beobench repo folder in vscode
 4. Inside vscode, open the command palette (e.g. on macOS shortcut is ``shift`` + ``cmd`` + ``P``), and use the ``Remote-containers: reopen in container`` command.
 
