@@ -79,12 +79,13 @@ def run(
             inside the experiment container. By default the latest PyPI version is
             installed.
     """
+    # pylint: disable=unused-argument
 
     # get config dict from config argument
     if config:
         config = beobench.experiment.config_parser.parse(config)
     else:
-        config = beobench.experiment.config_parser.get_default_config()
+        config = beobench.experiment.config_parser.get_default()
     # Create a definition of experiment from inputs
     if experiment_file is not None:
         warnings.warn(
