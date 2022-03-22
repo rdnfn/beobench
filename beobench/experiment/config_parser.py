@@ -3,6 +3,7 @@
 from typing import Union
 import pathlib
 import yaml
+import importlib.resources
 
 
 def parse(config: Union[str, pathlib.Path]) -> dict:
@@ -64,41 +65,7 @@ def get_default() -> dict:
         dict: default beobench config dict
     """
 
-    config = {
-        "agent": {
-            "origin": "rllib",
-            "config": {
-                "run_or_experiment": "PPO",
-                "stop": {"timesteps_total": 400000},
-                "config": {
-                    "lr": 0.005,
-                    "model": {
-                        "fcnet_activation": "relu",
-                        "fcnet_hiddens": [256, 256, 256, 256],
-                        "post_fcnet_activation": "tanh",
-                    },
-                    "batch_mode": "complete_episodes",
-                    "gamma": 0.999,
-                    "horizon": 1000,
-                    "metrics_smoothing_episodes": 5,
-                    "framework": "torch",
-                },
-            },
-        },
-        "env": {
-            "name": "MixedUseFanFCU-v0",
-            "gym": "energym",
-            "config": {
-                "days": 365,
-                "energym_environment": "MixedUseFanFCU-v0",
-                "gym_kwargs": {
-                    "max_episode_length": 35040,
-                    "normalize": True,
-                    "step_period": 15,
-                },
-                "weather": "GRC_A_Athens",
-            },
-        },
-    }
+    defs_path = importlib.resources.files("beobench.experiment.definitions")
+    config = parse(defs_path.joinpath("default.yaml"))
 
     return config
