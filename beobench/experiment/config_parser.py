@@ -42,8 +42,13 @@ def create_rllib_config(config: dict) -> dict:
     """
 
     # Check if config is with rllib agent
-    if config["agent"]["origin"] is not "rllib":
-        raise ValueError("Configuration does not have rllib agent origin set.")
+    if config["agent"]["origin"] != "rllib":
+        raise ValueError(
+            (
+                "Configuration does not have rllib agent origin set."
+                f"Config is set to: {config}"
+            )
+        )
 
     rllib_config = config["agent"]["config"]
     rllib_config["config"]["env_config"] = config["env"]["config"]
