@@ -1,6 +1,8 @@
 """Command line interface for beobench."""
 
 import click
+import ast
+
 import beobench.experiment.scheduler
 import beobench.utils
 
@@ -11,6 +13,12 @@ def cli():
 
 
 @cli.command()
+@click.option(
+    "--config",
+    default=None,
+    help="Json or filepath with yaml that defines beobench experiment configuration.",
+    type=str,
+)
 @click.option(
     "--experiment-file",
     default=None,
@@ -85,6 +93,7 @@ def cli():
     help="For developer use only: location of custom beobench package version.",
 )
 def run(
+    config: str,
     experiment_file: str,
     agent_file: str,
     method: str,
@@ -110,7 +119,12 @@ def run(
     #
     # See https://stackoverflow.com/a/40094408.
 
+    # Parse config str to dict if
+    if config[0] == "{":
+        config = ast.literal_eval(config)
+
     beobench.experiment.scheduler.run(
+        config=config,
         experiment_file=experiment_file,
         agent_file=agent_file,
         method=method,
