@@ -12,7 +12,7 @@ from typing import Union
 try:
     import beobench.integration.rllib
 except ImportError:
-    pass
+    print("Note: RLlib beobench integration not available.")
 
 
 import beobench.experiment.definitions.utils
