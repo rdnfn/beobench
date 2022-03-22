@@ -8,9 +8,7 @@ import importlib.util
 import warnings
 from typing import Union
 
-# RLlib integration is only available inside experiment container
-import beobench.integration.rllib
-
+# RLlib integration is only available with extended extras.
 try:
     import beobench.integration.rllib
 except ImportError:
