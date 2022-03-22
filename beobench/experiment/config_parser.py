@@ -70,6 +70,7 @@ def get_default() -> dict:
             "config": {
                 "run_or_experiment": "PPO",
                 "stop": {"timesteps_total": 400000},
+                "framework": "torch",
                 "config": {
                     "lr": 0.005,
                     "model": {
