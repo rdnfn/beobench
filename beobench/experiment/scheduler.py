@@ -183,7 +183,7 @@ def run(
 
         # define flags for beobench scheduler call inside experiment container
         beobench_flags = []
-        beobench_flags.append(f"--config={config}")
+        beobench_flags.append(f'--config="{config}"')
         if wandb_project:
             beobench_flags.append(f"--wandb-project={wandb_project}")
         if wandb_entity:
