@@ -9,10 +9,11 @@ import warnings
 from typing import Union
 
 # RLlib integration is only available inside experiment container
+import beobench.integration.rllib
+
 try:
     import beobench.integration.rllib
 except ImportError:
-    raise ImportError
     print("Note: RLlib beobench integration not available.")
 
 
