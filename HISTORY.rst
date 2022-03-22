@@ -6,6 +6,8 @@ History
 ------------------
 
 * Make dependencies that are only used inside experiment/gym containers optional (for all dependencies install via ``pip install beobench[extended]``)
+* Add two part experiment image build process so that there is shared beobench installation dockerfile
+* Add support for yaml config files
 
 0.3.0 (2022-02-14)
 ------------------
