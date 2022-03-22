@@ -15,6 +15,7 @@ agent:
       gamma: 0.999
       horizon: 1000
       metrics_smoothing_episodes: 5
+      framework: torch
 # environment config
 env:
   name: MixedUseFanFCU-v0
