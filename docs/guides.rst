@@ -1,6 +1,6 @@
-=====
+======
 Guides
-=====
+======
 
 Welcome to beobench's usage guides!
 
