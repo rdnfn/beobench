@@ -24,14 +24,14 @@
         :target: https://opensource.org/licenses/MIT
         :alt: License
 
-A toolkit providing easy and unified access to building control reinforcement learning environments from multiple frameworks. Out of the box, Beobench provides access to environments from *BOPTEST*, *Energym*, and *Sinergym*. If required Beobench can be easily extended to be used with other environments.
+A toolkit providing easy and unified access to building control reinforcement learning environments from multiple frameworks. Out of the box, Beobench provides access to environments from *BOPTEST*, *Energym*, and *Sinergym*. If required, Beobench can be easily extended to be used with other environments.
 
 Features
 --------
 - **Largest collection of building control environments:** by combining the environments from *BOPTEST*, *Energym*, and *Sinergym*, Beobench is able to provide the (to the best of our knowledge) largest collection of building control environments.
 - **Clean and light-weight installation:** Beobench is installed via pip and only requires docker as an additional non-python dependency (:ref:`see quickstart <sec_quickstart>`). Other packages require the user to manage building simulation installations or deal directly with docker images.
 - **Built-in RL agents:** Beobench allows the user to apply any agent from the `Ray RLlib collection <https://github.com/ray-project/ray/tree/master/rllib>`_ *in addition* to agents provided by the user directly.
-- **Easily extendable:** want to use Beobench to evaluate RL agents on an environment not yet included in Beobench? The use of docker contexts makes it easy to use Beobench with any RL environment.
+- **Easily extendable:** want to use Beobench to evaluate RL agents on an environment not yet included? The use of docker contexts makes it easy to use Beobench with any RL environment.
 
 .. end-in-sphinx-docs
 
