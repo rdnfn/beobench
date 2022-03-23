@@ -26,6 +26,13 @@
 
 A toolbox for benchmarking reinforcement learning (RL) algorithms on building energy optimisation (BEO) problems. Beobench tries to make working on RL for BEO easier: it provides simple access to existing libraries defining BEO problems (such as `BOPTEST <https://github.com/ibpsa/project1-boptest>`_) and provides a large set of pre-configured RL algorithms. Beobench is *not* a gym library itself - instead it leverages the brilliant work done by many existing gym-type projects and makes their work more easily accessible.
 
+Available environments
+----------------------
+
+.. csv-table:: Available environments
+        :file: ./docs/available_envs_parsed.csv
+
+
 Features
 --------
 
