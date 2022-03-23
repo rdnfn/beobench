@@ -1,10 +1,10 @@
 Gym,Environment,Type
-BOPTEST,bestest_air,🏠
+*BOPTEST*,bestest_air,🏠
 ,bestest_hydronic,🏠
 ,bestest_hydronic_heat_pump,🏠
 ,multizone_residential_hydronic,🏠
 ,singlezone_commercial_hydronic,🏢
-Energym,Apartments2Thermal-v0,🏠
+*Energym*,Apartments2Thermal-v0,🏠
 ,Apartments2Grid-v0,🏠
 ,ApartmentsThermal-v0,🏠
 ,ApartmentsGrid-v0,🏠
@@ -18,7 +18,7 @@ Energym,Apartments2Thermal-v0,🏠
 ,SwissHouseRSlaA2W-v0,🏠
 ,SwissHouseRSlaTank-v0,🏠
 ,SwissHouseRSlaTankDhw-v0,🏠
-Sinergym,Eplus-demo-v1,🏠
+*Sinergym*,Eplus-demo-v1,🏠
 ,Eplus-5Zone-hot-discrete-v1,🏠
 ,Eplus-5Zone-mixed-discrete-v1,🏠
 ,Eplus-5Zone-cool-discrete-v1,🏠

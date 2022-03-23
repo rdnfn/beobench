@@ -29,8 +29,52 @@ A toolbox for benchmarking reinforcement learning (RL) algorithms on building en
 Available environments
 ----------------------
 
-.. csv-table:: Available environments
-        :file: ./docs/available_envs_parsed.csv
+.. csv-table::
+        :header-rows: 1
+        :widths: auto
+
+        Gym,Environment,Type
+        *BOPTEST*,bestest_air,🏠
+        ,bestest_hydronic,🏠
+        ,bestest_hydronic_heat_pump,🏠
+        ,multizone_residential_hydronic,🏠
+        ,singlezone_commercial_hydronic,🏢
+        *Energym*,Apartments2Thermal-v0,🏠
+        ,Apartments2Grid-v0,🏠
+        ,ApartmentsThermal-v0,🏠
+        ,ApartmentsGrid-v0,🏠
+        ,OfficesThermostat-v0,🏢
+        ,MixedUseFanFCU-v0,🏢
+        ,SeminarcenterThermostat-v0,🏢
+        ,SeminarcenterFull-v0,🏢
+        ,SimpleHouseRad-v0,🏠
+        ,SimpleHouseRSla-v0,🏠
+        ,SwissHouseRSlaW2W-v0,🏠
+        ,SwissHouseRSlaA2W-v0,🏠
+        ,SwissHouseRSlaTank-v0,🏠
+        ,SwissHouseRSlaTankDhw-v0,🏠
+        *Sinergym*,Eplus-demo-v1,🏠
+        ,Eplus-5Zone-hot-discrete-v1,🏠
+        ,Eplus-5Zone-mixed-discrete-v1,🏠
+        ,Eplus-5Zone-cool-discrete-v1,🏠
+        ,Eplus-5Zone-hot-continuous-v1,🏠
+        ,Eplus-5Zone-mixed-continuous-v1,🏠
+        ,Eplus-5Zone-cool-continuous-v1,🏠
+        ,Eplus-5Zone-hot-discrete-stochastic-v1,🏠
+        ,Eplus-5Zone-mixed-discrete-stochastic-v1,🏠
+        ,Eplus-5Zone-cool-discrete-stochastic-v1,🏠
+        ,Eplus-5Zone-hot-continuous-stochastic-v1,🏠
+        ,Eplus-5Zone-mixed-continuous-stochastic-v1,🏠
+        ,Eplus-5Zone-cool-continuous-stochastic-v1,🏠
+        ,Eplus-datacenter-discrete-v1,🏭
+        ,Eplus-datacenter-continuous-v1,🏭
+        ,Eplus-datacenter-discrete-stochastic-v1,🏭
+        ,Eplus-datacenter-continuous-stochastic-v1,🏭
+        ,Eplus-IWMullion-discrete-v1,🏢
+        ,Eplus-IWMullion-continuous-v1,🏢
+        ,Eplus-IWMullion-discrete-stochastic-v1,🏢
+        ,Eplus-IWMullion-continuous-stochastic-v1,🏢
+
 
 
 Features
