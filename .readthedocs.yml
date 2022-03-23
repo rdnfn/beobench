@@ -25,3 +25,7 @@ python:
   - method: pip
     path: .
   - requirements: requirements/doc_requirements.txt
+
+# Ensure the beobench_contrib submodule is included
+submodules:
+  include: all
