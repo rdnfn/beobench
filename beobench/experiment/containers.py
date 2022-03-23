@@ -2,7 +2,15 @@
 
 import subprocess
 import os
-import importlib.resources
+
+# To enable compatiblity with Python<=3.6 (e.g. for sinergym dockerfile)
+try:
+    import importlib.resources
+except ImportError:
+    import importlib_resources
+    import importlib
+
+    importlib.resources = importlib_resources
 
 
 def build_experiment_container(
