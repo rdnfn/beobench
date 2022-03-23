@@ -13,6 +13,7 @@ Contents
 
    self
    guides/installation
+   envs
    guides
    api
    contributing
