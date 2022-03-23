@@ -1,0 +1,25 @@
+# agent config
+agent:
+  origin: rllib # either path to agent script or name of agent library (rllib)
+  config: # given to ray.tune.run() as arguments (since rllib set before)
+    run_or_experiment: PPO
+    stop:
+      timesteps_total: 400000
+    config:
+      lr: 0.005
+      model:
+        fcnet_activation: relu
+        fcnet_hiddens: [256,256,256,256]
+        post_fcnet_activation: tanh
+      batch_mode: complete_episodes
+      gamma: 0.999
+      horizon: 1000
+      metrics_smoothing_episodes: 5
+      framework: torch
+# environment config
+env:
+  name: Eplus-5Zone-hot-continuous-v1
+  gym: sinergym
+  config:
+    name: Eplus-5Zone-hot-continuous-v1
+    normalize: True
