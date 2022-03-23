@@ -33,7 +33,39 @@ Features
 - **Built-in RL agents:** Beobench allows the user to apply any agent from the `Ray RLlib collection <https://github.com/ray-project/ray/tree/master/rllib>`_ *in addition* to agents provided by the user directly.
 - **Easily extendable:** want to use Beobench to evaluate RL agents on an environment not yet included in Beobench? The use of docker contexts makes it easy to use Beobench with any RL environment.
 
+.. end-in-sphinx-docs
 
+.. start-quickstart
+.. _sec_quickstart:
+
+Quickstart
+----------
+
+Run your first beobench experiment in three steps:
+
+1. `Install docker <https://docs.docker.com/get-docker/>`_ on your machine (if on Linux, check the `additional installation steps <https://beobench.readthedocs.io/en/latest/guides/installation_linux.html>`_)
+2. Install *beobench* using:
+
+        .. code-block:: console
+
+                pip install beobench
+
+3. Finally, start your first experiment using:
+
+        .. code-block:: console
+
+                beobench run
+
+Done, you have just started your first experiment... congrats! Check out the `full getting started guide in the documentation <https://beobench.readthedocs.io/en/latest/guides/getting_started.html>`_ for the next steps.
+
+.. end-quickstart
+
+Documentation
+-------------
+https://beobench.readthedocs.io
+
+
+.. _sec_envs:
 
 Available environments
 ----------------------
@@ -85,63 +117,9 @@ Available environments
         ,Eplus-IWMullion-continuous-stochastic-v1,🏢
 
 
-
-Features
---------
-
-*Some of the features are work in progress*
-
-Main features
-
-- *RL algorithm collection:* what's the best RL method for your BEO problem? Building on `Ray RLlib <https://github.com/ray-project/ray/tree/master/rllib>`_, beobench provides a large collection of pre-configured RL algorithm experiments that can be easily applied to your new BEO problem.
-- *Problem collection:* beobench provides ready-to-use docker containers for popular BEO gym-type problem libraries. By enforcing a strict OpenAI ``gym.Env`` it makes testing your method on different libraries easy.
-
-Additional features
-
-- *Experiment logging:* log experiment results in a reproducible and shareable manner via `Weights and Biases`_.
-- *Hyperparameter tuning:* easily tune hyperparameters using the extensive `Ray Tune Search API <https://docs.ray.io/en/master/tune/index.html>`_.
-- *Simple installation:* beobench can be installed via pip and only requires docker as an additional non-python dependency.
-- *Easily extendable:* beobench is designed for the user to add both environments and methods.
-
-.. _Weights and Biases: https://wandb.ai/
-
-.. end-in-sphinx-docs
-
-
-.. start-quickstart
-.. _sec_quickstart:
-
-Quickstart
-----------
-
-Run your first beobench experiment in three steps:
-
-1. `Install docker <https://docs.docker.com/get-docker/>`_ on your machine (if on Linux, check the `additional installation steps <https://beobench.readthedocs.io/en/latest/guides/installation_linux.html>`_)
-2. Install *beobench* using:
-
-        .. code-block:: console
-
-                pip install beobench
-
-3. Finally, start your first experiment using:
-
-        .. code-block:: console
-
-                beobench run
-
-Done, you have just started your first experiment... congrats! Check out the `full getting started guide in the documentation <https://beobench.readthedocs.io/en/latest/guides/getting_started.html>`_ for the next steps.
-
-.. end-quickstart
-
-Documentation
--------------
-https://beobench.readthedocs.io
-
 License
 -------
 MIT license
-
-
 
 Credits
 -------
