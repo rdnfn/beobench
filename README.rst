@@ -116,8 +116,11 @@ Available environments
         ,``Eplus-IWMullion-discrete-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
         ,``Eplus-IWMullion-continuous-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
 
+\* Types of environments:
 
-
+* residential |home|
+* office |office|
+* data center |industry|
 
 
 License

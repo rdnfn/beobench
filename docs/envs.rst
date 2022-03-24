@@ -24,7 +24,7 @@ Environment list
 
 * residential |home|
 * office |office|
-* commercial |industry|
+* data center |industry|
 
 .. |office| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg
 .. |home| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg
