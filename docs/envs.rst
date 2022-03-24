@@ -12,10 +12,20 @@ Beobench provides easy access to a large number of RL building control environme
    envs/sinergym
 
 
-Complete environment list
+Environment list
 -------------------------
 
 .. csv-table::
         :header-rows: 1
         :widths: auto
         :file: available_envs_parsed.csv
+
+\* Types of environments:
+
+* residential |home|
+* office |office|
+* commercial |industry|
+
+.. |office| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg
+.. |home| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg
+.. |industry| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-factory.svg
