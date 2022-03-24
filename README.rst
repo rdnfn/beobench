@@ -122,6 +122,10 @@ Available environments
 * office |office|
 * data center |industry|
 
+.. |office| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg
+.. |home| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg
+.. |industry| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-factory.svg
+
 
 License
 -------
