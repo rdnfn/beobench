@@ -13,8 +13,8 @@ Contents
 
    self
    guides/installation
-   envs
    guides
+   envs
    api
    contributing
    credits
