@@ -7,7 +7,7 @@ Credits and license
 Further acknowledgements
 ------------------------
 
-The starting package structure was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+The initial package structure was created using Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
@@ -17,7 +17,9 @@ License
 
 The code in this repository is published under MIT license (see ``LICENSE`` file).
 
-Further the icons used in the environment list in the documentation are licensed under the following MIT license:
+Further, the icons used in the environment list in the documentation are licensed under the following MIT license:
+
+.. code-block:: txt
 
     MIT License
 
@@ -40,4 +42,3 @@ Further the icons used in the environment list in the documentation are licensed
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
-
