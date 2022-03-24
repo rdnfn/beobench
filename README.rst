@@ -74,47 +74,50 @@ Available environments
         :header-rows: 1
         :widths: auto
 
-        Gym,Environment,Type
-        *BOPTEST*,bestest_air,🏠
-        ,bestest_hydronic,🏠
-        ,bestest_hydronic_heat_pump,🏠
-        ,multizone_residential_hydronic,🏠
-        ,singlezone_commercial_hydronic,🏢
-        *Energym*,Apartments2Thermal-v0,🏠
-        ,Apartments2Grid-v0,🏠
-        ,ApartmentsThermal-v0,🏠
-        ,ApartmentsGrid-v0,🏠
-        ,OfficesThermostat-v0,🏢
-        ,MixedUseFanFCU-v0,🏢
-        ,SeminarcenterThermostat-v0,🏢
-        ,SeminarcenterFull-v0,🏢
-        ,SimpleHouseRad-v0,🏠
-        ,SimpleHouseRSla-v0,🏠
-        ,SwissHouseRSlaW2W-v0,🏠
-        ,SwissHouseRSlaA2W-v0,🏠
-        ,SwissHouseRSlaTank-v0,🏠
-        ,SwissHouseRSlaTankDhw-v0,🏠
-        *Sinergym*,Eplus-demo-v1,🏠
-        ,Eplus-5Zone-hot-discrete-v1,🏠
-        ,Eplus-5Zone-mixed-discrete-v1,🏠
-        ,Eplus-5Zone-cool-discrete-v1,🏠
-        ,Eplus-5Zone-hot-continuous-v1,🏠
-        ,Eplus-5Zone-mixed-continuous-v1,🏠
-        ,Eplus-5Zone-cool-continuous-v1,🏠
-        ,Eplus-5Zone-hot-discrete-stochastic-v1,🏠
-        ,Eplus-5Zone-mixed-discrete-stochastic-v1,🏠
-        ,Eplus-5Zone-cool-discrete-stochastic-v1,🏠
-        ,Eplus-5Zone-hot-continuous-stochastic-v1,🏠
-        ,Eplus-5Zone-mixed-continuous-stochastic-v1,🏠
-        ,Eplus-5Zone-cool-continuous-stochastic-v1,🏠
-        ,Eplus-datacenter-discrete-v1,🏭
-        ,Eplus-datacenter-continuous-v1,🏭
-        ,Eplus-datacenter-discrete-stochastic-v1,🏭
-        ,Eplus-datacenter-continuous-stochastic-v1,🏭
-        ,Eplus-IWMullion-discrete-v1,🏢
-        ,Eplus-IWMullion-continuous-v1,🏢
-        ,Eplus-IWMullion-discrete-stochastic-v1,🏢
-        ,Eplus-IWMullion-continuous-stochastic-v1,🏢
+        Gym,Environment,Type*,Description
+        *BOPTEST*,``bestest_air``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/bestest_air/doc/index.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/boptest.html>`_"
+        ,``bestest_hydronic``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/bestest_hydronic/doc/index.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/boptest.html>`_"
+        ,``bestest_hydronic_heat_pump``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/bestest_hydronic_heat_pump/doc/index.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/boptest.html>`_"
+        ,``multizone_residential_hydronic``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/multizone_residential_hydronic/doc/MultiZoneResidentialHydronic.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/boptest.html>`_"
+        ,``singlezone_commercial_hydronic``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/singlezone_commercial_hydronic/doc/index.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/boptest.html>`_"
+        *Energym*,``Apartments2Thermal-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/ap2t.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``Apartments2Grid-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/ap2g.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``ApartmentsThermal-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/apt.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``ApartmentsGrid-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/apg.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``OfficesThermostat-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://bsl546.github.io/energym-pages/sources/offices.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``MixedUseFanFCU-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://bsl546.github.io/energym-pages/sources/mixeduse.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SeminarcenterThermostat-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://bsl546.github.io/energym-pages/sources/seminart.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SeminarcenterFull-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://bsl546.github.io/energym-pages/sources/seminarf.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SimpleHouseRad-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/houserad.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SimpleHouseRSla-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/houseslab.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SwissHouseRSlaW2W-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/swiss.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SwissHouseRSlaA2W-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/swiss.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SwissHouseRSlaTank-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/swiss2.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SwissHouseRSlaTankDhw-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/swiss2.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        *Sinergym*,``Eplus-demo-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-hot-discrete-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-mixed-discrete-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-cool-discrete-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-hot-continuous-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-mixed-continuous-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-cool-continuous-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-hot-discrete-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-mixed-discrete-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-cool-discrete-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-hot-continuous-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-mixed-continuous-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-cool-continuous-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-datacenter-discrete-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-factory.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-datacenter-continuous-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-factory.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-datacenter-discrete-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-factory.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-datacenter-continuous-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-factory.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-IWMullion-discrete-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-IWMullion-continuous-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-IWMullion-discrete-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-IWMullion-continuous-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+
+
+
 
 
 License
