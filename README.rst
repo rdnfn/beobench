@@ -122,12 +122,6 @@ Available environments
 
 License
 -------
-MIT license
+MIT license, see `credits and license page in docs <https://beobench.readthedocs.io/en/latest/credits.html>`_ for more detailed information.
 
-Credits
--------
 
-This package was originally created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage

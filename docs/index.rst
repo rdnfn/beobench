@@ -17,7 +17,7 @@ Contents
    guides
    api
    contributing
-   authors
+   credits
    history
 
 Indices and tables
