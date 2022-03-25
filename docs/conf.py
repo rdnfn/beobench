@@ -104,7 +104,6 @@ html_theme = "sphinx_book_theme"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
-html_css_files = ["custom.css"]
 
 
 # -- Options for HTMLHelp output ---------------------------------------
@@ -192,3 +191,5 @@ elif html_theme == "sphinx_book_theme":
         "logo_only": True,
         #'prev_next_buttons_location': None,
     }
+
+html_css_files = ["custom.css"]
