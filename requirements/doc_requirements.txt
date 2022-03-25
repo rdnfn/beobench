@@ -1,2 +1,4 @@
 sphinx-tabs
 myst-parser
+sphinx-book-theme
+docutils>=0.17
