@@ -4,7 +4,6 @@ import os
 import uuid
 import subprocess
 import pathlib
-import importlib.util
 import warnings
 from typing import Union
 
@@ -14,11 +13,7 @@ try:
 except ImportError:
     print("Note: RLlib beobench integration not available.")
 
-
 import beobench.experiment.definitions.utils
-import beobench.experiment.definitions.default
-import beobench.experiment.definitions.methods
-import beobench.experiment.definitions.envs
 import beobench.experiment.containers
 import beobench.experiment.config_parser
 import beobench.utils
@@ -229,84 +224,3 @@ def run(
         ]
         print("Executing docker command: ", " ".join(args))
         subprocess.check_call(args)
-
-
-def _create_experiment_def(
-    experiment_file: pathlib.Path, method: str, env: str
-) -> dict:
-    """Create a Beobench experiment definition.
-
-    Args:
-        experiment_file (str): path to experiment file.
-        method (str): name of RL method.
-        env (str): name of environment.
-    """
-    experiment_def = _load_experiment_file(experiment_file)
-
-    # parsing high level interface options
-
-    # methods
-    if method:
-        if method == "ppo":
-            experiment_def["method"] = beobench.experiment.definitions.methods.PPO
-        else:
-            raise ValueError(
-                (
-                    f"The supplied method '{method}' does not match any of "
-                    "the pre-configured beobench methods."
-                )
-            )
-
-    if env:
-        if env == "boptest_bestest-hydronic-heat-pump-v1":
-            experiment_def["problem"] = getattr(
-                beobench.experiment.definitions.envs,
-                env.replace("-", "_"),
-            )
-        if env == "sinergym_eplus-5zone-hot-continous-v1":
-            experiment_def["problem"] = getattr(
-                beobench.experiment.definitions.envs,
-                env.replace("-", "_"),
-            )
-        if env == "energym_mixed-use-fan-fcu-v0":
-            experiment_def["problem"] = getattr(
-                beobench.experiment.definitions.envs,
-                env.replace("-", "_"),
-            )
-
-    return experiment_def
-
-
-def _load_experiment_file(experiment_file: pathlib.Path) -> dict:
-    """Load a Beobench experiment file.
-
-    Args:
-        experiment_file (str): path to experiment file.
-    """
-
-    # Load experiment definition file
-    if experiment_file is None:
-        experiment_file_mod = beobench.experiment.definitions.default
-    else:
-        # import experiment definition file as module
-        spec = importlib.util.spec_from_file_location(
-            "experiment_definition",
-            str(experiment_file.absolute()),
-        )
-        experiment_file_mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(experiment_file_mod)
-
-    experiment_def = {}
-
-    # Create experiment def dictionary, and set default values if not available
-    # from experiment_file (module).
-    for exp_part in ["problem", "method", "rllib_setup"]:
-        if hasattr(experiment_file_mod, exp_part):
-            experiment_def[exp_part] = getattr(experiment_file_mod, exp_part)
-        else:
-            experiment_def[exp_part] = getattr(
-                beobench.experiment.definitions.default,
-                exp_part,
-            )
-
-    return experiment_def
