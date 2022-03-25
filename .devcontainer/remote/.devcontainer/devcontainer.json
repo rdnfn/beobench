@@ -63,7 +63,7 @@
 	"features": {
 		"git": "latest",
 		"docker-in-docker": {
-			"version": "latest",
+			"version": "20.10.13",
 			"moby": true
 		}
 	},
