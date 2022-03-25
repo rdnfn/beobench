@@ -15,6 +15,7 @@ def cli():
 @cli.command()
 @click.option(
     "--config",
+    "-c",
     default=None,
     help="Json or filepath with yaml that defines beobench experiment configuration.",
     type=str,
