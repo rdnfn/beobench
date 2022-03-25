@@ -63,7 +63,8 @@
 	"features": {
 		"git": "latest",
 		"docker-in-docker": {
-			"version": "20.10.13",
+			// fixing version because potential cause of problem with --gpus docker run option.
+			"version": "20.10.12",
 			"moby": true
 		}
 	},
