@@ -12,7 +12,7 @@
 			"VARIANT": "3.9",
 			// Options
 			"NODE_VERSION": "none",
-			"NVIDIA_SUPPORT": "none"
+			"NVIDIA_SUPPORT": "True",
 		}
 	},
 	"workspaceFolder": "/beobench",
@@ -63,8 +63,7 @@
 	"features": {
 		"git": "latest",
 		"docker-in-docker": {
-			// fixing version because potential cause of problem with --gpus docker run option.
-			"version": "20.10.12",
+			"version": "latest",
 			"moby": true
 		}
 	},
