@@ -34,7 +34,7 @@ def run(
     docker_shm_size: str = "2gb",
     no_additional_container: bool = False,
     use_no_cache: bool = False,
-    dev_beobench_location: str = None,
+    dev_path: str = None,
 ) -> None:
     """Run experiment.
 
@@ -69,7 +69,7 @@ def run(
             is started to run experiments in.
         use_no_cache (bool, optional): whether to use cache to build experiment
             container.
-        dev_beobench_location (str, optional): github path to beobench package. For
+        dev_path (str, optional): file or github path to beobench package. For
             developement purpose only. This will install a custom beobench version
             inside the experiment container. By default the latest PyPI version is
             installed.
@@ -192,11 +192,27 @@ def run(
             # this will return "" if env var not set
             wandb_api_key = os.getenv("WANDB_API_KEY", "")
 
+        # dev mode where custom beobench is installed directly from github or local path
         cmd_list_in_container = [""]
-        # dev mode where custom beobench is installed directly from git
-        if dev_beobench_location is not None:
+        if dev_path is not None:
             cmd_list_in_container.append("pip uninstall --yes beobench")
-            cmd_list_in_container.append(f"pip install {dev_beobench_location}")
+            if "https" in dev_path:
+                cmd_list_in_container.append(f"pip install {dev_path}")
+            else:
+                # mount local beobench repo
+                dev_path = pathlib.Path(dev_path)
+                dev_abs = dev_path.absolute()
+                dev_path_on_docker = "/tmp/beobench/beobench"
+                docker_flags += [
+                    "-v",
+                    f"{dev_abs}:{dev_path_on_docker}_mount:ro",
+                ]
+                cmd_list_in_container.append(
+                    f"cp -r {dev_path_on_docker}_mount {dev_path_on_docker}"
+                )
+                cmd_list_in_container.append(
+                    f"python -m pip install {dev_path_on_docker}"
+                )
 
         cmd_in_container = " && ".join(cmd_list_in_container)
 
