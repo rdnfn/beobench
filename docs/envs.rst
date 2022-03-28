@@ -6,11 +6,6 @@ Beobench provides easy access to a large number of building control environments
 
 .. include:: envs/envs_list.rst
 
-
-.. |office| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg
-.. |home| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg
-.. |industry| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-factory.svg
-
 ----
 
 BOPTEST
@@ -19,6 +14,10 @@ BOPTEST
 .. include:: ../beobench_contrib/gyms/boptest/README.md
     :parser: myst_parser.sphinx_
     :start-line: 2
+
+
+BOPTEST Envs
+^^^^^^^^^^^^
 
 .. include:: envs/BOPTEST_descriptions.rst
 
@@ -32,6 +31,10 @@ Energym
     :parser: myst_parser.sphinx_
     :start-line: 2
 
+
+Energym Envs
+^^^^^^^^^^^^
+
 .. include:: envs/Energym_descriptions.rst
 
 ----
@@ -42,5 +45,9 @@ Sinergym
 .. include:: ../beobench_contrib/gyms/sinergym/README.md
     :parser: myst_parser.sphinx_
     :start-line: 2
+
+
+Sinergym Envs
+^^^^^^^^^^^^^
 
 .. include:: envs/Sinergym_descriptions.rst
