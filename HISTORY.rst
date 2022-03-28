@@ -2,12 +2,17 @@
 History
 =======
 
-0.3.1 (2022-00-00)
+0.4.0 (2022-03-28)
 ------------------
 
 * Make dependencies that are only used inside experiment/gym containers optional (for all dependencies install via ``pip install beobench[extended]``)
 * Add two part experiment image build process so that there is shared beobench installation dockerfile
-* Add support for yaml config files
+* Add support for yaml config files (!)
+* Overhaul of documentation, including new envs page and new theme
+* Enable RLlib free experiment containers when not required
+* Add beobench_contrib as submodule
+* Simplify Pypi readme file
+* Remove GPU requirement for devcontainer
 
 0.3.0 (2022-02-14)
 ------------------
