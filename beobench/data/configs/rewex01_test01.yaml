@@ -1,6 +1,6 @@
 # REWEX Experiment 01
 # Run with the command
-# beobench run -c beobench/data/configs/rewex01_test01.yaml -d . --use-gpu --docker-shm-size 28gb
+# beobench run -c beobench/data/configs/rewex01_test01.yaml -d .[extended] --use-gpu --docker-shm-size 28gb
 
 # agent config
 agent:
