@@ -5,6 +5,7 @@ import uuid
 import subprocess
 import pathlib
 import warnings
+import yaml
 from typing import Union
 
 # RLlib integration is only available with extended extras.
@@ -25,7 +26,7 @@ def run(
     agent_file: str = None,
     method: str = None,
     env: str = None,
-    local_dir: str = "./beobench_results/ray_results",
+    local_dir: str = "./beobench_results",
     wandb_project: str = "",
     wandb_entity: str = "",
     wandb_api_key: str = "",
@@ -84,7 +85,7 @@ def run(
     # Create a definition of experiment from inputs
     if experiment_file is not None:
         warnings.warn(
-            "The experiment_file argmunet has been replaced by config",
+            "The experiment_file argmunent has been replaced by config",
             DeprecationWarning,
         )
     if agent_file is not None:
@@ -116,16 +117,28 @@ def run(
             )
         else:
             # run custom RL agent
-            args = ["python -m", f"/tmp/beobench/{agent_file.name}"]
+            args = ["python", f"/tmp/beobench/{agent_file.name}"]
             subprocess.check_call(args)
 
     else:
         # build and run experiments in docker container
+        docker_flags = []
 
         # Ensure local_dir exists, and create otherwise
         local_dir_path = pathlib.Path(local_dir)
         local_dir_path.mkdir(parents=True, exist_ok=True)
-        local_dir_abs = str(local_dir_path.absolute())
+        ray_path_abs = str((local_dir_path / "ray_results").absolute())
+
+        # Save config to local dir and add mount flag for config
+        config_path = local_dir_path / "tmp" / "config.yaml"
+        config_path.parent.mkdir(parents=True, exist_ok=True)
+        config_path_abs = config_path.absolute()
+        with open(config_path, "w", encoding="utf-8") as conf_file:
+            yaml.dump(config, conf_file)
+        docker_flags += [
+            "-v",
+            f"{config_path_abs}:/tmp/beobench/config.yaml:ro",
+        ]
 
         # docker setup
         image_tag = beobench.experiment.containers.build_experiment_container(
@@ -137,7 +150,6 @@ def run(
         unique_id = uuid.uuid4().hex[:6]
         container_name = f"auto_beobench_experiment_{unique_id}"
 
-        docker_flags = []
         if experiment_file is not None:
             exp_file_abs = experiment_file.absolute()
             exp_file_on_docker = f"/tmp/beobench/{experiment_file.name}"
@@ -221,7 +233,7 @@ def run(
             "run",
             # mount experiment data dir
             "-v",
-            f"{local_dir_abs}:/root/ray_results",
+            f"{ray_path_abs}:/root/ray_results",
             # automatically remove container when stopped/exited
             "--rm",
             # add more memory
