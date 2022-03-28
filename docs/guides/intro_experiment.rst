@@ -22,7 +22,7 @@ Beobench experiments are configured either using a *Python dictionary* or an equ
 
 
 
-Given this configuration file ``example.yaml``, we can the experiment using the following commands:
+Given this configuration file ``example.yaml``, we can run the experiment using the following commands:
 
 .. include:: ../snippets/run_standard_experiment.rst
 
