@@ -19,7 +19,9 @@ requirements = [
 ]
 
 # The extended requirements are only used inside experiment/gym containers
-extended_requirements = []
+extended_requirements = [
+    "gym",
+]
 
 rllib_requirements = [
     "ray[rllib]",
