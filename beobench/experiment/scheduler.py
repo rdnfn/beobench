@@ -1,29 +1,33 @@
 """Module to schedule experiments."""
 
+from cgitb import enable
 import os
 import uuid
 import subprocess
 import pathlib
-import importlib.util
-import ray.tune
-import ray.tune.integration.wandb
-import ray.tune.integration.mlflow
+import warnings
+import yaml
+from typing import Union
 
+# RLlib integration is only available with extended extras.
+try:
+    import beobench.integration.rllib
+except ImportError:
+    print("Note: RLlib beobench integration not available.")
 
 import beobench.experiment.definitions.utils
-import beobench.experiment.definitions.default
-import beobench.experiment.definitions.methods
-import beobench.experiment.definitions.envs
 import beobench.experiment.containers
+import beobench.experiment.config_parser
 import beobench.utils
 
 
 def run(
+    config: Union[str, dict] = None,
     experiment_file: str = None,
     agent_file: str = None,
     method: str = None,
     env: str = None,
-    local_dir: str = "./beobench_results/ray_results",
+    local_dir: str = "./beobench_results",
     wandb_project: str = "",
     wandb_entity: str = "",
     wandb_api_key: str = "",
@@ -32,7 +36,7 @@ def run(
     docker_shm_size: str = "2gb",
     no_additional_container: bool = False,
     use_no_cache: bool = False,
-    _dev_beobench_location: str = None,
+    dev_path: str = None,
 ) -> None:
     """Run experiment.
 
@@ -40,10 +44,12 @@ def run(
     interface.
 
     Args:
+        config (str or dict, optional): experiment configuration. This can either be
+            a dictionary or a path to a yaml file.
         experiment_file (str, optional): File that defines experiment.
-            Defaults to None.
+            Defaults to None. DEPRECATED.
         agent_file (str, optional): File that defines custom agent. This script is
-            executed inside the gym container.
+            executed inside the gym container. DEPRECATED, this should be set in config.
         method (str, optional): RL method to use in experiment. This overwrites any
             method that is set in experiment file. For example 'PPO'. Defaults to None.
         env (str, optional): environment to apply method to in experiment. This
@@ -65,74 +71,90 @@ def run(
             is started to run experiments in.
         use_no_cache (bool, optional): whether to use cache to build experiment
             container.
-        _dev_beobench_location (str, optional): github path to beobench package. For
+        dev_path (str, optional): file or github path to beobench package. For
             developement purpose only. This will install a custom beobench version
             inside the experiment container. By default the latest PyPI version is
             installed.
     """
+    # pylint: disable=unused-argument
 
+    # get config dict from config argument
+    if config:
+        config = beobench.experiment.config_parser.parse(config)
+    else:
+        config = beobench.experiment.config_parser.get_default()
     # Create a definition of experiment from inputs
     if experiment_file is not None:
-        experiment_file = pathlib.Path(experiment_file)
+        warnings.warn(
+            "The experiment_file argmunent has been replaced by config",
+            DeprecationWarning,
+        )
     if agent_file is not None:
-        agent_file = pathlib.Path(agent_file)
-    experiment_def = _create_experiment_def(experiment_file, method, env)
+        warnings.warn(
+            "The agent_file argmunet has been replaced by config",
+            DeprecationWarning,
+        )
+
+    if config["agent"]["origin"] == "rllib":
+        agent_file = None
+    else:
+        agent_file = pathlib.Path(config["agent"]["origin"])
+
+    # TODO add parsing of high level API arguments env and agent
 
     if no_additional_container:
         # Execute experiment
         # (this is usually reached from inside an experiment container)
 
-        # Add wandb callback if sufficient information
-        # TODO: add earlier check to see that also API key available
-        if wandb_project and wandb_entity:
-            callbacks = [_create_wandb_callback(wandb_project, wandb_entity)]
-        elif wandb_project or wandb_entity:
-            raise ValueError(
-                "Only one of wandb_project or wandb_entity given, but both required."
-            )
-        elif mlflow_name:
-            callbacks = [_create_mlflow_callback(mlflow_name)]
-        else:
-            callbacks = []
-
-        # change RLlib setup if GPU used
-        if use_gpu:
-            experiment_def["rllib_setup"]["rllib_experiment_config"]["config"][
-                "num_gpus"
-            ] = 1
-
         # run experiment in ray tune
-        if not agent_file:
-            run_in_tune(
-                problem_def=experiment_def["problem"],
-                method_def=experiment_def["method"],
-                rllib_setup=experiment_def["rllib_setup"],
-                rllib_callbacks=callbacks,
+
+        if config["agent"]["origin"] == "rllib":
+            beobench.integration.rllib.run_in_tune(
+                config,
+                wandb_entity=wandb_entity,
+                wandb_project=wandb_project,
+                mlflow_name=mlflow_name,
+                use_gpu=use_gpu,
             )
         else:
             # run custom RL agent
-            args = ["python -m", f"/tmp/beobench/{agent_file.name}"]
+            args = ["python", f"/tmp/beobench/{agent_file.name}"]
             subprocess.check_call(args)
 
     else:
         # build and run experiments in docker container
 
+        ### part 1: build docker images
+        enable_rllib = config["agent"]["origin"] == "rllib"
+        image_tag = beobench.experiment.containers.build_experiment_container(
+            build_context=config["env"]["gym"],
+            use_no_cache=use_no_cache,
+            enable_rllib=enable_rllib,
+        )
+
+        ### part 2: create args and run command in docker container
+        docker_flags = []
+
         # Ensure local_dir exists, and create otherwise
         local_dir_path = pathlib.Path(local_dir)
         local_dir_path.mkdir(parents=True, exist_ok=True)
-        local_dir_abs = str(local_dir_path.absolute())
+        ray_path_abs = str((local_dir_path / "ray_results").absolute())
 
-        # docker setup
-        image_tag = beobench.experiment.containers.build_experiment_container(
-            build_context=experiment_def["problem"]["problem_library"],
-            use_no_cache=use_no_cache,
-        )
+        # Save config to local dir and add mount flag for config
+        config_path = local_dir_path / "tmp" / "config.yaml"
+        config_path.parent.mkdir(parents=True, exist_ok=True)
+        config_path_abs = config_path.absolute()
+        with open(config_path, "w", encoding="utf-8") as conf_file:
+            yaml.dump(config, conf_file)
+        docker_flags += [
+            "-v",
+            f"{config_path_abs}:/tmp/beobench/config.yaml:ro",
+        ]
 
-        # define docker arguments/options/flags
+        # define more docker arguments/options/flags
         unique_id = uuid.uuid4().hex[:6]
         container_name = f"auto_beobench_experiment_{unique_id}"
 
-        docker_flags = []
         if experiment_file is not None:
             exp_file_abs = experiment_file.absolute()
             exp_file_on_docker = f"/tmp/beobench/{experiment_file.name}"
@@ -150,7 +172,7 @@ def run(
             ]
 
         # enable docker-from-docker access only for built-in boptest integration.
-        if experiment_def["problem"]["problem_library"] == "boptest":
+        if config["env"]["gym"] == "boptest":
 
             # Create docker network (only useful if starting other containers)
             beobench.experiment.containers.create_docker_network("beobench-net")
@@ -173,16 +195,13 @@ def run(
 
         # define flags for beobench scheduler call inside experiment container
         beobench_flags = []
-        if experiment_file:
-            beobench_flags.append(f"--experiment-file={exp_file_on_docker}")
+        beobench_flags.append(f'--config="{config}"')
         if wandb_project:
             beobench_flags.append(f"--wandb-project={wandb_project}")
         if wandb_entity:
             beobench_flags.append(f"--wandb-entity={wandb_entity}")
         if use_gpu:
             beobench_flags.append("--use-gpu")
-        if agent_file:
-            beobench_flags.append(f"--agent-file={agent_file}")
         beobench_flag_str = " ".join(beobench_flags)
 
         # if no wandb API key is given try to get it from env
@@ -190,11 +209,27 @@ def run(
             # this will return "" if env var not set
             wandb_api_key = os.getenv("WANDB_API_KEY", "")
 
+        # dev mode where custom beobench is installed directly from github or local path
         cmd_list_in_container = [""]
-        # dev mode where custom beobench is installed directly from git
-        if _dev_beobench_location is not None:
+        if dev_path is not None:
             cmd_list_in_container.append("pip uninstall --yes beobench")
-            cmd_list_in_container.append(f"pip install {_dev_beobench_location}")
+            if "https" in dev_path:
+                cmd_list_in_container.append(f"pip install {dev_path}")
+            else:
+                # mount local beobench repo
+                dev_path = pathlib.Path(dev_path)
+                dev_abs = dev_path.absolute()
+                dev_path_on_docker = "/tmp/beobench/beobench"
+                docker_flags += [
+                    "-v",
+                    f"{dev_abs}:{dev_path_on_docker}_mount:ro",
+                ]
+                cmd_list_in_container.append(
+                    f"cp -r {dev_path_on_docker}_mount {dev_path_on_docker}"
+                )
+                cmd_list_in_container.append(
+                    f"python -m pip install {dev_path_on_docker}"
+                )
 
         cmd_in_container = " && ".join(cmd_list_in_container)
 
@@ -203,7 +238,7 @@ def run(
             "run",
             # mount experiment data dir
             "-v",
-            f"{local_dir_abs}:/root/ray_results",
+            f"{ray_path_abs}:/root/ray_results",
             # automatically remove container when stopped/exited
             "--rm",
             # add more memory
@@ -222,180 +257,3 @@ def run(
         ]
         print("Executing docker command: ", " ".join(args))
         subprocess.check_call(args)
-
-
-def run_in_tune(
-    problem_def: dict, method_def: dict, rllib_setup: dict, rllib_callbacks: list = None
-) -> ray.tune.ExperimentAnalysis:
-    """Run beobench experiment.
-
-    Additional info: note that RLlib is a submodule of the ray package, i.e. it is
-    imported as `ray.rllib`. For experiment definitions it uses the `ray.tune`
-    submodule. Therefore ray tune experiment definition means the same as ray rllib
-    experiment defintions. To avoid confusion all variable/argument names use rllib
-    instead of ray tune but strictly speaking these are ray tune experiment
-    definitions.
-
-    Args:
-        problem_def (dict): definition of problem. This is an incomplete
-            ray tune experiment defintion that only defines the problem side.
-        method_def (dict): definition of method. This is an incomplete
-            ray tune experiment defintion that only defines the method side.
-        rllib_setup (dict): rllib setup. This is an incomplete
-            ray tune experiment defintion that only defines the ray tune/rllib setup
-            (e.g. number of workers, etc.).
-        rllib_callbacks (list, optional): callbacks to add to ray.tune.run command.
-            Defaults to None.
-
-    Returns:
-        ray.tune.ExperimentAnalysis: analysis object of completed experiment.
-    """
-    if rllib_callbacks is None:
-        rllib_callbacks = []
-
-    # combine the three incomplete ray tune experiment
-    # definitions into a single complete one.
-    exp_config = beobench.experiment.definitions.utils.get_experiment_config(
-        problem_def, method_def, rllib_setup
-    )
-
-    # register the problem environment with ray tune
-    # env_creator is a module available in experiment containers
-    import env_creator  # pylint: disable=import-outside-toplevel,import-error
-
-    ray.tune.registry.register_env(
-        problem_def["rllib_experiment_config"]["config"]["env"],
-        env_creator.create_env,
-    )
-
-    # if run in notebook, change the output reported throughout experiment.
-    if beobench.utils.check_if_in_notebook():
-        reporter = ray.tune.JupyterNotebookReporter(overwrite=True)
-    else:
-        reporter = None
-
-    # running the experiment
-    analysis = ray.tune.run(
-        progress_reporter=reporter,
-        callbacks=rllib_callbacks,
-        **exp_config,
-    )
-
-    return analysis
-
-
-def _create_wandb_callback(
-    wandb_project: str,
-    wandb_entity: str,
-):
-    """Create an RLlib weights and biases (wandb) callback.
-
-    Args:
-        wandb_project (str): name of wandb project.
-        wandb_entity (str): name of wandb entity that owns project.
-
-    Returns:
-        : a wandb callback
-    """
-    wandb_callback = ray.tune.integration.wandb.WandbLoggerCallback(
-        project=wandb_project, log_config=True, entity=wandb_entity
-    )
-    return wandb_callback
-
-
-def _create_mlflow_callback(
-    mlflow_name: str,
-):
-    """Create an RLlib MLflow callback.
-
-    Args:
-        mlflow_name (str, optional): name of MLflow experiment.
-
-    Returns:
-        : a wandb callback
-    """
-    mlflow_callback = ray.tune.integration.mlflow.MLflowLoggerCallback(
-        experiment_name=mlflow_name, tracking_uri="file:/root/ray_results/mlflow"
-    )
-    return mlflow_callback
-
-
-def _create_experiment_def(
-    experiment_file: pathlib.Path, method: str, env: str
-) -> dict:
-    """Create a Beobench experiment definition.
-
-    Args:
-        experiment_file (str): path to experiment file.
-        method (str): name of RL method.
-        env (str): name of environment.
-    """
-    experiment_def = _load_experiment_file(experiment_file)
-
-    # parsing high level interface options
-
-    # methods
-    if method:
-        if method == "ppo":
-            experiment_def["method"] = beobench.experiment.definitions.methods.PPO
-        else:
-            raise ValueError(
-                (
-                    f"The supplied method '{method}' does not match any of "
-                    "the pre-configured beobench methods."
-                )
-            )
-
-    if env:
-        if env == "boptest_bestest-hydronic-heat-pump-v1":
-            experiment_def["problem"] = getattr(
-                beobench.experiment.definitions.envs,
-                env.replace("-", "_"),
-            )
-        if env == "sinergym_eplus-5zone-hot-continous-v1":
-            experiment_def["problem"] = getattr(
-                beobench.experiment.definitions.envs,
-                env.replace("-", "_"),
-            )
-        if env == "energym_mixed-use-fan-fcu-v0":
-            experiment_def["problem"] = getattr(
-                beobench.experiment.definitions.envs,
-                env.replace("-", "_"),
-            )
-
-    return experiment_def
-
-
-def _load_experiment_file(experiment_file: pathlib.Path) -> dict:
-    """Load a Beobench experiment file.
-
-    Args:
-        experiment_file (str): path to experiment file.
-    """
-
-    # Load experiment definition file
-    if experiment_file is None:
-        experiment_file_mod = beobench.experiment.definitions.default
-    else:
-        # import experiment definition file as module
-        spec = importlib.util.spec_from_file_location(
-            "experiment_definition",
-            str(experiment_file.absolute()),
-        )
-        experiment_file_mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(experiment_file_mod)
-
-    experiment_def = dict()
-
-    # Create experiment def dictionary, and set default values if not available
-    # from experiment_file (module).
-    for exp_part in ["problem", "method", "rllib_setup"]:
-        if hasattr(experiment_file_mod, exp_part):
-            experiment_def[exp_part] = getattr(experiment_file_mod, exp_part)
-        else:
-            experiment_def[exp_part] = getattr(
-                beobench.experiment.definitions.default,
-                exp_part,
-            )
-
-    return experiment_def

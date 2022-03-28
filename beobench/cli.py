@@ -1,6 +1,8 @@
 """Command line interface for beobench."""
 
 import click
+import ast
+
 import beobench.experiment.scheduler
 import beobench.utils
 
@@ -11,6 +13,13 @@ def cli():
 
 
 @cli.command()
+@click.option(
+    "--config",
+    "-c",
+    default=None,
+    help="Json or filepath with yaml that defines beobench experiment configuration.",
+    type=str,
+)
 @click.option(
     "--experiment-file",
     default=None,
@@ -80,11 +89,13 @@ def cli():
     help="Whether to use cache to build experiment container.",
 )
 @click.option(
-    "--dev-beobench-location",
+    "--dev-path",
+    "-d",
     default=None,
     help="For developer use only: location of custom beobench package version.",
 )
 def run(
+    config: str,
     experiment_file: str,
     agent_file: str,
     method: str,
@@ -98,7 +109,7 @@ def run(
     docker_shm_size: str,
     no_additional_container: bool,
     use_no_cache: bool,
-    dev_beobench_location: str,
+    dev_path: str,
 ) -> None:
     """Run beobench experiment from command line.
 
@@ -110,7 +121,12 @@ def run(
     #
     # See https://stackoverflow.com/a/40094408.
 
+    # Parse config str to dict if
+    if config and config[0] == "{":
+        config = ast.literal_eval(config)
+
     beobench.experiment.scheduler.run(
+        config=config,
         experiment_file=experiment_file,
         agent_file=agent_file,
         method=method,
@@ -124,7 +140,7 @@ def run(
         docker_shm_size=docker_shm_size,
         no_additional_container=no_additional_container,
         use_no_cache=use_no_cache,
-        _dev_beobench_location=dev_beobench_location,
+        dev_path=dev_path,
     )
 
 

@@ -1,1 +1,8 @@
 sphinx-tabs
+myst-parser
+sphinx-book-theme
+docutils>=0.17
+
+# Because of the following bug
+# https://github.com/readthedocs/readthedocs.org/issues/9038
+Jinja2<3.1

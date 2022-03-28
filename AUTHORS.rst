@@ -1,13 +1,4 @@
-=======
-Credits
-=======
-
-Development Lead
-----------------
-
-* rdnfn <->
-
-Contributors
-------------
-
-None yet. Why not be the first?
+Code Contributors
+-----------------
+* Arduin Findeis (https://github.com/rdnfn)
+* Scott Jeen (https://github.com/enjeeneer)

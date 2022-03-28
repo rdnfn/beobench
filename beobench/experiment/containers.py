@@ -3,9 +3,21 @@
 import subprocess
 import os
 
+# To enable compatiblity with Python<=3.6 (e.g. for sinergym dockerfile)
+try:
+    import importlib.resources
+except ImportError:
+    import importlib_resources
+    import importlib
+
+    importlib.resources = importlib_resources
+
 
 def build_experiment_container(
-    build_context: str, docker_tag: str = None, use_no_cache: bool = False
+    build_context: str,
+    use_no_cache: bool = False,
+    version="latest",
+    enable_rllib=False,
 ) -> None:
     """Build experiment container from beobench/integrations/boptest/Dockerfile.
 
@@ -17,6 +29,7 @@ def build_experiment_container(
         use_no_cache (bool, optional): wether to use cache in build. Defaults to False.
     """
 
+    # Flags are shared between gym image build and gym_and_beobench image build
     flags = []
     if use_no_cache:
         flags.append("--no-cache")
@@ -28,7 +41,7 @@ def build_experiment_container(
     ]  # pylint: disable=invalid-name
 
     if build_context in AVAILABLE_INTEGRATIONS:
-        docker_tag = f"beobench_{build_context}:latest"
+        image_name = f"beobench_{build_context}"
         integration_name = build_context
         build_context = (
             f"https://github.com/rdnfn/"
@@ -41,18 +54,20 @@ def build_experiment_container(
             )
         )
     else:
-        if docker_tag is None:
-            # get alphanumeric name from context
-            context_name = "".join(e for e in build_context if e.isalnum())
-            docker_tag = f"beobench_custom_{context_name}:latest"
+        # get alphanumeric name from context
+        context_name = "".join(e for e in build_context if e.isalnum())
+        image_name = f"beobench_custom_{context_name}"
 
-    print(f"Building experiment container `{docker_tag}`...")
+    base_image_tag = f"{image_name}_base:{version}"
 
+    print(f"Building experiment base image `{base_image_tag}`...")
+
+    # Part 1: build base experiment image
     args = [
         "docker",
         "build",
         "-t",
-        docker_tag,
+        base_image_tag,
         "-f",
         "Dockerfile",  # change to non-default name
         *flags,
@@ -65,9 +80,47 @@ def build_experiment_container(
         env=env,  # this enables accessing dockerfile in subdir
     )
 
-    print("Experiment container build finished.")
+    # Part 2: build complete experiment image
+    # This includes installation of beobench in experiment image
+    complete_image_tag = f"{image_name}_complete:{version}"
+    complete_dockerfile = str(
+        importlib.resources.files("beobench.experiment.dockerfiles").joinpath(
+            "Dockerfile.experiment"
+        )
+    )
 
-    return docker_tag
+    # Which extras to install beobench container
+    # e.g. using pip install beobench[extras]
+    if enable_rllib:
+        beobench_extras = '"extended,rllib"'
+    else:
+        beobench_extras = "extended"
+    # Load dockerfile into pipe
+    with subprocess.Popen(["cat", complete_dockerfile], stdout=subprocess.PIPE) as proc:
+        beobench_build_args = [
+            "docker",
+            "build",
+            "-t",
+            complete_image_tag,
+            "-f",
+            "-",
+            "--build-arg",
+            f"GYM_IMAGE={base_image_tag}",
+            "--build-arg",
+            f"EXTRAS={beobench_extras}",
+            *flags,
+            build_context,
+        ]
+        print("Running command: " + " ".join(beobench_build_args))
+        subprocess.check_call(
+            beobench_build_args,
+            stdin=proc.stdout,
+            env=env,  # this enables accessing dockerfile in subdir
+        )
+
+    print("Experiment gym image build finished.")
+
+    return complete_image_tag
 
 
 def create_docker_network(network_name: str) -> None:

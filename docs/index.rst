@@ -14,9 +14,10 @@ Contents
    self
    guides/installation
    guides
+   envs
    api
    contributing
-   authors
+   credits
    history
 
 Indices and tables

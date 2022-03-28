@@ -1,30 +1,28 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.205.2/containers/python-3
 {
-	"name": "beobench_devcontainer",
+	"name": "beobench_devcontainer_remote",
 	"build": {
-		"dockerfile": "Dockerfile",
-		"context": "..",
+		"dockerfile": "../../Dockerfile",
+		"context": "../../..",
 		"args": {
 			// Update 'VARIANT' to pick a Python version: 3, 3.10, 3.9, 3.8, 3.7, 3.6
 			// Append -bullseye or -buster to pin to an OS version.
 			// Use -bullseye variants on local on arm64/Apple Silicon.
-			// Note: ray[rllib] is not available on debian 11 (bullseye)
-			"VARIANT": "3.9-bullseye",
+			"VARIANT": "3.9",
 			// Options
 			"NODE_VERSION": "none",
-			"NVIDIA_SUPPORT": "none"
+			"NVIDIA_SUPPORT": "True",
 		}
 	},
 	"workspaceFolder": "/beobench",
 	// "workspaceMount": "source=remote-workspace,target=/workspace,type=volume",
 	// ADAPT: the mount must be adapted to cloned repo location
-	"workspaceMount": "source=${localWorkspaceFolder},target=/beobench,type=bind,consistency=cached",
+	"workspaceMount": "source=/home/rdnfn-docker/main/repos/github/beobench/,target=/beobench/,type=bind,consistency=cached",
 	// ADAPT: the mount must be adapted to the gitconfig location on the remote machine
-	//"mounts": [
-	//	"source=${localEnv:HOME}/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached",
-	//],
-	//"initializeCommand": "export DOCKER_BUILDKIT=0 && export COMPOSE_DOCKER_CLI_BUILD=0",
+	"mounts": [
+		"source=/home/rdnfn-docker/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached",
+	],
 	"postCreateCommand": "pip install -e .",
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
@@ -54,8 +52,7 @@
 		"ms-azuretools.vscode-docker",
 		"trond-snekvik.simple-rst",
 		"lextudio.restructuredtext",
-		"njpwerner.autodocstring",
-		"donjayamanne.githistory",
+		"njpwerner.autodocstring"
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
@@ -65,10 +62,13 @@
 	// "remoteUser": "vscode",
 	"features": {
 		"git": "latest",
-		"docker-in-docker": "20.10"
+		"docker-in-docker": {
+			"version": "latest",
+			"moby": true
+		}
 	},
 	"runArgs": [
-		//"--shm-size=32gb",
-		//"--gpus=all",
+		"--shm-size=32gb",
+		"--gpus=all",
 	]
 }

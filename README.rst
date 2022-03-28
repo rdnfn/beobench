@@ -24,31 +24,19 @@
         :target: https://opensource.org/licenses/MIT
         :alt: License
 
-A toolbox for benchmarking reinforcement learning (RL) algorithms on building energy optimisation (BEO) problems. Beobench tries to make working on RL for BEO easier: it provides simple access to existing libraries defining BEO problems (such as `BOPTEST <https://github.com/ibpsa/project1-boptest>`_) and provides a large set of pre-configured RL algorithms. Beobench is *not* a gym library itself - instead it leverages the brilliant work done by many existing gym-type projects and makes their work more easily accessible.
+A toolkit providing easy and unified access to building control environments for reinforcement learning (RL).
 
 Features
 --------
-
-*Some of the features are work in progress*
-
-Main features
-
-- *RL algorithm collection:* what's the best RL method for your BEO problem? Building on `Ray RLlib <https://github.com/ray-project/ray/tree/master/rllib>`_, beobench provides a large collection of pre-configured RL algorithm experiments that can be easily applied to your new BEO problem.
-- *Problem collection:* beobench provides ready-to-use docker containers for popular BEO gym-type problem libraries. By enforcing a strict OpenAI ``gym.Env`` it makes testing your method on different libraries easy.
-
-Additional features
-
-- *Experiment logging:* log experiment results in a reproducible and shareable manner via `Weights and Biases`_.
-- *Hyperparameter tuning:* easily tune hyperparameters using the extensive `Ray Tune Search API <https://docs.ray.io/en/master/tune/index.html>`_.
-- *Simple installation:* beobench can be installed via pip and only requires docker as an additional non-python dependency.
-- *Easily extendable:* beobench is designed for the user to add both environments and methods.
-
-.. _Weights and Biases: https://wandb.ai/
+- **Large collection of building control environments:** Out-of-the-box Beobench provides access to environments from `BOPTEST <https://github.com/ibpsa/project1-boptest>`_, `Energym <https://github.com/bsl546/energym>`_, and `Sinergym <https://github.com/jajimer/sinergym>`_. By providing access to all the environments from these frameworks, Beobench is able to provide the (to the best of our knowledge) largest single collection of building control environments (`see environment list here <https://beobench.readthedocs.io/en/latest/envs.html>`_).
+- **Clean and light-weight installation:** Beobench is installed via pip and only requires Docker as an additional non-python dependency (`see installation guide <https://beobench.readthedocs.io/en/latest/guides/installation.html>`_). Other packages require the user to deal with building simulator installations or manage docker images directly.
+- **Built-in RL agents:** Beobench allows the user to apply any agent from the `Ray RLlib collection <https://github.com/ray-project/ray/tree/master/rllib>`_ *in addition* to agents provided by the user directly.
+- **Easily extendable:** want to use Beobench with an environment not yet included? The support for user-defined Docker contexts makes it easy to use Beobench with any RL environment.
 
 .. end-in-sphinx-docs
 
-
 .. start-quickstart
+.. _sec_quickstart:
 
 Quickstart
 ----------
@@ -76,16 +64,71 @@ Documentation
 -------------
 https://beobench.readthedocs.io
 
+
+.. _sec_envs:
+
+Available environments
+----------------------
+
+.. csv-table::
+        :header-rows: 1
+        :widths: auto
+
+        Gym,Environment,Type*,Description
+        *BOPTEST*,``bestest_air``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/bestest_air/doc/index.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/boptest.html>`_"
+        ,``bestest_hydronic``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/bestest_hydronic/doc/index.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/boptest.html>`_"
+        ,``bestest_hydronic_heat_pump``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/bestest_hydronic_heat_pump/doc/index.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/boptest.html>`_"
+        ,``multizone_residential_hydronic``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/multizone_residential_hydronic/doc/MultiZoneResidentialHydronic.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/boptest.html>`_"
+        ,``singlezone_commercial_hydronic``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/singlezone_commercial_hydronic/doc/index.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/boptest.html>`_"
+        *Energym*,``Apartments2Thermal-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/ap2t.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``Apartments2Grid-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/ap2g.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``ApartmentsThermal-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/apt.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``ApartmentsGrid-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/apg.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``OfficesThermostat-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://bsl546.github.io/energym-pages/sources/offices.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``MixedUseFanFCU-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://bsl546.github.io/energym-pages/sources/mixeduse.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SeminarcenterThermostat-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://bsl546.github.io/energym-pages/sources/seminart.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SeminarcenterFull-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://bsl546.github.io/energym-pages/sources/seminarf.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SimpleHouseRad-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/houserad.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SimpleHouseRSla-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/houseslab.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SwissHouseRSlaW2W-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/swiss.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SwissHouseRSlaA2W-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/swiss.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SwissHouseRSlaTank-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/swiss2.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        ,``SwissHouseRSlaTankDhw-v0``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://bsl546.github.io/energym-pages/sources/swiss2.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/energym.html>`_"
+        *Sinergym*,``Eplus-demo-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-hot-discrete-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-mixed-discrete-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-cool-discrete-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-hot-continuous-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-mixed-continuous-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-cool-continuous-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-hot-discrete-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-mixed-discrete-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-cool-discrete-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-hot-continuous-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-mixed-continuous-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-5Zone-cool-continuous-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-datacenter-discrete-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-factory.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-datacenter-continuous-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-factory.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-datacenter-discrete-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-factory.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-datacenter-continuous-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-factory.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-IWMullion-discrete-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-IWMullion-continuous-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-IWMullion-discrete-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+        ,``Eplus-IWMullion-continuous-stochastic-v1``,.. image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg,"`original <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_, `beobench <https://beobench.readthedocs.io/en/latest/envs/sinergym.html>`_"
+
+\* Types of environments:
+
+* residential |home|
+* office |office|
+* data center |industry|
+
+.. |office| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-skyscraper.svg
+.. |home| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/home.svg
+.. |industry| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-factory.svg
+
+
 License
 -------
-MIT license
+MIT license, see `credits and license page in docs <https://beobench.readthedocs.io/en/latest/credits.html>`_ for more detailed information.
 
 
-
-Credits
--------
-
-This package was originally created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
