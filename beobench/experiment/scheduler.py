@@ -1,6 +1,5 @@
 """Module to schedule experiments."""
 
-from cgitb import enable
 import os
 import uuid
 import subprocess
@@ -216,6 +215,17 @@ def run(
             if "https" in dev_path:
                 cmd_list_in_container.append(f"pip install {dev_path}")
             else:
+                if "[" in dev_path:
+                    dev_paths = dev_path.split("[")
+                    if len(dev_paths) > 2:
+                        raise ValueError(
+                            f"Dev path does not appear compatible: {dev_path}"
+                        )
+                    dev_path = dev_paths[0]
+                    dev_extras = "[" + dev_paths[1]
+                else:
+                    dev_extras = ""
+
                 # mount local beobench repo
                 dev_path = pathlib.Path(dev_path)
                 dev_abs = dev_path.absolute()
@@ -228,7 +238,7 @@ def run(
                     f"cp -r {dev_path_on_docker}_mount {dev_path_on_docker}"
                 )
                 cmd_list_in_container.append(
-                    f"python -m pip install {dev_path_on_docker}"
+                    f"python -m pip install {dev_path_on_docker}{dev_extras}"
                 )
 
         cmd_in_container = " && ".join(cmd_list_in_container)
