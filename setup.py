@@ -19,11 +19,13 @@ requirements = [
 ]
 
 # The extended requirements are only used inside experiment/gym containers
-extended_requirements = [
+extended_requirements = []
+
+rllib_requirements = [
     "ray[rllib]",
-    "wandb",
     "torch",
     "gym",
+    "wandb",
 ]
 
 setup(
@@ -43,6 +45,7 @@ setup(
     install_requires=requirements,
     extras_require={
         "extended": extended_requirements,
+        "rllib": rllib_requirements,
     },
     license="MIT license",
     long_description=readme + "\n\n" + history,
