@@ -2,6 +2,13 @@
 History
 =======
 
+0.4.1 (2022-00-00)
+------------------
+
+* Feature: enable package extras to be given in development mode
+* Fix: add gym to extended package requirements
+
+
 0.4.0 (2022-03-28)
 ------------------
 
