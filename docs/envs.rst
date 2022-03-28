@@ -2,18 +2,17 @@
 Environments
 ============
 
-Beobench provides easy access to a large number of RL building control environments. More information about the different libraries can be found here:
-
-.. toctree::
-   :maxdepth: 1
-
-   envs/boptest
-   envs/energym
-   envs/sinergym
+Beobench provides easy access to a large number of building control environments for reinforcement learning. Each environment comes form a different framework.
 
 
 Environment list
 -------------------------
+
+:BOPTEST:
+        - `bestest_air <test>`_
+        - `bestest_hydronic <test>`_
+
+:Energym: - `another env <test>`_
 
 .. csv-table::
         :header-rows: 1
