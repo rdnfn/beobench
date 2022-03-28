@@ -122,7 +122,7 @@
 ``Eplus-datacenter-discrete-v1``
 """"""""""""""""""""""""""""""""
 
-:Type: industry (|industry|)
+:Type: data center (|industry|)
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -131,7 +131,7 @@
 ``Eplus-datacenter-continuous-v1``
 """"""""""""""""""""""""""""""""""
 
-:Type: industry (|industry|)
+:Type: data center (|industry|)
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -140,7 +140,7 @@
 ``Eplus-datacenter-discrete-stochastic-v1``
 """""""""""""""""""""""""""""""""""""""""""
 
-:Type: industry (|industry|)
+:Type: data center (|industry|)
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -149,7 +149,7 @@
 ``Eplus-datacenter-continuous-stochastic-v1``
 """""""""""""""""""""""""""""""""""""""""""""
 
-:Type: industry (|industry|)
+:Type: data center (|industry|)
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
