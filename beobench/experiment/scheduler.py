@@ -1,5 +1,6 @@
 """Module to schedule experiments."""
 
+from cgitb import enable
 import os
 import uuid
 import subprocess
@@ -122,6 +123,16 @@ def run(
 
     else:
         # build and run experiments in docker container
+
+        ### part 1: build docker images
+        enable_rllib = config["agent"]["origin"] == "rllib"
+        image_tag = beobench.experiment.containers.build_experiment_container(
+            build_context=config["env"]["gym"],
+            use_no_cache=use_no_cache,
+            enable_rllib=enable_rllib,
+        )
+
+        ### part 2: create args and run command in docker container
         docker_flags = []
 
         # Ensure local_dir exists, and create otherwise
@@ -140,13 +151,7 @@ def run(
             f"{config_path_abs}:/tmp/beobench/config.yaml:ro",
         ]
 
-        # docker setup
-        image_tag = beobench.experiment.containers.build_experiment_container(
-            build_context=config["env"]["gym"],
-            use_no_cache=use_no_cache,
-        )
-
-        # define docker arguments/options/flags
+        # define more docker arguments/options/flags
         unique_id = uuid.uuid4().hex[:6]
         container_name = f"auto_beobench_experiment_{unique_id}"
 
