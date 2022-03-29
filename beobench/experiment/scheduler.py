@@ -85,7 +85,7 @@ def run(
     # Create a definition of experiment from inputs
     if experiment_file is not None:
         warnings.warn(
-            "The experiment_file argmunent has been replaced by config",
+            "The experiment_file argument has been replaced by config",
             DeprecationWarning,
         )
     if agent_file is not None:
