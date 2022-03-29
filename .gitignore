@@ -117,5 +117,5 @@ wandb/
 docs/generated/
 
 #beobench
-beobench_results/
+beobench_results*
 notebooks/archive
