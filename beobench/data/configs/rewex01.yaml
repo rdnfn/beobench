@@ -2,6 +2,9 @@
 # Run with the command
 # beobench run -c beobench/experiment/definitions/rewex01.yaml -d . --use-gpu --docker-shm-size 28gb
 
+# Some of the descriptions of RLlib config values are taken from
+# https://docs.ray.io/en/latest/rllib/rllib-training.html
+
 # agent config
 agent:
   origin: rllib # either path to agent script or name of agent library (rllib)
@@ -17,8 +20,20 @@ agent:
         post_fcnet_activation: tanh
       batch_mode: complete_episodes
       gamma: 0.999
-      horizon: 1000
-      metrics_smoothing_episodes: 5
+      # Number of steps after which the episode is forced to terminate. Defaults
+      # to `env.spec.max_episode_steps` (if present) for Gym envs.
+      horizon: 94
+      # Calculate rewards but don't reset the environment when the horizon is
+      # hit. This allows value estimation and RNN state to span across logical
+      # episodes denoted by horizon. This only has an effect if horizon != inf.
+      soft_horizon: True
+      # Number of timesteps collected for each SGD round. This defines the size
+      # of each SGD epoch.
+      train_batch_size: 94 # single day of 15min steps
+      # Total SGD batch size across all devices for SGD. This defines the
+      # minibatch size within each epoch.
+      sgd_minibatch_size: 47,
+      metrics_smoothing_episodes: 1
       framework: torch
       log_level: "WARNING"
       num_workers: 1 # this is required for energym to work (can fail silently otherwise)
