@@ -5,7 +5,7 @@ This guide explains how to add a new reinforcement learning (RL) environment to 
 
 .. admonition:: Why should I use this?
 
-    Adding your RL environment to beobench allows you to test all of beobench's methods on your environment without actually implementing any methods yourself. Instead of just testing a single method configuration, beobench will automatically test a range of method configurations -- taking care of basic hyperparameter tuning. Additionally, beobench gives you access to all other RL methods available in RLlib.
+    Adding your RL environment to beobench allows you to test all of RLlib's methods on your environment without actually implementing any methods yourself. It also allows you to compare the performance of agents across your and other beobench environments, enabling you to compare your environment's difficulty.
 
 
 Creating build context
