@@ -92,7 +92,7 @@ def build_experiment_container(
     # Which extras to install beobench container
     # e.g. using pip install beobench[extras]
     if enable_rllib:
-        beobench_extras = '"extended,rllib"'
+        beobench_extras = "extended,rllib"
     else:
         beobench_extras = "extended"
     # Load dockerfile into pipe

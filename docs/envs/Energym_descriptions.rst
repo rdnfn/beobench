@@ -5,7 +5,7 @@
 ``Apartments2Thermal-v0``
 """""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://bsl546.github.io/energym-pages/sources/ap2t.html>`_
 
 
@@ -14,7 +14,7 @@
 ``Apartments2Grid-v0``
 """"""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://bsl546.github.io/energym-pages/sources/ap2g.html>`_
 
 
@@ -23,7 +23,7 @@
 ``ApartmentsThermal-v0``
 """"""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://bsl546.github.io/energym-pages/sources/apt.html>`_
 
 
@@ -32,7 +32,7 @@
 ``ApartmentsGrid-v0``
 """""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://bsl546.github.io/energym-pages/sources/apg.html>`_
 
 
@@ -41,7 +41,7 @@
 ``OfficesThermostat-v0``
 """"""""""""""""""""""""
 
-:Type: office building (|office|)
+:Type: office building
 :More info: `framework docs <https://bsl546.github.io/energym-pages/sources/offices.html>`_
 
 
@@ -50,7 +50,7 @@
 ``MixedUseFanFCU-v0``
 """""""""""""""""""""
 
-:Type: office building (|office|)
+:Type: office building
 :More info: `framework docs <https://bsl546.github.io/energym-pages/sources/mixeduse.html>`_
 
 
@@ -59,7 +59,7 @@
 ``SeminarcenterThermostat-v0``
 """"""""""""""""""""""""""""""
 
-:Type: office building (|office|)
+:Type: office building
 :More info: `framework docs <https://bsl546.github.io/energym-pages/sources/seminart.html>`_
 
 
@@ -68,7 +68,7 @@
 ``SeminarcenterFull-v0``
 """"""""""""""""""""""""
 
-:Type: office building (|office|)
+:Type: office building
 :More info: `framework docs <https://bsl546.github.io/energym-pages/sources/seminarf.html>`_
 
 
@@ -77,7 +77,7 @@
 ``SimpleHouseRad-v0``
 """""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://bsl546.github.io/energym-pages/sources/houserad.html>`_
 
 
@@ -86,7 +86,7 @@
 ``SimpleHouseRSla-v0``
 """"""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://bsl546.github.io/energym-pages/sources/houseslab.html>`_
 
 
@@ -95,7 +95,7 @@
 ``SwissHouseRSlaW2W-v0``
 """"""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://bsl546.github.io/energym-pages/sources/swiss.html>`_
 
 
@@ -104,7 +104,7 @@
 ``SwissHouseRSlaA2W-v0``
 """"""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://bsl546.github.io/energym-pages/sources/swiss.html>`_
 
 
@@ -113,7 +113,7 @@
 ``SwissHouseRSlaTank-v0``
 """""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://bsl546.github.io/energym-pages/sources/swiss2.html>`_
 
 
@@ -122,5 +122,5 @@
 ``SwissHouseRSlaTankDhw-v0``
 """"""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://bsl546.github.io/energym-pages/sources/swiss2.html>`_

@@ -2,7 +2,7 @@ ARG GYM_IMAGE
 FROM ${GYM_IMAGE}
 
 # install beobench
-ARG EXTRAS="extended, rllib"
+ARG EXTRAS="extended,rllib"
 RUN pip3 --disable-pip-version-check --no-cache-dir install "beobench[${EXTRAS}]"
 
 # add env creator
