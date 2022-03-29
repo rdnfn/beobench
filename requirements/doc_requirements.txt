@@ -2,7 +2,7 @@ sphinx-tabs
 myst-parser
 sphinx-book-theme==0.3.2
 # with docutils>=0.18 admonitions sometimes do not end
-docutils>=0.18
+docutils==0.16
 
 # Because of the following bug
 # https://github.com/readthedocs/readthedocs.org/issues/9038
