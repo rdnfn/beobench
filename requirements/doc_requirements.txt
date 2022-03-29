@@ -1,6 +1,6 @@
 sphinx-tabs
 myst-parser
-sphinx-book-theme
+sphinx-book-theme==0.3
 # with docutils>=0.18 admonitions sometimes do not end
 docutils==0.17
 
