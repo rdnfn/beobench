@@ -8,7 +8,7 @@ agent:
   config: # given to ray.tune.run() as arguments (since rllib set before)
     run_or_experiment: PPO
     stop:
-      timesteps_total: 400000
+      timesteps_total: 35040
     config:
       lr: 0.005
       model:
