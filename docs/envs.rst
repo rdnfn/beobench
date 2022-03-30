@@ -13,8 +13,7 @@ Beobench provides easy access to a large number of building control environments
 BOPTEST
 -------
 
-.. include:: ../beobench_contrib/gyms/boptest/README.md
-    :parser: myst_parser.sphinx_
+.. mdinclude:: ../beobench_contrib/gyms/boptest/README.md
     :start-line: 2
 
 
@@ -29,8 +28,7 @@ BOPTEST Envs
 Energym
 -------
 
-.. include:: ../beobench_contrib/gyms/energym/README.md
-    :parser: myst_parser.sphinx_
+.. mdinclude:: ../beobench_contrib/gyms/energym/README.md
     :start-line: 2
 
 
@@ -44,8 +42,7 @@ Energym Envs
 Sinergym
 --------
 
-.. include:: ../beobench_contrib/gyms/sinergym/README.md
-    :parser: myst_parser.sphinx_
+.. mdinclude:: ../beobench_contrib/gyms/sinergym/README.md
     :start-line: 2
 
 

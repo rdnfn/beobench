@@ -38,7 +38,8 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.autosummary",
     "sphinx_tabs.tabs",
-    "myst_parser",
+    # "myst_parser",
+    "m2r2",
 ]
 
 # Add any paths that contain templates here, relative to this directory.

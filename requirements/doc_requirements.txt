@@ -1,6 +1,13 @@
-sphinx-tabs
-myst-parser
+# theme
 sphinx-book-theme==0.3.2
+
+# for code tabs
+sphinx-tabs
+
+# markdown parsing (m2r2 should be used only as long as docutils<0.17)
+myst-parser
+m2r2
+
 # with docutils>=0.18 admonitions sometimes do not end
 docutils==0.16
 
