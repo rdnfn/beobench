@@ -55,7 +55,7 @@ def run(
             overwrites any env set in experiment file. Defaults to None.
         local_dir (str, optional): Directory to write experiment files to. This argument
             is equivalent to the `local_dir` argument in `tune.run()`. Defaults to
-            `"./beobench_results/ray_results"`.
+            `"./beobench_results"`.
         wandb_project (str, optional): Name of wandb project. Defaults to
             "initial_experiments".
         wandb_entity (str, optional): Name of wandb entity. Defaults to "beobench".
@@ -124,19 +124,22 @@ def run(
         # build and run experiments in docker container
 
         ### part 1: build docker images
+        # Ensure local_dir exists, and create otherwise
+        local_dir_path = pathlib.Path(local_dir)
+        local_dir_path.mkdir(parents=True, exist_ok=True)
+
         enable_rllib = config["agent"]["origin"] == "rllib"
         image_tag = beobench.experiment.containers.build_experiment_container(
             build_context=config["env"]["gym"],
             use_no_cache=use_no_cache,
             enable_rllib=enable_rllib,
+            local_dir=local_dir_path,
         )
 
         ### part 2: create args and run command in docker container
         docker_flags = []
 
-        # Ensure local_dir exists, and create otherwise
-        local_dir_path = pathlib.Path(local_dir)
-        local_dir_path.mkdir(parents=True, exist_ok=True)
+        ### create path to store ray results at
         ray_path_abs = str((local_dir_path / "ray_results").absolute())
 
         # Save config to local dir and add mount flag for config
