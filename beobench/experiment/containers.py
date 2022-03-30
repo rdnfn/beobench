@@ -21,7 +21,6 @@ def build_experiment_container(
     local_dir: pathlib.Path = None,
     version: str = "latest",
     enable_rllib: bool = False,
-    platform: str = "amd64",
 ) -> None:
     """Build experiment container from beobench/integrations/boptest/Dockerfile.
 
@@ -33,9 +32,6 @@ def build_experiment_container(
         use_no_cache (bool, optional): wether to use cache in build. Defaults to False.
         version (str, optional): version to add to container tag. Defaults to "latest".
         enable_rllib (bool, optional): whether to install rllib. Defaults to False.
-        platform (str, optional): which underlying platform to use. Defaults to None
-            which will pick the default docker platform. Alternatively, "amd64" can be
-            set to force docker to create an image that is run in compatibility mode.
     """
 
     # Flags are shared between gym image build and gym_and_beobench image build
@@ -44,7 +40,10 @@ def build_experiment_container(
     # Using buildx to enable platform-specific builds
     build_commands = ["docker", "buildx", "build"]
 
-    if platform == "amd64":
+    # On arm64 machines force experiment containers to be amd64
+    # This is only useful for development purposes.
+    # (example: M1 macbooks)
+    if os.uname().machine == "arm64":
         flags += ["--platform", "linux/amd64"]
 
     if use_no_cache:
