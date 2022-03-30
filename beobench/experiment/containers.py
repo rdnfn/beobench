@@ -43,17 +43,18 @@ def build_experiment_container(
     # On arm64 machines force experiment containers to be amd64
     # This is only useful for development purposes.
     # (example: M1 macbooks)
-    if os.uname().machine == "arm64":
+    if os.uname().machine in ["arm64", "aarch64"]:
         flags += ["--platform", "linux/amd64"]
 
     if use_no_cache:
         flags.append("--no-cache")
 
+    # pylint: disable=invalid-name
     AVAILABLE_INTEGRATIONS = [
         "boptest",
         "sinergym",
         "energym",
-    ]  # pylint: disable=invalid-name
+    ]
 
     if build_context in AVAILABLE_INTEGRATIONS:
         image_name = f"beobench_{build_context}"
