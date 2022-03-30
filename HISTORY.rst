@@ -2,7 +2,7 @@
 History
 =======
 
-0.4.1 (2022-00-00)
+0.4.1 (2022-03-30)
 ------------------
 
 * Feature: enable package extras to be given in development mode
