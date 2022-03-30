@@ -2,7 +2,7 @@
 
 __author__ = """rdnfn"""
 __email__ = "-"
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 
 from beobench.utils import restart
 from beobench.experiment.scheduler import run

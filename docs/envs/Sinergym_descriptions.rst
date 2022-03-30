@@ -5,7 +5,7 @@
 ``Eplus-demo-v1``
 """""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -14,7 +14,7 @@
 ``Eplus-5Zone-hot-discrete-v1``
 """""""""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -23,7 +23,7 @@
 ``Eplus-5Zone-mixed-discrete-v1``
 """""""""""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -32,7 +32,7 @@
 ``Eplus-5Zone-cool-discrete-v1``
 """"""""""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -41,7 +41,7 @@
 ``Eplus-5Zone-hot-continuous-v1``
 """""""""""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -50,7 +50,7 @@
 ``Eplus-5Zone-mixed-continuous-v1``
 """""""""""""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -59,7 +59,7 @@
 ``Eplus-5Zone-cool-continuous-v1``
 """"""""""""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -68,7 +68,7 @@
 ``Eplus-5Zone-hot-discrete-stochastic-v1``
 """"""""""""""""""""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -77,7 +77,7 @@
 ``Eplus-5Zone-mixed-discrete-stochastic-v1``
 """"""""""""""""""""""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -86,7 +86,7 @@
 ``Eplus-5Zone-cool-discrete-stochastic-v1``
 """""""""""""""""""""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -95,7 +95,7 @@
 ``Eplus-5Zone-hot-continuous-stochastic-v1``
 """"""""""""""""""""""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -104,7 +104,7 @@
 ``Eplus-5Zone-mixed-continuous-stochastic-v1``
 """"""""""""""""""""""""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -113,7 +113,7 @@
 ``Eplus-5Zone-cool-continuous-stochastic-v1``
 """""""""""""""""""""""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -122,7 +122,7 @@
 ``Eplus-datacenter-discrete-v1``
 """"""""""""""""""""""""""""""""
 
-:Type: data center (|industry|)
+:Type: data center
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -131,7 +131,7 @@
 ``Eplus-datacenter-continuous-v1``
 """"""""""""""""""""""""""""""""""
 
-:Type: data center (|industry|)
+:Type: data center
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -140,7 +140,7 @@
 ``Eplus-datacenter-discrete-stochastic-v1``
 """""""""""""""""""""""""""""""""""""""""""
 
-:Type: data center (|industry|)
+:Type: data center
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -149,7 +149,7 @@
 ``Eplus-datacenter-continuous-stochastic-v1``
 """""""""""""""""""""""""""""""""""""""""""""
 
-:Type: data center (|industry|)
+:Type: data center
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -158,7 +158,7 @@
 ``Eplus-IWMullion-discrete-v1``
 """""""""""""""""""""""""""""""
 
-:Type: office building (|office|)
+:Type: office building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -167,7 +167,7 @@
 ``Eplus-IWMullion-continuous-v1``
 """""""""""""""""""""""""""""""""
 
-:Type: office building (|office|)
+:Type: office building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -176,7 +176,7 @@
 ``Eplus-IWMullion-discrete-stochastic-v1``
 """"""""""""""""""""""""""""""""""""""""""
 
-:Type: office building (|office|)
+:Type: office building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_
 
 
@@ -185,5 +185,5 @@
 ``Eplus-IWMullion-continuous-stochastic-v1``
 """"""""""""""""""""""""""""""""""""""""""""
 
-:Type: office building (|office|)
+:Type: office building
 :More info: `framework docs <https://jajimer.github.io/sinergym/compilation/html/pages/environments.html>`_

@@ -1,6 +1,5 @@
 """Module to schedule experiments."""
 
-from cgitb import enable
 import os
 import uuid
 import subprocess
@@ -56,7 +55,7 @@ def run(
             overwrites any env set in experiment file. Defaults to None.
         local_dir (str, optional): Directory to write experiment files to. This argument
             is equivalent to the `local_dir` argument in `tune.run()`. Defaults to
-            `"./beobench_results/ray_results"`.
+            `"./beobench_results"`.
         wandb_project (str, optional): Name of wandb project. Defaults to
             "initial_experiments".
         wandb_entity (str, optional): Name of wandb entity. Defaults to "beobench".
@@ -86,7 +85,7 @@ def run(
     # Create a definition of experiment from inputs
     if experiment_file is not None:
         warnings.warn(
-            "The experiment_file argmunent has been replaced by config",
+            "The experiment_file argument has been replaced by config",
             DeprecationWarning,
         )
     if agent_file is not None:
@@ -125,19 +124,22 @@ def run(
         # build and run experiments in docker container
 
         ### part 1: build docker images
+        # Ensure local_dir exists, and create otherwise
+        local_dir_path = pathlib.Path(local_dir)
+        local_dir_path.mkdir(parents=True, exist_ok=True)
+
         enable_rllib = config["agent"]["origin"] == "rllib"
         image_tag = beobench.experiment.containers.build_experiment_container(
             build_context=config["env"]["gym"],
             use_no_cache=use_no_cache,
             enable_rllib=enable_rllib,
+            local_dir=local_dir_path,
         )
 
         ### part 2: create args and run command in docker container
         docker_flags = []
 
-        # Ensure local_dir exists, and create otherwise
-        local_dir_path = pathlib.Path(local_dir)
-        local_dir_path.mkdir(parents=True, exist_ok=True)
+        ### create path to store ray results at
         ray_path_abs = str((local_dir_path / "ray_results").absolute())
 
         # Save config to local dir and add mount flag for config
@@ -216,6 +218,17 @@ def run(
             if "https" in dev_path:
                 cmd_list_in_container.append(f"pip install {dev_path}")
             else:
+                if "[" in dev_path:
+                    dev_paths = dev_path.split("[")
+                    if len(dev_paths) > 2:
+                        raise ValueError(
+                            f"Dev path does not appear compatible: {dev_path}"
+                        )
+                    dev_path = dev_paths[0]
+                    dev_extras = "[" + dev_paths[1]
+                else:
+                    dev_extras = ""
+
                 # mount local beobench repo
                 dev_path = pathlib.Path(dev_path)
                 dev_abs = dev_path.absolute()
@@ -228,7 +241,7 @@ def run(
                     f"cp -r {dev_path_on_docker}_mount {dev_path_on_docker}"
                 )
                 cmd_list_in_container.append(
-                    f"python -m pip install {dev_path_on_docker}"
+                    f"python -m pip install {dev_path_on_docker}{dev_extras}"
                 )
 
         cmd_in_container = " && ".join(cmd_list_in_container)

@@ -6,9 +6,10 @@ include README.rst
 include PYPI_README.rst
 
 recursive-include tests *
-recursive-exclude * __pycache__
-recursive-exclude * *.py[co]
 
 recursive-include beobench/experiment/definitions *
+recursive-exclude beobench/experiment/definitions/archive/ *
 
 recursive-exclude docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]

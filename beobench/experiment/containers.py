@@ -2,6 +2,8 @@
 
 import subprocess
 import os
+import pathlib
+import shutil
 
 # To enable compatiblity with Python<=3.6 (e.g. for sinergym dockerfile)
 try:
@@ -16,8 +18,9 @@ except ImportError:
 def build_experiment_container(
     build_context: str,
     use_no_cache: bool = False,
-    version="latest",
-    enable_rllib=False,
+    local_dir: pathlib.Path = None,
+    version: str = "latest",
+    enable_rllib: bool = False,
 ) -> None:
     """Build experiment container from beobench/integrations/boptest/Dockerfile.
 
@@ -27,26 +30,49 @@ def build_experiment_container(
             of existing beobench integration (e.g. `boptest`). See the official docs
             https://docs.docker.com/engine/reference/commandline/build/ for more info.
         use_no_cache (bool, optional): wether to use cache in build. Defaults to False.
+        version (str, optional): version to add to container tag. Defaults to "latest".
+        enable_rllib (bool, optional): whether to install rllib. Defaults to False.
     """
 
     # Flags are shared between gym image build and gym_and_beobench image build
     flags = []
+
+    # Using buildx to enable platform-specific builds
+    build_commands = ["docker", "buildx", "build"]
+
+    # On arm64 machines force experiment containers to be amd64
+    # This is only useful for development purposes.
+    # (example: M1 macbooks)
+    if os.uname().machine in ["arm64", "aarch64"]:
+        flags += ["--platform", "linux/amd64"]
+
     if use_no_cache:
         flags.append("--no-cache")
 
+    # pylint: disable=invalid-name
     AVAILABLE_INTEGRATIONS = [
         "boptest",
         "sinergym",
         "energym",
-    ]  # pylint: disable=invalid-name
+    ]
 
     if build_context in AVAILABLE_INTEGRATIONS:
         image_name = f"beobench_{build_context}"
         integration_name = build_context
-        build_context = (
-            f"https://github.com/rdnfn/"
-            f"beobench_contrib.git#main:gyms/{build_context}"
+
+        # TODO: remove tmp git dir once buildkit version in docker cli updated
+        tmp_git_dir = (local_dir / "tmp" / "beobench_contrib").absolute()
+        subprocess.check_call(
+            [
+                "git",
+                "clone",
+                "https://github.com/rdnfn/beobench_contrib.git",
+                tmp_git_dir,
+            ]
         )
+
+        build_context = str(tmp_git_dir / "gyms" / integration_name)
+
         print(
             (
                 f"Recognised integration named {integration_name}: using build"
@@ -64,17 +90,14 @@ def build_experiment_container(
 
     # Part 1: build base experiment image
     args = [
-        "docker",
-        "build",
+        *build_commands,
         "-t",
         base_image_tag,
-        "-f",
-        "Dockerfile",  # change to non-default name
         *flags,
         build_context,
     ]
     env = os.environ.copy()
-    env["DOCKER_BUILDKIT"] = "0"
+    print("Running command: " + " ".join(args))
     subprocess.check_call(
         args,
         env=env,  # this enables accessing dockerfile in subdir
@@ -92,14 +115,13 @@ def build_experiment_container(
     # Which extras to install beobench container
     # e.g. using pip install beobench[extras]
     if enable_rllib:
-        beobench_extras = '"extended,rllib"'
+        beobench_extras = "extended,rllib"
     else:
         beobench_extras = "extended"
     # Load dockerfile into pipe
     with subprocess.Popen(["cat", complete_dockerfile], stdout=subprocess.PIPE) as proc:
         beobench_build_args = [
-            "docker",
-            "build",
+            *build_commands,
             "-t",
             complete_image_tag,
             "-f",
@@ -118,6 +140,8 @@ def build_experiment_container(
             env=env,  # this enables accessing dockerfile in subdir
         )
 
+    # TODO: remove tmp git dir once buildkit version in docker cli updated
+    shutil.rmtree(tmp_git_dir)
     print("Experiment gym image build finished.")
 
     return complete_image_tag

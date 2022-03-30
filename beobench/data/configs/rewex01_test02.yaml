@@ -1,0 +1,19 @@
+# REWEX Experiment 02
+# Run with the command
+# beobench run -c beobench/data/configs/rewex01_test02.yaml -d .[extended] --use-gpu --docker-shm-size 28gb
+
+# agent config
+agent:
+  origin: beobench/data/agents/random_agent.py # either path to agent script or name of agent library (rllib)
+# environment config
+env:
+  name: MixedUseFanFCU-v0
+  gym: energym
+  config:
+    days: 365
+    energym_environment: MixedUseFanFCU-v0
+    gym_kwargs:
+      max_episode_length: 35040
+      normalize: true
+      step_period: 15
+    weather: GRC_A_Athens

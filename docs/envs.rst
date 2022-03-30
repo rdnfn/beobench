@@ -2,21 +2,26 @@
 Environments
 ============
 
-Beobench provides easy access to a large number of building control environments for reinforcement learning. Each environment comes from one of the integrated frameworks `BOPTEST <https://github.com/ibpsa/project1-boptest>`_, `Energym <https://github.com/bsl546/energym>`_ and `Sinergym <https://github.com/jajimer/sinergym>`_. The list below shows links to all environments available out-of-the-box. Each environment is marked based on whether it represents a residential building (|home|), office (|office|) or data center (|industry|).
 
-.. include:: envs/envs_list.rst
+Overview
+--------
+
+Beobench provides easy access to a large number of building control environments for reinforcement learning. Each environment comes from one of the integrated frameworks `BOPTEST <https://github.com/ibpsa/project1-boptest>`_, `Energym <https://github.com/bsl546/energym>`_ and `Sinergym <https://github.com/jajimer/sinergym>`_. The list below shows links to all environments available out-of-the-box.
+
+.. admonition:: Available Environments
+
+    .. include:: envs/envs_list.rst
 
 ----
 
 BOPTEST
 -------
 
-.. include:: ../beobench_contrib/gyms/boptest/README.md
-    :parser: myst_parser.sphinx_
-    :start-line: 2
+.. include:: ../beobench_contrib/gyms/boptest/README.rst
+    :start-line: 3
 
 
-BOPTEST Envs
+Environments
 ^^^^^^^^^^^^
 
 .. include:: envs/BOPTEST_descriptions.rst
@@ -27,12 +32,11 @@ BOPTEST Envs
 Energym
 -------
 
-.. include:: ../beobench_contrib/gyms/energym/README.md
-    :parser: myst_parser.sphinx_
-    :start-line: 2
+.. include:: ../beobench_contrib/gyms/energym/README.rst
+    :start-line: 3
 
 
-Energym Envs
+Environments
 ^^^^^^^^^^^^
 
 .. include:: envs/Energym_descriptions.rst
@@ -42,12 +46,11 @@ Energym Envs
 Sinergym
 --------
 
-.. include:: ../beobench_contrib/gyms/sinergym/README.md
-    :parser: myst_parser.sphinx_
-    :start-line: 2
+.. include:: ../beobench_contrib/gyms/sinergym/README.rst
+    :start-line: 3
 
 
-Sinergym Envs
-^^^^^^^^^^^^^
+Environments
+^^^^^^^^^^^^
 
 .. include:: envs/Sinergym_descriptions.rst

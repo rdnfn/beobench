@@ -5,7 +5,7 @@
 ``bestest_air``
 """""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/bestest_air/doc/index.html>`_
 
 
@@ -14,7 +14,7 @@
 ``bestest_hydronic``
 """"""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/bestest_hydronic/doc/index.html>`_
 
 
@@ -23,7 +23,7 @@
 ``bestest_hydronic_heat_pump``
 """"""""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/bestest_hydronic_heat_pump/doc/index.html>`_
 
 
@@ -32,7 +32,7 @@
 ``multizone_residential_hydronic``
 """"""""""""""""""""""""""""""""""
 
-:Type: residential building (|home|)
+:Type: residential building
 :More info: `framework docs <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/multizone_residential_hydronic/doc/MultiZoneResidentialHydronic.html>`_
 
 
@@ -41,5 +41,5 @@
 ``singlezone_commercial_hydronic``
 """"""""""""""""""""""""""""""""""
 
-:Type: office building (|office|)
+:Type: office building
 :More info: `framework docs <https://htmlpreview.github.io/?https://github.com/ibpsa/project1-boptest/blob/master/testcases/singlezone_commercial_hydronic/doc/index.html>`_

@@ -10,7 +10,7 @@ with open("PYPI_README.rst", encoding="UTF-8") as readme_file:
 with open("HISTORY.rst", encoding="UTF-8") as history_file:
     history = history_file.read()
 
-version = "0.4.0"  # pylint: disable=invalid-name
+version = "0.4.1"  # pylint: disable=invalid-name
 
 requirements = [
     "docker",
@@ -19,7 +19,9 @@ requirements = [
 ]
 
 # The extended requirements are only used inside experiment/gym containers
-extended_requirements = []
+extended_requirements = [
+    "gym",
+]
 
 rllib_requirements = [
     "ray[rllib]",
