@@ -44,7 +44,7 @@ def cli():
 )
 @click.option(
     "--local-dir",
-    default="./beobench_results/ray_results",
+    default="./beobench_results",
     help="Local directory to write results to.",
     type=click.Path(exists=False, file_okay=False, dir_okay=True),
 )
