@@ -36,7 +36,7 @@ Energym
     :start-line: 3
 
 
-Energym Envs
+Environments
 ^^^^^^^^^^^^
 
 .. include:: envs/Energym_descriptions.rst
@@ -50,7 +50,7 @@ Sinergym
     :start-line: 3
 
 
-Sinergym Envs
-^^^^^^^^^^^^^
+Environments
+^^^^^^^^^^^^
 
 .. include:: envs/Sinergym_descriptions.rst
