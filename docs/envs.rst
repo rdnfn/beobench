@@ -2,6 +2,10 @@
 Environments
 ============
 
+
+Overview
+--------
+
 Beobench provides easy access to a large number of building control environments for reinforcement learning. Each environment comes from one of the integrated frameworks `BOPTEST <https://github.com/ibpsa/project1-boptest>`_, `Energym <https://github.com/bsl546/energym>`_ and `Sinergym <https://github.com/jajimer/sinergym>`_. The list below shows links to all environments available out-of-the-box.
 
 .. admonition:: Available Environments
@@ -13,11 +17,11 @@ Beobench provides easy access to a large number of building control environments
 BOPTEST
 -------
 
-.. mdinclude:: ../beobench_contrib/gyms/boptest/README.md
-    :start-line: 2
+.. include:: ../beobench_contrib/gyms/boptest/README.rst
+    :start-line: 3
 
 
-BOPTEST Envs
+Environments
 ^^^^^^^^^^^^
 
 .. include:: envs/BOPTEST_descriptions.rst
@@ -28,8 +32,8 @@ BOPTEST Envs
 Energym
 -------
 
-.. mdinclude:: ../beobench_contrib/gyms/energym/README.md
-    :start-line: 2
+.. include:: ../beobench_contrib/gyms/energym/README.rst
+    :start-line: 3
 
 
 Energym Envs
@@ -42,8 +46,8 @@ Energym Envs
 Sinergym
 --------
 
-.. mdinclude:: ../beobench_contrib/gyms/sinergym/README.md
-    :start-line: 2
+.. include:: ../beobench_contrib/gyms/sinergym/README.rst
+    :start-line: 3
 
 
 Sinergym Envs

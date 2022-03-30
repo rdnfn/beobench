@@ -39,7 +39,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx_tabs.tabs",
     # "myst_parser",
-    "m2r2",
+    # "m2r2",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
