@@ -20,6 +20,10 @@ Recommended method
 
 Look at the :doc:`getting started guide <getting_started>` to run your first beobench experiment.
 
+.. admonition:: OS support
+
+        Beobench is recommended to be used on Linux systems. There is experimental support for ``aarch64``/``arm64``-based macOS systems (M1 Macs). Note that this uses ``amd64``-based docker containers, leading to limited performance – it is therefore only intended for development purposes (not running experiments). On Windows systems it is recommended to use Windows Subsystem for Linux (WSL) to run Beobench.
+
 Directly from GitHub
 ^^^^^^^^^^^^^^^^^^^^
 
