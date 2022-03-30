@@ -13,7 +13,7 @@ agent:
     stop:
       timesteps_total: 35040
     config:
-      lr: 0.005
+      lr: 0.0005
       model:
         fcnet_activation: relu
         fcnet_hiddens: [256,256,256,256]
@@ -22,7 +22,7 @@ agent:
       gamma: 0.999
       # Number of steps after which the episode is forced to terminate. Defaults
       # to `env.spec.max_episode_steps` (if present) for Gym envs.
-      horizon: 94
+      horizon: 96
       # Calculate rewards but don't reset the environment when the horizon is
       # hit. This allows value estimation and RNN state to span across logical
       # episodes denoted by horizon. This only has an effect if horizon != inf.
@@ -32,7 +32,7 @@ agent:
       train_batch_size: 94 # single day of 15min steps
       # Total SGD batch size across all devices for SGD. This defines the
       # minibatch size within each epoch.
-      sgd_minibatch_size: 47
+      sgd_minibatch_size: 24
       metrics_smoothing_episodes: 1
       framework: torch
       log_level: "WARNING"
