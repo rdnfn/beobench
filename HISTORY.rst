@@ -6,6 +6,7 @@ History
 ------------------
 
 * Feature: enable package extras to be given in development mode
+* Feature: add support for arm64/aarch64-based development by forcing experiment containers to run as amd64 containers on those systems (#32)
 * Fix: add gym to extended package requirements
 
 
