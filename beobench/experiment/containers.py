@@ -75,6 +75,7 @@ def build_experiment_container(
     ]
     env = os.environ.copy()
     env["DOCKER_BUILDKIT"] = "0"
+    print("Running command: " + " ".join(args))
     subprocess.check_call(
         args,
         env=env,  # this enables accessing dockerfile in subdir
