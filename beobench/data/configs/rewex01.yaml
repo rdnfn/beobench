@@ -32,7 +32,7 @@ agent:
       train_batch_size: 94 # single day of 15min steps
       # Total SGD batch size across all devices for SGD. This defines the
       # minibatch size within each epoch.
-      sgd_minibatch_size: 47,
+      sgd_minibatch_size: 47
       metrics_smoothing_episodes: 1
       framework: torch
       log_level: "WARNING"
