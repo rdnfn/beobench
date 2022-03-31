@@ -45,7 +45,10 @@
 		"editor.formatOnSave": true,
 		"editor.rulers": [
 			88
-		]
+		],
+		"python.terminal.activateEnvInCurrentTerminal": true,
+		"esbonio.server.enabled": false,
+		"esbonio.sphinx.confDir": "${workspaceFolder}/docs"
 	},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
