@@ -104,6 +104,15 @@ To run a subset of tests::
 
     $ python -m unittest tests.test_beobench
 
+
+Resources
+---------
+
+Documentation and cheatsheets for reStructuredText (``..rst``):
+
+* https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
+* https://bashtage.github.io/sphinx-material/rst-cheatsheet/rst-cheatsheet.html
+
 Deploying
 ---------
 
