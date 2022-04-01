@@ -1,6 +1,9 @@
 .. highlight:: shell
 
+.. toctree::
+        :hidden:
 
+        installation_linux
 
 
 .. _sec-installation:
@@ -18,7 +21,8 @@ Recommended method
 
                 pip install beobench
 
-Look at the :doc:`getting started guide <getting_started>` to run your first beobench experiment.
+Look at the :doc:`getting started guide <getting_started>`
+to run your first beobench experiment.
 
 .. admonition:: OS support
 
@@ -27,7 +31,10 @@ Look at the :doc:`getting started guide <getting_started>` to run your first beo
 Directly from GitHub
 ^^^^^^^^^^^^^^^^^^^^
 
-If you would like to get the truly latest (but not necessarily stable) version of beobench, you can replace the `pip install` command above with the following command:
+If you would like to get the truly latest (but
+not necessarily stable) version of beobench,
+you can replace the `pip install` command above
+with the following command:
 
 .. code-block:: console
 
@@ -39,4 +46,6 @@ This will install the latest version directly from the master branch on GitHub.
 Development environment
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-If you would like to contribute to beobench, use :doc:`this guide <dev_env>` to set up the full development environment.
+If you would like to contribute to beobench,
+use :doc:`this guide <dev_env>` to set up the
+full development environment.
