@@ -9,6 +9,8 @@ History
   (giving multiple ``-c`` options) and Python API (as a list) (#51)
 * Fix: adapted Energym env reset() method to avoid triggering
   long warm-up times with additional simulation runs (#43)
+* Fix: enable container build even if prior build failed midway
+  and left artifacts
 
 0.4.1 (2022-03-30)
 ------------------
