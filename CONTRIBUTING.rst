@@ -108,7 +108,7 @@ To run a subset of tests::
 Resources
 ---------
 
-Documentation and cheatsheets for reStructuredText (``..rst``):
+Documentation and cheatsheets for reStructuredText (``.rst`` files):
 
 * https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
 * https://bashtage.github.io/sphinx-material/rst-cheatsheet/rst-cheatsheet.html
