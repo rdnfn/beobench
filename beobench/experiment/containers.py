@@ -62,6 +62,12 @@ def build_experiment_container(
 
         # TODO: remove tmp git dir once buildkit version in docker cli updated
         tmp_git_dir = (local_dir / "tmp" / "beobench_contrib").absolute()
+
+        try:
+            shutil.rmtree(tmp_git_dir)
+        except FileNotFoundError:
+            pass
+
         subprocess.check_call(
             [
                 "git",
