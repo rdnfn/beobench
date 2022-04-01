@@ -59,7 +59,6 @@ def parse(config: Union[dict, str, pathlib.Path, list]) -> dict:
             f"Config not one of allowed types (dict, str, pathlib.Path, list): {config}"
         )
 
-    print("Parsed config:", parsed_config)
     return parsed_config
 
 

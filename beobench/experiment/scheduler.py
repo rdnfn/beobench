@@ -84,6 +84,8 @@ def run(
     else:
         config = beobench.experiment.config_parser.parse(config)
 
+    print("Beobench config used:", config)
+
     # Create a definition of experiment from inputs
     if experiment_file is not None:
         warnings.warn(
