@@ -21,7 +21,7 @@ import beobench.utils
 
 
 def run(
-    config: Union[str, dict] = None,
+    config: Union[str, dict, pathlib.Path, list] = None,
     experiment_file: str = None,
     agent_file: str = None,
     method: str = None,
@@ -43,8 +43,9 @@ def run(
     interface.
 
     Args:
-        config (str or dict, optional): experiment configuration. This can either be
-            a dictionary or a path to a yaml file.
+        config (str, dict, pathlib.Path or list, optional): experiment configuration.
+            This can either be a dictionary, or a path (str or pathlib) to a yaml file,
+            or a json str, or a list combining any number of the prior config types.
         experiment_file (str, optional): File that defines experiment.
             Defaults to None. DEPRECATED.
         agent_file (str, optional): File that defines custom agent. This script is
@@ -78,10 +79,11 @@ def run(
     # pylint: disable=unused-argument
 
     # get config dict from config argument
-    if config:
-        config = beobench.experiment.config_parser.parse(config)
-    else:
+    if not config:
         config = beobench.experiment.config_parser.get_default()
+    else:
+        config = beobench.experiment.config_parser.parse(config)
+
     # Create a definition of experiment from inputs
     if experiment_file is not None:
         warnings.warn(
