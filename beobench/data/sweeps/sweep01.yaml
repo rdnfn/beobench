@@ -1,0 +1,9 @@
+program: beobench
+method: grid
+command:
+- ${program}
+- run
+- ${args}
+parameters:
+  config:
+    values: [./beobench/data/configs/rewex01.yaml]
