@@ -21,18 +21,6 @@ def cli():
     multiple=True,
 )
 @click.option(
-    "--experiment-file",
-    default=None,
-    help="File that defines beobench experiment.",
-    type=click.Path(exists=True, file_okay=True, dir_okay=False),
-)
-@click.option(
-    "--agent-file",
-    default=None,
-    help="File that defines custom agent.",
-    type=click.Path(exists=True, file_okay=True, dir_okay=False),
-)
-@click.option(
     "--method",
     default="",
     help="Name of RL method to use in experiment.",
@@ -96,8 +84,6 @@ def cli():
 )
 def run(
     config: str,
-    experiment_file: str,
-    agent_file: str,
     method: str,
     env: str,
     local_dir: str,
@@ -123,8 +109,6 @@ def run(
 
     beobench.experiment.scheduler.run(
         config=list(config),
-        experiment_file=experiment_file,
-        agent_file=agent_file,
         method=method,
         env=env,
         local_dir=local_dir,
