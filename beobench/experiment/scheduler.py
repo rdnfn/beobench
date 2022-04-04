@@ -11,7 +11,7 @@ from typing import Union
 try:
     import beobench.integration.rllib
 except ImportError:
-    print("Note: RLlib beobench integration not available.")
+    pass
 
 import beobench.experiment.definitions.utils
 import beobench.experiment.containers
@@ -89,12 +89,9 @@ def run(
 
     # adding any defaults that haven't been set by user given config
     default_config = beobench.experiment.config_parser.get_default()
-    print("default", default_config)
     config = beobench.utils.merge_dicts(
         a=default_config, b=config, let_b_overrule_a=True
     )
-
-    print("Beobench config used:", config)
 
     # select agent script
     if config["agent"]["origin"] == "rllib":
@@ -274,10 +271,12 @@ def run(
                 "--no-additional-container && bash"
             ),
         ]
-        print(
-            "Executing docker command: ",
-            " ".join(args).replace(wandb_api_key, "<API_KEY_HIDDEN>"),
-        )
+
+        arg_str = " ".join(args)
+        if wandb_api_key:
+            arg_str.replace(wandb_api_key, "<API_KEY_HIDDEN>")
+        print(f"Executing docker command: {arg_str}")
+
         subprocess.check_call(args)
 
 
