@@ -10,5 +10,9 @@ are other options as well (e.g. `Ray Tune <https://www.ray.io/ray-tune>`_).
 W&B Sweeps
 ^^^^^^^^^^
 
+Make sure that the W&B ``wandb`` Python package is installed. Follow the
+`official quickstart <https://docs.wandb.ai/quickstart>`_ if it is
+not installed yet.
+
 *Under construction.*
 
