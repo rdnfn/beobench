@@ -24,13 +24,13 @@ def run(
     config: Union[str, dict, pathlib.Path, list] = None,
     method: str = None,
     env: str = None,
-    local_dir: str = "./beobench_results",
-    wandb_project: str = "",
-    wandb_entity: str = "",
-    wandb_api_key: str = "",
+    local_dir: str = None,
+    wandb_project: str = None,
+    wandb_entity: str = None,
+    wandb_api_key: str = None,
     mlflow_name: str = None,
     use_gpu: bool = False,
-    docker_shm_size: str = "2gb",
+    docker_shm_size: str = None,
     no_additional_container: bool = False,
     use_no_cache: bool = False,
     dev_path: str = None,
@@ -77,6 +77,14 @@ def run(
         config = beobench.experiment.config_parser.get_default()
     else:
         config = beobench.experiment.config_parser.parse(config)
+
+    if env or method:
+        raise ValueError(
+            (
+                "This functionality has been deprecated. Directly configure"
+                " the environment or method in the config argument."
+            )
+        )
 
     print("Beobench config used:", config)
 
