@@ -30,9 +30,9 @@ def run(
     mlflow_name: str = None,
     use_gpu: bool = False,
     docker_shm_size: str = None,
-    no_additional_container: bool = False,
     use_no_cache: bool = False,
     dev_path: str = None,
+    no_additional_container: bool = False,
 ) -> None:
     """Run experiment.
 
@@ -60,24 +60,45 @@ def run(
         mlflow_name (str, optional): name of MLflow experiment. Defaults to None.
         docker_shm_size(str, optional): size of the shared memory available to the
             container. Defaults to None."
-        no_additional_container (bool, optional): wether not to start another container
-            to run experiments in. Defaults to False, which means that another container
-            is started to run experiments in. Defaults to False.
         use_no_cache (bool, optional): whether to use cache to build experiment
             container. Defaults to False.
         dev_path (str, optional): file or github path to beobench package. For
             developement purpose only. This will install a custom beobench version
             inside the experiment container. By default the latest PyPI version is
             installed.
+        no_additional_container (bool, optional): wether not to start another container
+            to run experiments in. Defaults to False, which means that another container
+            is started to run experiments in.
     """
-    # pylint: disable=unused-argument
-
-    # get config dict from config argument
-    if not config:
+    # use fault config if no config given
+    if config is None:
         config = beobench.experiment.config_parser.get_default()
-    else:
-        config = beobench.experiment.config_parser.parse(config)
 
+    # parsing some kwargs to config and adding them to config
+    kwarg_config = _create_config_from_kwargs(
+        local_dir=local_dir,
+        wandb_project=wandb_project,
+        wandb_entity=wandb_entity,
+        wandb_api_key=wandb_api_key,
+        mlflow_name=mlflow_name,
+        use_gpu=use_gpu,
+        docker_shm_size=docker_shm_size,
+        use_no_cache=use_no_cache,
+        dev_path=dev_path,
+    )
+    config = [config, kwarg_config]
+
+    # parse combined config
+    config = beobench.experiment.config_parser.parse(config)
+    print("Beobench config used:", config)
+
+    # select agent script
+    if config["agent"]["origin"] == "rllib":
+        agent_file = None
+    else:
+        agent_file = pathlib.Path(config["agent"]["origin"])
+
+    # TODO add parsing of high level API arguments env and agent
     if env or method:
         raise ValueError(
             (
@@ -85,15 +106,6 @@ def run(
                 " the environment or method in the config argument."
             )
         )
-
-    print("Beobench config used:", config)
-
-    if config["agent"]["origin"] == "rllib":
-        agent_file = None
-    else:
-        agent_file = pathlib.Path(config["agent"]["origin"])
-
-    # TODO add parsing of high level API arguments env and agent
 
     if no_additional_container:
         # Execute experiment
@@ -256,3 +268,16 @@ def run(
         ]
         print("Executing docker command: ", " ".join(args))
         subprocess.check_call(args)
+
+
+def _create_config_from_kwargs(**kwargs) -> dict:
+    """Create a config dict from kwargs.
+
+    Returns:
+        dict: config dict with kwargs under general key.
+    """
+    config = {"general": {}}
+    for key, value in kwargs.items():
+        if value:
+            config["general"][key] = value
+    return config
