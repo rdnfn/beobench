@@ -4,6 +4,7 @@ import os
 import uuid
 import subprocess
 import pathlib
+from wandb import agent
 import yaml
 from typing import Union
 
@@ -70,6 +71,7 @@ def run(
             to run experiments in. Defaults to False, which means that another container
             is started to run experiments in.
     """
+    print("Beobench: starting experiment run ...")
     # parsing relevant kwargs and adding them to config
     kwarg_config = _create_config_from_kwargs(
         local_dir=local_dir,
@@ -107,6 +109,13 @@ def run(
                 " the environment or method in the config argument."
             )
         )
+
+    print(
+        (
+            f"Beobench: running experiment with environment {config['env']['name']}"
+            f" and agent from {config['agent']['origin']}."
+        )
+    )
 
     if no_additional_container:
         # Execute experiment
