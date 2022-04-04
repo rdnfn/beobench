@@ -22,33 +22,33 @@ def cli():
 )
 @click.option(
     "--method",
-    default="",
+    default=None,
     help="Name of RL method to use in experiment.",
 )
 @click.option(
     "--env",
-    default="",
+    default=None,
     help="Name of RL environment to use in experiment.",
 )
 @click.option(
     "--local-dir",
-    default="./beobench_results",
+    default=None,
     help="Local directory to write results to.",
     type=click.Path(exists=False, file_okay=False, dir_okay=True),
 )
 @click.option(
     "--wandb-project",
-    default="",
+    default=None,
     help="Weights and biases project name to log runs to.",
 )
 @click.option(
     "--wandb-entity",
-    default="",
+    default=None,
     help="Weights and biases entity name to log runs under.",
 )
 @click.option(
     "--wandb-api-key",
-    default="",
+    default=None,
     help="Weights and biases API key.",
 )
 @click.option(
@@ -63,7 +63,7 @@ def cli():
 )
 @click.option(
     "--docker-shm-size",
-    default="2gb",
+    default=None,
     help="Size of shared memory available to experiment container.",
 )
 @click.option(
