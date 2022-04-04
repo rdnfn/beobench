@@ -96,8 +96,8 @@ commit messages with the following adaptions:
 2. Use a ``exp:`` type for commits relating to experiment data (e.g. experiment config files).
 
 
-Pull Request Guidelines
-~~~~~~~~~~~~~~~~~~~~~~~
+Pull Requests
+~~~~~~~~~~~~~
 
 Before you submit a pull request, check that it meets these guidelines:
 
