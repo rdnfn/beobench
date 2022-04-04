@@ -149,6 +149,16 @@ def run(
         ### part 2: create args and run command in docker container
         docker_flags = []
 
+        # if no wandb API key is given try to get it from env
+        if config["general"]["wandb_api_key"] is None:
+            # this will return "" if env var not set
+            wandb_api_key = os.getenv("WANDB_API_KEY", "")
+        else:
+            wandb_api_key = config["general"]["wandb_api_key"]
+
+        # We don't want the key to be logged in wandb
+        del config["general"]["wandb_api_key"]
+
         ### create path to store ray results at
         ray_path_abs = str((local_dir_path / "ray_results").absolute())
 
@@ -202,13 +212,6 @@ def run(
         beobench_flags = []
         beobench_flags.append(f'--config="{config}"')
         beobench_flag_str = " ".join(beobench_flags)
-
-        # if no wandb API key is given try to get it from env
-        if config["general"]["wandb_api_key"] is None:
-            # this will return "" if env var not set
-            wandb_api_key = os.getenv("WANDB_API_KEY", "")
-        else:
-            wandb_api_key = config["general"]["wandb_api_key"]
 
         # Setup dev mode
         # In dev mode Beobench is installed directly from github or local path
