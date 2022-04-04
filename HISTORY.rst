@@ -2,7 +2,7 @@
 History
 =======
 
-0.4.2 (2022-04-00)
+0.4.2 (2022-04-04)
 ------------------
 
 * Feature: defining all relevant options/kwargs of CLI an API is now supported
