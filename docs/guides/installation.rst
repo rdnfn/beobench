@@ -1,10 +1,5 @@
 .. highlight:: shell
 
-.. toctree::
-        :hidden:
-
-        installation_linux
-
 
 .. _sec-installation:
 
@@ -49,3 +44,8 @@ Development environment
 If you would like to contribute to beobench,
 use :doc:`this guide <dev_env>` to set up the
 full development environment.
+
+.. toctree::
+        :hidden:
+
+        installation_linux
