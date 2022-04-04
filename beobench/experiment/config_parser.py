@@ -4,13 +4,14 @@ from typing import Union
 import pathlib
 import yaml
 import ast
+import sys
 
 import beobench.utils
 
-# To enable compatiblity with Python<=3.6 (e.g. for sinergym dockerfile)
-try:
+# To enable compatiblity with Python<=3.8 (e.g. for sinergym dockerfile)
+if sys.version_info[1] >= 9:
     import importlib.resources
-except ImportError:
+else:
     import importlib_resources
     import importlib
 
