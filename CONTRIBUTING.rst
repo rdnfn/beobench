@@ -88,7 +88,9 @@ Guidelines
 Commit messages
 ^^^^^^^^^^^^^^^
 
-When committing to the Beobench repo, please try to follow `this style guide by Udacity <https://udacity.github.io/git-styleguide/>` for the commit messages.
+When committing to the Beobench repo, please try to follow `this style
+guide by Udacity <https://udacity.github.io/git-styleguide/>` for the
+commit messages, but replace the ``chore:`` type with ``aux:``.
 
 
 Pull Request Guidelines
