@@ -4,7 +4,6 @@ import os
 import uuid
 import subprocess
 import pathlib
-from wandb import agent
 import yaml
 from typing import Union
 
