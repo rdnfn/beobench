@@ -5,6 +5,8 @@ History
 0.4.2 (2022-04-00)
 ------------------
 
+* Feature: defining all relevant options/kwargs of CLI an API is now supported
+  yaml files (#54)
 * Feature: allow multiple configs to be given to both CLI
   (giving multiple ``-c`` options) and Python API (as a list) (#51)
 * Fix: adapted Energym env reset() method to avoid triggering
