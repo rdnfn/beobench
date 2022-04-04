@@ -1,0 +1,13 @@
+program: beobench
+method: grid
+command:
+- ${program}
+- run
+- ${args}
+parameters:
+  config:
+    value:
+      - ./beobench/data/configs/rewex01.yaml
+      - ./wandb.beo.yaml
+  dev-path:
+    value: .

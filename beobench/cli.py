@@ -1,7 +1,6 @@
 """Command line interface for beobench."""
 
 import click
-import ast
 
 import beobench.experiment.scheduler
 import beobench.utils
@@ -19,48 +18,37 @@ def cli():
     default=None,
     help="Json or filepath with yaml that defines beobench experiment configuration.",
     type=str,
-)
-@click.option(
-    "--experiment-file",
-    default=None,
-    help="File that defines beobench experiment.",
-    type=click.Path(exists=True, file_okay=True, dir_okay=False),
-)
-@click.option(
-    "--agent-file",
-    default=None,
-    help="File that defines custom agent.",
-    type=click.Path(exists=True, file_okay=True, dir_okay=False),
+    multiple=True,
 )
 @click.option(
     "--method",
-    default="",
+    default=None,
     help="Name of RL method to use in experiment.",
 )
 @click.option(
     "--env",
-    default="",
+    default=None,
     help="Name of RL environment to use in experiment.",
 )
 @click.option(
     "--local-dir",
-    default="./beobench_results",
+    default=None,
     help="Local directory to write results to.",
     type=click.Path(exists=False, file_okay=False, dir_okay=True),
 )
 @click.option(
     "--wandb-project",
-    default="",
+    default=None,
     help="Weights and biases project name to log runs to.",
 )
 @click.option(
     "--wandb-entity",
-    default="",
+    default=None,
     help="Weights and biases entity name to log runs under.",
 )
 @click.option(
     "--wandb-api-key",
-    default="",
+    default=None,
     help="Weights and biases API key.",
 )
 @click.option(
@@ -75,7 +63,7 @@ def cli():
 )
 @click.option(
     "--docker-shm-size",
-    default="2gb",
+    default=None,
     help="Size of shared memory available to experiment container.",
 )
 @click.option(
@@ -96,8 +84,6 @@ def cli():
 )
 def run(
     config: str,
-    experiment_file: str,
-    agent_file: str,
     method: str,
     env: str,
     local_dir: str,
@@ -121,14 +107,8 @@ def run(
     #
     # See https://stackoverflow.com/a/40094408.
 
-    # Parse config str to dict if
-    if config and config[0] == "{":
-        config = ast.literal_eval(config)
-
     beobench.experiment.scheduler.run(
-        config=config,
-        experiment_file=experiment_file,
-        agent_file=agent_file,
+        config=list(config),
         method=method,
         env=env,
         local_dir=local_dir,

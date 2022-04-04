@@ -19,7 +19,13 @@ def check_if_in_notebook() -> bool:
         return False
 
 
-def merge_dicts(a: dict, b: dict, path: list = None, mutate_a: bool = False) -> dict:
+def merge_dicts(
+    a: dict,
+    b: dict,
+    path: list = None,
+    mutate_a: bool = False,
+    let_b_overrule_a=False,
+) -> dict:
     """Merge dictionary b into dictionary a.
 
     Adapted from https://stackoverflow.com/a/7205107.
@@ -32,10 +38,12 @@ def merge_dicts(a: dict, b: dict, path: list = None, mutate_a: bool = False) -> 
         mutate_a (bool, optional): whether to mutate the dictionary a that
             is given. Necessary for recursion, no need to use.
             Defaults to False.
+        let_b_overrule_a: whether to allow dict b to overrule if they disagree on a
+            key value. Defaults to False.
 
 
     Raises:
-        Exception: When dictionaries are inconsistent
+        Exception: When dictionaries are inconsistent, and not let_b_overrule_a.
 
     Returns:
         dictionary: merged dictionary.
@@ -51,11 +59,26 @@ def merge_dicts(a: dict, b: dict, path: list = None, mutate_a: bool = False) -> 
     for key in b:
         if key in a:
             if isinstance(a[key], dict) and isinstance(b[key], dict):
-                merge_dicts(a[key], b[key], path + [str(key)], mutate_a=True)
+                merge_dicts(
+                    a[key],
+                    b[key],
+                    path + [str(key)],
+                    mutate_a=True,
+                    let_b_overrule_a=let_b_overrule_a,
+                )
             elif a[key] == b[key]:
                 pass  # same leaf value
             else:
-                raise Exception("Conflict at %s" % ".".join(path + [str(key)]))
+                if not let_b_overrule_a:
+                    location = ".".join(path + [str(key)])
+                    raise Exception(
+                        (
+                            f"Conflict at {location}."
+                            f"a={a[key]} is not the same as b={b[key]}."
+                        )
+                    )
+                else:
+                    a[key] = b[key]
         else:
             a[key] = b[key]
     return a

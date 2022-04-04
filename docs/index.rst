@@ -1,4 +1,4 @@
-Home - Beobench Docs
+Beobench Docs
 =============================
 
 .. include:: ../README.rst
@@ -10,8 +10,9 @@ Contents
 
 .. toctree::
    :maxdepth: 2
+   :includehidden:
 
-   self
+   Home <self>
    guides/installation
    guides
    envs

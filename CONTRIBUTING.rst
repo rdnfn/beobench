@@ -82,8 +82,22 @@ Ready to contribute? Here's how to set up `beobench` for local development.
 
 5. Submit a pull request through the GitHub website.
 
-Pull Request Guidelines
------------------------
+Guidelines
+----------
+
+Commit messages
+~~~~~~~~~~~~~~~
+
+When committing to the Beobench repo, please try to follow `this style
+guide by Udacity <https://udacity.github.io/git-styleguide/>`_ for the
+commit messages with the following adaptions:
+
+1. Replace the ``chore:`` type with ``aux:``.
+2. Use a ``exp:`` type for commits relating to experiment data (e.g. experiment config files).
+
+
+Pull Requests
+~~~~~~~~~~~~~
 
 Before you submit a pull request, check that it meets these guidelines:
 
@@ -91,6 +105,8 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.
+
+
 .. 3. The pull request should work for Python 3.6, 3.7, 3.8 and 3.9.
 
 .. Check https://travis-ci.com/rdnfn/beobench/pull_requests
@@ -103,6 +119,15 @@ To run a subset of tests::
 
 
     $ python -m unittest tests.test_beobench
+
+
+Resources
+---------
+
+Documentation and cheatsheets for reStructuredText (``.rst`` files):
+
+* https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
+* https://bashtage.github.io/sphinx-material/rst-cheatsheet/rst-cheatsheet.html
 
 Deploying
 ---------
