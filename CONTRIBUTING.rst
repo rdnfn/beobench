@@ -86,7 +86,7 @@ Guidelines
 ----------
 
 Commit messages
-^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~
 
 When committing to the Beobench repo, please try to follow `this style
 guide by Udacity <https://udacity.github.io/git-styleguide/>`_ for the
@@ -97,7 +97,7 @@ commit messages with the following adaptions:
 
 
 Pull Request Guidelines
-^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Before you submit a pull request, check that it meets these guidelines:
 
