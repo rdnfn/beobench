@@ -82,8 +82,17 @@ Ready to contribute? Here's how to set up `beobench` for local development.
 
 5. Submit a pull request through the GitHub website.
 
+Guidelines
+----------
+
+Commit messages
+^^^^^^^^^^^^^^^
+
+When committing to the Beobench repo, please try to follow `this style guide by Udacity <https://udacity.github.io/git-styleguide/>` for the commit messages.
+
+
 Pull Request Guidelines
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Before you submit a pull request, check that it meets these guidelines:
 
