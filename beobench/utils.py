@@ -70,7 +70,13 @@ def merge_dicts(
                 pass  # same leaf value
             else:
                 if not let_b_overrule_a:
-                    raise Exception("Conflict at %s" % ".".join(path + [str(key)]))
+                    location = ".".join(path + [str(key)])
+                    raise Exception(
+                        (
+                            f"Conflict at {location}."
+                            f"a={a[key]} is not the same as b={b[key]}."
+                        )
+                    )
                 else:
                     a[key] = b[key]
         else:
