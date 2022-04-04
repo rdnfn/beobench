@@ -4,7 +4,6 @@ import os
 import uuid
 import subprocess
 import pathlib
-import warnings
 import yaml
 from typing import Union
 
@@ -43,28 +42,29 @@ def run(
     Args:
         config (str, dict, pathlib.Path or list, optional): experiment configuration.
             This can either be a dictionary, or a path (str or pathlib) to a yaml file,
-            or a json str, or a list combining any number of the prior config types.
+            or a json str, or a list combining any number of the prior config types. If
+            no config is given, a default config is used.
         method (str, optional): RL method to use in experiment. This overwrites any
             method that is set in experiment file. For example 'PPO'. Defaults to None.
         env (str, optional): environment to apply method to in experiment. This
             overwrites any env set in experiment file. Defaults to None.
         local_dir (str, optional): Directory to write experiment files to. This argument
             is equivalent to the `local_dir` argument in `tune.run()`. Defaults to
-            `"./beobench_results"`.
+            None.
         wandb_project (str, optional): Name of wandb project. Defaults to
-            "initial_experiments".
+            None.
         wandb_entity (str, optional): Name of wandb entity. Defaults to "beobench".
         wandb_api_key (str, optional): wandb API key. Defaults to None.
         use_gpu (bool, optional): whether to use GPU from the host system. Defaults to
             False.
-        mlflow_name (str, optional): name of MLflow experiment.
+        mlflow_name (str, optional): name of MLflow experiment. Defaults to None.
         docker_shm_size(str, optional): size of the shared memory available to the
-            container. Defaults to '2gb'."
+            container. Defaults to None."
         no_additional_container (bool, optional): wether not to start another container
             to run experiments in. Defaults to False, which means that another container
-            is started to run experiments in.
+            is started to run experiments in. Defaults to False.
         use_no_cache (bool, optional): whether to use cache to build experiment
-            container.
+            container. Defaults to False.
         dev_path (str, optional): file or github path to beobench package. For
             developement purpose only. This will install a custom beobench version
             inside the experiment container. By default the latest PyPI version is
