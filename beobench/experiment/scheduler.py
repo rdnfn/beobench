@@ -143,14 +143,6 @@ def run(
         unique_id = uuid.uuid4().hex[:6]
         container_name = f"auto_beobench_experiment_{unique_id}"
 
-        if experiment_file is not None:
-            exp_file_abs = experiment_file.absolute()
-            exp_file_on_docker = f"/tmp/beobench/{experiment_file.name}"
-            docker_flags += [
-                "-v",
-                f"{exp_file_abs}:{exp_file_on_docker}:ro",
-            ]
-
         if agent_file is not None:
             ag_file_abs = agent_file.absolute()
             ag_file_on_docker = f"/tmp/beobench/{agent_file.name}"
