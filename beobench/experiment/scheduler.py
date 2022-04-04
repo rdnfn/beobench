@@ -70,11 +70,7 @@ def run(
             to run experiments in. Defaults to False, which means that another container
             is started to run experiments in.
     """
-    # use fault config if no config given
-    if config is None:
-        config = beobench.experiment.config_parser.get_default()
-
-    # parsing some kwargs to config and adding them to config
+    # parsing relevant kwargs and adding them to config
     kwarg_config = _create_config_from_kwargs(
         local_dir=local_dir,
         wandb_project=wandb_project,
@@ -90,6 +86,14 @@ def run(
 
     # parse combined config
     config = beobench.experiment.config_parser.parse(config)
+
+    # adding any defaults that haven't been set by user given config
+    default_config = beobench.experiment.config_parser.get_default()
+    print("default", default_config)
+    config = beobench.utils.merge_dicts(
+        a=default_config, b=config, let_b_overrule_a=True
+    )
+
     print("Beobench config used:", config)
 
     # select agent script
