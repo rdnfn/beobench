@@ -6,4 +6,8 @@ command:
 - ${args}
 parameters:
   config:
-    values: [./beobench/data/configs/rewex01.yaml]
+    value:
+      - ./beobench/data/configs/rewex01.yaml
+      - ./wandb.beo.yaml
+  dev-path:
+    value: .
