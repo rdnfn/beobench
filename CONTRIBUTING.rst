@@ -90,7 +90,9 @@ Commit messages
 
 When committing to the Beobench repo, please try to follow `this style
 guide by Udacity <https://udacity.github.io/git-styleguide/>` for the
-commit messages, but replace the ``chore:`` type with ``aux:``.
+commit messages with the following adaptions:
+1. Replace the ``chore:`` type with ``aux:``.
+2. Use a ``exp:`` type for commits relating to experiment data (e.g. experiment config files).
 
 
 Pull Request Guidelines
