@@ -44,9 +44,9 @@ def parse(config: Union[dict, str, pathlib.Path, list]) -> dict:
             parsed_config = yaml.safe_load(config_file)
 
     elif isinstance(config, str):
-        if config[0] == "{":
-            # if json str
-            parsed_config = ast.literal_eval(config)
+        if config[0] in ["{", "["]:
+            # if json str or list
+            parsed_config = parse(ast.literal_eval(config))
         else:
             # make sure config is a real path
             config_path = pathlib.Path(config)
