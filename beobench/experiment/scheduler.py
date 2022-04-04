@@ -116,10 +116,10 @@ def run(
         if config["agent"]["origin"] == "rllib":
             beobench.integration.rllib.run_in_tune(
                 config,
-                wandb_entity=wandb_entity,
-                wandb_project=wandb_project,
-                mlflow_name=mlflow_name,
-                use_gpu=use_gpu,
+                wandb_entity=config["general"]["wandb_entity"],
+                wandb_project=config["general"]["wandb_project"],
+                mlflow_name=config["general"]["mlflow_name"],
+                use_gpu=config["general"]["use_gpu"],
             )
         else:
             # run custom RL agent
@@ -131,13 +131,13 @@ def run(
 
         ### part 1: build docker images
         # Ensure local_dir exists, and create otherwise
-        local_dir_path = pathlib.Path(local_dir)
+        local_dir_path = pathlib.Path(config["general"]["local_dir"])
         local_dir_path.mkdir(parents=True, exist_ok=True)
 
         enable_rllib = config["agent"]["origin"] == "rllib"
         image_tag = beobench.experiment.containers.build_experiment_container(
             build_context=config["env"]["gym"],
-            use_no_cache=use_no_cache,
+            use_no_cache=config["general"]["use_no_cache"],
             enable_rllib=enable_rllib,
             local_dir=local_dir_path,
         )
@@ -159,10 +159,11 @@ def run(
             f"{config_path_abs}:/tmp/beobench/config.yaml:ro",
         ]
 
-        # define more docker arguments/options/flags
+        # setup container name with unique identifier
         unique_id = uuid.uuid4().hex[:6]
         container_name = f"auto_beobench_experiment_{unique_id}"
 
+        # load agent file (e.g. if RLlib integration not used)
         if agent_file is not None:
             ag_file_abs = agent_file.absolute()
             ag_file_on_docker = f"/tmp/beobench/{agent_file.name}"
@@ -187,7 +188,7 @@ def run(
             ]
 
         # enabling GPU access in docker container
-        if use_gpu:
+        if config["general"]["use_gpu"]:
             docker_flags += [
                 # add all available GPUs
                 "--gpus=all",
@@ -196,26 +197,26 @@ def run(
         # define flags for beobench scheduler call inside experiment container
         beobench_flags = []
         beobench_flags.append(f'--config="{config}"')
-        if wandb_project:
-            beobench_flags.append(f"--wandb-project={wandb_project}")
-        if wandb_entity:
-            beobench_flags.append(f"--wandb-entity={wandb_entity}")
-        if use_gpu:
-            beobench_flags.append("--use-gpu")
         beobench_flag_str = " ".join(beobench_flags)
 
         # if no wandb API key is given try to get it from env
-        if not wandb_api_key:
+        if config["general"]["wandb_api_key"] is None:
             # this will return "" if env var not set
             wandb_api_key = os.getenv("WANDB_API_KEY", "")
+        else:
+            wandb_api_key = config["general"]["wandb_api_key"]
 
-        # dev mode where custom beobench is installed directly from github or local path
+        # Setup dev mode
+        # In dev mode Beobench is installed directly from github or local path
+        dev_path = config["general"]["dev_path"]
         cmd_list_in_container = [""]
         if dev_path is not None:
             cmd_list_in_container.append("pip uninstall --yes beobench")
             if "https" in dev_path:
+                # clone directly from web adress
                 cmd_list_in_container.append(f"pip install {dev_path}")
             else:
+                # use local Beobench repo
                 if "[" in dev_path:
                     dev_paths = dev_path.split("[")
                     if len(dev_paths) > 2:
@@ -227,7 +228,7 @@ def run(
                 else:
                     dev_extras = ""
 
-                # mount local beobench repo
+                # mount local Beobench repo
                 dev_path = pathlib.Path(dev_path)
                 dev_abs = dev_path.absolute()
                 dev_path_on_docker = "/tmp/beobench/beobench"
@@ -253,7 +254,7 @@ def run(
             # automatically remove container when stopped/exited
             "--rm",
             # add more memory
-            f"--shm-size={docker_shm_size}",
+            f"--shm-size={config['general']['docker_shm_size']}",
             "--name",
             container_name,
             *docker_flags,
