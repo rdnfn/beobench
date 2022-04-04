@@ -274,7 +274,10 @@ def run(
                 "--no-additional-container && bash"
             ),
         ]
-        print("Executing docker command: ", " ".join(args))
+        print(
+            "Executing docker command: ",
+            " ".join(args).replace(wandb_api_key, "<API_KEY_HIDDEN>"),
+        )
         subprocess.check_call(args)
 
 
