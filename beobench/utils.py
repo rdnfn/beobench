@@ -38,11 +38,12 @@ def merge_dicts(
         mutate_a (bool, optional): whether to mutate the dictionary a that
             is given. Necessary for recursion, no need to use.
             Defaults to False.
-        let_b_overrule_a: whether to allow dict b to overrule if they disagree on key.
+        let_b_overrule_a: whether to allow dict b to overrule if they disagree on a
+            key value. Defaults to False.
 
 
     Raises:
-        Exception: When dictionaries are inconsistent
+        Exception: When dictionaries are inconsistent, and not let_b_overrule_a.
 
     Returns:
         dictionary: merged dictionary.
