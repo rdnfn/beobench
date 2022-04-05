@@ -1,0 +1,23 @@
+# Sweep 02
+# Run with the command
+# beobench run -c beobench/experiment/definitions/rewex01.yaml -d . --use-gpu --docker-shm-size 28gb
+
+# Some of the descriptions of RLlib config values are taken from
+# https://docs.ray.io/en/latest/rllib/rllib-training.html
+
+# agent config
+agent:
+  origin: beobench/data/agents/sweep.py
+  config:
+    base_config: beobench/data/configs/rewex01.py
+    sweep_config:
+      method: grid
+      parameters:
+        agent:
+          value:
+            config:
+              value:
+                lr:
+                  values: [0.0005, 0.0001, 0.00005]
+env:
+  gym: energym
