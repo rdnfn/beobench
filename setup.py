@@ -16,6 +16,7 @@ requirements = [
     "docker",
     "click",
     "pyyaml",
+    "importlib-resources",  # backport of importlib.resources, required for Python<=3.8
 ]
 
 # The extended requirements are only used inside experiment/gym containers
