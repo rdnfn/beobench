@@ -301,7 +301,7 @@ def run(
 
         arg_str = " ".join(args)
         if wandb_api_key:
-            arg_str.replace(wandb_api_key, "<API_KEY_HIDDEN>")
+            arg_str = arg_str.replace(wandb_api_key, "<API_KEY_HIDDEN>")
         print(f"Executing docker command: {arg_str}")
 
         subprocess.check_call(args)
