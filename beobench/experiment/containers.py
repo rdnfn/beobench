@@ -20,7 +20,7 @@ def build_experiment_container(
     use_no_cache: bool = False,
     local_dir: pathlib.Path = None,
     version: str = "latest",
-    enable_rllib: bool = False,
+    beobench_extras: str = "extended",
 ) -> None:
     """Build experiment container from beobench/integrations/boptest/Dockerfile.
 
@@ -31,7 +31,8 @@ def build_experiment_container(
             https://docs.docker.com/engine/reference/commandline/build/ for more info.
         use_no_cache (bool, optional): wether to use cache in build. Defaults to False.
         version (str, optional): version to add to container tag. Defaults to "latest".
-        enable_rllib (bool, optional): whether to install rllib. Defaults to False.
+        beobench_extras (str, optional): which beobench extra dependencies to install
+            As in `pip install beobench[extras]`. Defaults to "extended".
     """
 
     # Flags are shared between gym image build and gym_and_beobench image build
@@ -118,12 +119,6 @@ def build_experiment_container(
         )
     )
 
-    # Which extras to install beobench container
-    # e.g. using pip install beobench[extras]
-    if enable_rllib:
-        beobench_extras = "extended,rllib"
-    else:
-        beobench_extras = "extended"
     # Load dockerfile into pipe
     with subprocess.Popen(["cat", complete_dockerfile], stdout=subprocess.PIPE) as proc:
         beobench_build_args = [
