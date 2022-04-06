@@ -33,6 +33,8 @@ def run(
     use_no_cache: bool = False,
     dev_path: str = None,
     no_additional_container: bool = False,
+    docker_flags: list[str] = None,
+    beobench_extras: str = None,
 ) -> None:
     """Run experiment.
 
@@ -69,6 +71,11 @@ def run(
         no_additional_container (bool, optional): wether not to start another container
             to run experiments in. Defaults to False, which means that another container
             is started to run experiments in.
+        docker_flags (list[str], optional): list of docker flags to be added to
+        docker run command of Beobench experiment container.
+        beobench_extras (str, optional): extra dependencies to install with beobench.
+            Used during pip installation in experiment image, as in using the command:
+            `pip install beobench[<beobench_extras>]`
     """
     print("Beobench: starting experiment run ...")
     # parsing relevant kwargs and adding them to config
@@ -82,6 +89,8 @@ def run(
         docker_shm_size=docker_shm_size,
         use_no_cache=use_no_cache,
         dev_path=dev_path,
+        docker_flags=docker_flags,
+        beobench_extras=beobench_extras,
     )
     config = [config, kwarg_config]
 
@@ -143,16 +152,26 @@ def run(
         local_dir_path = pathlib.Path(config["general"]["local_dir"])
         local_dir_path.mkdir(parents=True, exist_ok=True)
 
-        enable_rllib = config["agent"]["origin"] == "rllib"
+        if (
+            config["general"]["beobench_extras"] == "extended"
+            and config["agent"]["origin"] == "rllib"
+        ):
+            beobench_extras = "extended,rllib"
+        else:
+            beobench_extras = config["general"]["beobench_extras"]
+
         image_tag = beobench.experiment.containers.build_experiment_container(
             build_context=config["env"]["gym"],
             use_no_cache=config["general"]["use_no_cache"],
-            enable_rllib=enable_rllib,
+            beobench_extras=beobench_extras,
             local_dir=local_dir_path,
         )
 
         ### part 2: create args and run command in docker container
-        docker_flags = []
+        if config["general"]["docker_flags"] is None:
+            docker_flags = []
+        else:
+            docker_flags = config["general"]["docker_flags"]
 
         # if no wandb API key is given try to get it from env
         if config["general"]["wandb_api_key"] is None:
