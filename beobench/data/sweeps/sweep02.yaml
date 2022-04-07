@@ -9,15 +9,16 @@
 agent:
   origin: beobench/data/agents/sweep.py
   config:
-    base_config: beobench/data/configs/rewex01.py
+    base_config: /tmp/beobench/configs/rewex01.yaml
     sweep_config:
       method: grid
       parameters:
-        agent:
-          value:
-            config:
-              value:
-                lr:
-                  values: [0.0005, 0.0001, 0.00005]
+        agent.config.lr:
+          values: [0.0005, 0.0001, 0.00005]
 env:
   gym: energym
+general:
+  beobench_extras: "extended,rllib"
+  docker_flags:
+  - -v
+  - /beobench/beobench/data/configs/rewex01.yaml:/tmp/beobench/configs/rewex01.yaml:ro
