@@ -39,3 +39,5 @@ general:
   docker_shm_size: 4gb
   use_no_cache: False
   dev_path: null
+  docker_flags: null
+  beobench_extras: "extended"
