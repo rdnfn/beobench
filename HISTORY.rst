@@ -5,6 +5,8 @@ History
 0.4.3 (2022-04-00)
 ------------------
 
+* Feature: add wandb logging support for random agent script (#59)
+* Feature: add rule-based agent script based on energym controller (#60)
 * Fix: add importlib-resources backport package to requirements
 
 0.4.2 (2022-04-04)
