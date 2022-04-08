@@ -31,9 +31,10 @@ env:
 # general config
 general:
   local_dir: ./beobench_results
-  wandb_project: ""
-  wandb_entity: ""
-  wandb_api_key: ""
+  wandb_project: null
+  wandb_entity: null
+  wandb_group: null
+  wandb_api_key: null
   mlflow_name: null
   use_gpu: False
   docker_shm_size: 4gb
