@@ -1,5 +1,7 @@
 """Module to schedule experiments."""
 
+from __future__ import annotations
+
 import os
 import uuid
 import subprocess
@@ -26,6 +28,7 @@ def run(
     local_dir: str = None,
     wandb_project: str = None,
     wandb_entity: str = None,
+    wandb_group: str = None,
     wandb_api_key: str = None,
     mlflow_name: str = None,
     use_gpu: bool = False,
@@ -55,7 +58,8 @@ def run(
             None.
         wandb_project (str, optional): Name of wandb project. Defaults to
             None.
-        wandb_entity (str, optional): Name of wandb entity. Defaults to "beobench".
+        wandb_entity (str, optional): Name of wandb entity. Defaults to None.
+        wandb_group (str, optional): name of wandb run group. Defaults to None.
         wandb_api_key (str, optional): wandb API key. Defaults to None.
         use_gpu (bool, optional): whether to use GPU from the host system. Defaults to
             False.
@@ -84,6 +88,7 @@ def run(
         wandb_project=wandb_project,
         wandb_entity=wandb_entity,
         wandb_api_key=wandb_api_key,
+        wandb_group=wandb_group,
         mlflow_name=mlflow_name,
         use_gpu=use_gpu,
         docker_shm_size=docker_shm_size,
