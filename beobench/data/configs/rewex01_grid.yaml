@@ -35,7 +35,7 @@ agent:
       soft_horizon: True
       # Number of timesteps collected for each SGD round. This defines the size
       # of each SGD epoch.
-      train_batch_size: 94 # single day of 15min steps
+      train_batch_size: 96 # single day of 15min steps
       # Total SGD batch size across all devices for SGD. This defines the
       # minibatch size within each epoch.
       sgd_minibatch_size: 24
