@@ -1,0 +1,62 @@
+# REWEX Experiment 01
+# Run with the command
+# beobench run -c beobench/experiment/definitions/rewex01.yaml -d . --use-gpu --docker-shm-size 28gb
+
+# Some of the descriptions of RLlib config values are taken from
+# https://docs.ray.io/en/latest/rllib/rllib-training.html
+
+# agent config
+agent:
+  origin: rllib # either path to agent script or name of agent library (rllib)
+  config: # given to ray.tune.run() as arguments (since rllib set before)
+    run_or_experiment: PPO
+    stop:
+      timesteps_total: 35040
+    config:
+      lr: 0.00005
+      model:
+        fcnet_activation: relu
+        fcnet_hiddens: [256,256,256,256]
+        post_fcnet_activation: tanh
+      batch_mode: complete_episodes
+      gamma: 0.999
+      # Number of steps after which the episode is forced to terminate. Defaults
+      # to `env.spec.max_episode_steps` (if present) for Gym envs.
+      horizon: 96
+      # Calculate rewards but don't reset the environment when the horizon is
+      # hit. This allows value estimation and RNN state to span across logical
+      # episodes denoted by horizon. This only has an effect if horizon != inf.
+      soft_horizon: True
+      # Number of timesteps collected for each SGD round. This defines the size
+      # of each SGD epoch.
+      train_batch_size: 94 # single day of 15min steps
+      # Total SGD batch size across all devices for SGD. This defines the
+      # minibatch size within each epoch.
+      sgd_minibatch_size:
+        grid_search:
+          - 24
+          - 48
+          - 96
+      metrics_smoothing_episodes: 1
+      framework: torch
+      log_level: "WARNING"
+      num_workers: 1 # this is required for energym to work (can fail silently otherwise)
+      num_gpus: 1
+# environment config
+env:
+  name: Apartments2Thermal-v0
+  gym: energym
+  config:
+    # Number of simulation days
+    days: 365
+    # Name of energym environment
+    energym_environment: Apartments2Thermal-v0
+    gym_kwargs:
+      # Maximum number of timesteps in one episode
+      max_episode_length: 35040 # corresponds to a year of 15 min steps
+      # User-provided flag to require state and action spaces to be normalized
+      normalize: True
+      # Number of real-world minutes between timesteps in building simulation
+      step_period: 15
+    # Weather file to use for the scenario (possible files depend on env chosen)
+    weather: ESP_CT_Barcelona
