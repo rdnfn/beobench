@@ -38,7 +38,7 @@ def run_in_tune(
         ray.tune.ExperimentAnalysis: analysis object from experiment.
     """
     if wandb_project and wandb_entity:
-        callbacks = [_create_wandb_callback(wandb_project, wandb_entity)]
+        callbacks = [_create_wandb_callback(config)]
     elif wandb_project or wandb_entity:
         raise ValueError(
             "Only one of wandb_project or wandb_entity given, but both required."
@@ -57,12 +57,13 @@ def run_in_tune(
         rllib_config["config"]["num_gpus"] = 1
 
     # register the problem environment with ray tune
-    # env_creator is a module available in experiment containers
-    import env_creator  # pylint: disable=import-outside-toplevel,import-error
+    # provider is a module available in experiment containers
+    # pylint: disable=import-outside-toplevel,import-error
+    from beobench.experiment.provider import create_env
 
     ray.tune.registry.register_env(
         rllib_config["config"]["env"],
-        env_creator.create_env,
+        create_env,
     )
 
     # if run in notebook, change the output reported throughout experiment.
@@ -81,21 +82,19 @@ def run_in_tune(
     return analysis
 
 
-def _create_wandb_callback(
-    wandb_project: str,
-    wandb_entity: str,
-):
+def _create_wandb_callback(config: dict):
     """Create an RLlib weights and biases (wandb) callback.
 
     Args:
-        wandb_project (str): name of wandb project.
-        wandb_entity (str): name of wandb entity that owns project.
+        config (dict): beobench config
 
     Returns:
         : a wandb callback
     """
     wandb_callback = ray.tune.integration.wandb.WandbLoggerCallback(
-        project=wandb_project, log_config=True, entity=wandb_entity
+        project=config["general"]["wandb_project"],
+        entity=config["general"]["wandb_entity"],
+        group=config["general"]["wandb_group"],
     )
     return wandb_callback
 
