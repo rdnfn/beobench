@@ -22,6 +22,7 @@ requirements = [
 # The extended requirements are only used inside experiment/gym containers
 extended_requirements = [
     "gym",
+    "wandb",
 ]
 
 rllib_requirements = [
