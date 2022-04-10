@@ -1,9 +1,9 @@
 """Module for managing experiment containers."""
 
+import contextlib
 import subprocess
 import os
 import pathlib
-import shutil
 
 # To enable compatiblity with Python<=3.6 (e.g. for sinergym dockerfile)
 try:
@@ -56,33 +56,17 @@ def build_experiment_container(
         "sinergym",
         "energym",
     ]
-
     if build_context in AVAILABLE_INTEGRATIONS:
         image_name = f"beobench_{build_context}"
-        integration_name = build_context
-
-        # TODO: remove tmp git dir once buildkit version in docker cli updated
-        tmp_git_dir = (local_dir / "tmp" / "beobench_contrib").absolute()
-
-        try:
-            shutil.rmtree(tmp_git_dir)
-        except FileNotFoundError:
-            pass
-
-        subprocess.check_call(
-            [
-                "git",
-                "clone",
-                "https://github.com/rdnfn/beobench_contrib.git",
-                tmp_git_dir,
-            ]
+        gym_name = build_context
+        gym_source = importlib.resources.files("beobench").joinpath(
+            f"beobench_contrib/gyms/{gym_name}"
         )
-
-        build_context = str(tmp_git_dir / "gyms" / integration_name)
+        package_build_context = True
 
         print(
             (
-                f"Recognised integration named {integration_name}: using build"
+                f"Recognised integration named {gym_name}: using build"
                 f" context {build_context}"
             )
         )
@@ -90,59 +74,67 @@ def build_experiment_container(
         # get alphanumeric name from context
         context_name = "".join(e for e in build_context if e.isalnum())
         image_name = f"beobench_custom_{context_name}"
+        package_build_context = False
 
     base_image_tag = f"{image_name}_base:{version}"
 
     print(f"Building experiment base image `{base_image_tag}`...")
 
-    # Part 1: build base experiment image
-    args = [
-        *build_commands,
-        "-t",
-        base_image_tag,
-        *flags,
-        build_context,
-    ]
-    env = os.environ.copy()
-    print("Running command: " + " ".join(args))
-    subprocess.check_call(
-        args,
-        env=env,  # this enables accessing dockerfile in subdir
-    )
+    with contextlib.ExitStack() as stack:
+        # if using build context from beobench package, get (potentially temp.) build
+        # context file path
+        if package_build_context:
+            build_context = stack.enter_context(importlib.resources.as_file(gym_source))
+            build_context = str(build_context.absolute())
 
-    # Part 2: build complete experiment image
-    # This includes installation of beobench in experiment image
-    complete_image_tag = f"{image_name}_complete:{version}"
-    complete_dockerfile = str(
-        importlib.resources.files("beobench.experiment.dockerfiles").joinpath(
-            "Dockerfile.experiment"
-        )
-    )
-
-    # Load dockerfile into pipe
-    with subprocess.Popen(["cat", complete_dockerfile], stdout=subprocess.PIPE) as proc:
-        beobench_build_args = [
+        # Part 1: build base experiment image
+        args = [
             *build_commands,
             "-t",
-            complete_image_tag,
-            "-f",
-            "-",
-            "--build-arg",
-            f"GYM_IMAGE={base_image_tag}",
-            "--build-arg",
-            f"EXTRAS={beobench_extras}",
+            base_image_tag,
             *flags,
             build_context,
         ]
-        print("Running command: " + " ".join(beobench_build_args))
+        env = os.environ.copy()
+        print("Running command: " + " ".join(args))
         subprocess.check_call(
-            beobench_build_args,
-            stdin=proc.stdout,
+            args,
             env=env,  # this enables accessing dockerfile in subdir
         )
 
-    # TODO: remove tmp git dir once buildkit version in docker cli updated
-    shutil.rmtree(tmp_git_dir)
+        # Part 2: build complete experiment image
+        # This includes installation of beobench in experiment image
+        complete_image_tag = f"{image_name}_complete:{version}"
+        complete_dockerfile = str(
+            importlib.resources.files("beobench.experiment.dockerfiles").joinpath(
+                "Dockerfile.experiment"
+            )
+        )
+
+        # Load dockerfile into pipe
+        with subprocess.Popen(
+            ["cat", complete_dockerfile], stdout=subprocess.PIPE
+        ) as proc:
+            beobench_build_args = [
+                *build_commands,
+                "-t",
+                complete_image_tag,
+                "-f",
+                "-",
+                "--build-arg",
+                f"GYM_IMAGE={base_image_tag}",
+                "--build-arg",
+                f"EXTRAS={beobench_extras}",
+                *flags,
+                build_context,
+            ]
+            print("Running command: " + " ".join(beobench_build_args))
+            subprocess.check_call(
+                beobench_build_args,
+                stdin=proc.stdout,
+                env=env,  # this enables accessing dockerfile in subdir
+            )
+
     print("Experiment gym image build finished.")
 
     return complete_image_tag
