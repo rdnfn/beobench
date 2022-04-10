@@ -1,3 +1,3 @@
 [submodule "beobench_contrib"]
-	path = beobench_contrib
+	path = beobench/beobench_contrib
 	url = https://github.com/rdnfn/beobench_contrib.git
