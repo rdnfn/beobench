@@ -5,6 +5,7 @@ History
 0.4.3 (2022-04-00)
 ------------------
 
+* Feature: ship integrations with package improving image build times (#44)
 * Feature: add wandb logging support for random agent script (#59)
 * Feature: add rule-based agent script based on energym controller (#60)
 * Fix: add importlib-resources backport package to requirements
