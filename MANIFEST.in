@@ -9,6 +9,7 @@ recursive-include tests *
 recursive-include beobench/beobench_contrib/gyms/ *
 
 recursive-include beobench/experiment/definitions *
+recursive-include beobench/experiment/dockerfiles *
 recursive-exclude beobench/experiment/definitions/archive/ *
 
 recursive-exclude docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
