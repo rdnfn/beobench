@@ -5,6 +5,8 @@ import ray.tune
 import ray.tune.integration.wandb
 import ray.tune.integration.mlflow
 import wandb
+import uuid
+import os
 
 import beobench.utils
 import beobench.experiment.config_parser
@@ -40,8 +42,18 @@ def run_in_tune(
     Returns:
         ray.tune.ExperimentAnalysis: analysis object from experiment.
     """
+    run_id = uuid.uuid4().hex
+
     if wandb_project and wandb_entity:
-        callbacks = [_create_wandb_callback(config)]
+
+        callbacks = [
+            ray.tune.integration.wandb.WandbLoggerCallback(
+                project=config["general"]["wandb_project"],
+                entity=config["general"]["wandb_entity"],
+                group=config["general"]["wandb_group"],
+                id=run_id,
+            )
+        ]
     elif wandb_project or wandb_entity:
         raise ValueError(
             "Only one of wandb_project or wandb_entity given, but both required."
@@ -52,9 +64,8 @@ def run_in_tune(
         callbacks = []
 
     if config["general"]["log_episode_data_from_rllib"]:
-        config["agent"]["config"]["config"]["output"] = str(
-            (CONTAINER_DATA_DIR / "outputs").absolute()
-        )
+        output_dir = (CONTAINER_DATA_DIR / "outputs / " f"outputs-{run_id}").absolute()
+        config["agent"]["config"]["config"]["output"] = str(output_dir)
 
     # combine the three incomplete ray tune experiment
     # definitions into a single complete one.
@@ -88,24 +99,21 @@ def run_in_tune(
         **rllib_config,
     )
 
+    if wandb_project and config["general"]["log_episode_data_from_rllib"]:
+
+        wandb.init(
+            id=run_id,
+            project=config["general"]["wandb_project"],
+            entity=config["general"]["wandb_entity"],
+            group=config["general"]["wandb_group"],
+        )
+        print("Beobench: wandb run id", wandb.run.id)
+
+        output_file = output_dir / os.listdir(output_dir)[0]
+        data = get_cross_episodes_data(output_file)
+        log_eps_data_to_wandb(data, wandb_run_id=wandb.run.id)
+
     return analysis
-
-
-def _create_wandb_callback(config: dict):
-    """Create an RLlib weights and biases (wandb) callback.
-
-    Args:
-        config (dict): beobench config
-
-    Returns:
-        : a wandb callback
-    """
-    wandb_callback = ray.tune.integration.wandb.WandbLoggerCallback(
-        project=config["general"]["wandb_project"],
-        entity=config["general"]["wandb_entity"],
-        group=config["general"]["wandb_group"],
-    )
-    return wandb_callback
 
 
 def _create_mlflow_callback(
