@@ -15,10 +15,6 @@ from beobench.constants import RAY_LOCAL_DIR_IN_CONTAINER, CONTAINER_DATA_DIR
 
 def run_in_tune(
     config: dict,
-    wandb_project: str = None,
-    wandb_entity: str = None,
-    mlflow_name: str = None,
-    use_gpu: bool = False,
 ) -> ray.tune.ExperimentAnalysis:
     """Run beobench experiment.
 
@@ -44,7 +40,7 @@ def run_in_tune(
     """
     run_id = uuid.uuid4().hex
 
-    if wandb_project and wandb_entity:
+    if config["general"]["wandb_project"] and config["general"]["wandb_entity"]:
 
         callbacks = [
             ray.tune.integration.wandb.WandbLoggerCallback(
@@ -54,12 +50,12 @@ def run_in_tune(
                 id=run_id,
             )
         ]
-    elif wandb_project or wandb_entity:
+    elif config["general"]["wandb_project"] or config["general"]["wandb_entity"]:
         raise ValueError(
             "Only one of wandb_project or wandb_entity given, but both required."
         )
-    elif mlflow_name:
-        callbacks = [_create_mlflow_callback(mlflow_name)]
+    elif config["general"]["mlflow_name"]:
+        callbacks = [_create_mlflow_callback(config["general"]["mlflow_name"])]
     else:
         callbacks = []
 
@@ -72,7 +68,7 @@ def run_in_tune(
     rllib_config = beobench.experiment.config_parser.create_rllib_config(config)
 
     # change RLlib setup if GPU used
-    if use_gpu:
+    if config["general"]["use_gpu"]:
         rllib_config["config"]["num_gpus"] = 1
 
     # register the problem environment with ray tune
@@ -99,7 +95,10 @@ def run_in_tune(
         **rllib_config,
     )
 
-    if wandb_project and config["general"]["log_episode_data_from_rllib"]:
+    if (
+        config["general"]["wandb_project"]
+        and config["general"]["log_episode_data_from_rllib"]
+    ):
 
         wandb.init(
             id=run_id,
