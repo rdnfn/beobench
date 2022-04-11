@@ -8,7 +8,7 @@ import wandb
 
 import beobench.utils
 import beobench.experiment.config_parser
-from beobench.constants import RAY_LOCAL_DIR_IN_CONTAINER
+from beobench.constants import RAY_LOCAL_DIR_IN_CONTAINER, CONTAINER_DATA_DIR
 
 
 def run_in_tune(
@@ -50,6 +50,11 @@ def run_in_tune(
         callbacks = [_create_mlflow_callback(mlflow_name)]
     else:
         callbacks = []
+
+    if config["general"]["log_episode_data_from_rllib"]:
+        config["agent"]["config"]["config"]["output"] = (
+            CONTAINER_DATA_DIR / "outputs"
+        ).absolute()
 
     # combine the three incomplete ray tune experiment
     # definitions into a single complete one.
