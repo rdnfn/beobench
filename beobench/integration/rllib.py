@@ -52,9 +52,9 @@ def run_in_tune(
         callbacks = []
 
     if config["general"]["log_episode_data_from_rllib"]:
-        config["agent"]["config"]["config"]["output"] = (
-            CONTAINER_DATA_DIR / "outputs"
-        ).absolute()
+        config["agent"]["config"]["config"]["output"] = str(
+            (CONTAINER_DATA_DIR / "outputs").absolute()
+        )
 
     # combine the three incomplete ray tune experiment
     # definitions into a single complete one.
