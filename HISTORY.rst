@@ -5,6 +5,7 @@ History
 0.4.3 (2022-04-00)
 ------------------
 
+* Feature: enable easy access to standard configs via util method
 * Feature: add non-normalised observations to info in energym integration (#62)
 * Feature: enable logging full episode data from RLlib and adding this data
   to wandb (#62)
