@@ -2,6 +2,19 @@
 
 import pathlib
 
+# available gym-framework integrations
+AVAILABLE_INTEGRATIONS = [
+    "boptest",
+    "sinergym",
+    "energym",
+]
+
+# available agent scripts
+AVAILABLE_AGENTS = [
+    "rllib",
+    "random",
+]
+
 # read-only dir in container
 CONTAINER_RO_DIR = pathlib.Path("/root/beobench_configs")
 
