@@ -6,6 +6,7 @@ import ray.tune.integration.mlflow
 
 import beobench.utils
 import beobench.experiment.config_parser
+from beobench.constants import RAY_LOCAL_DIR_IN_CONTAINER
 
 
 def run_in_tune(
@@ -76,6 +77,7 @@ def run_in_tune(
     analysis = ray.tune.run(
         progress_reporter=reporter,
         callbacks=callbacks,
+        local_dir=RAY_LOCAL_DIR_IN_CONTAINER,
         **rllib_config,
     )
 

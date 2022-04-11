@@ -1,6 +1,7 @@
 """ The experiment provider provides access to environments inside containers."""
 
 import beobench.experiment.config_parser
+from beobench.constants import CONTAINER_RO_DIR
 
 try:
     import env_creator  # pylint: disable=import-outside-toplevel,import-error
@@ -12,7 +13,7 @@ except ImportError as e:
         )
     ) from e
 
-config = beobench.experiment.config_parser.parse("/tmp/beobench/config.yaml")
+config = beobench.experiment.config_parser.parse(CONTAINER_RO_DIR / "config.yaml")
 
 
 def create_env(env_config: dict = None) -> object:

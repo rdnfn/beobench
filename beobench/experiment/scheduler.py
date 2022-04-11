@@ -19,6 +19,7 @@ import beobench.experiment.definitions.utils
 import beobench.experiment.containers
 import beobench.experiment.config_parser
 import beobench.utils
+from beobench.constants import CONTAINER_DATA_DIR, CONTAINER_RO_DIR
 
 
 def run(
@@ -146,7 +147,8 @@ def run(
             )
         else:
             # run custom RL agent
-            args = ["python", f"/tmp/beobench/{agent_file.name}"]
+            container_ro_dir_abs = CONTAINER_RO_DIR.absolute()
+            args = ["python", str(container_ro_dir_abs / agent_file.name)]
             subprocess.check_call(args)
 
     else:
@@ -156,6 +158,8 @@ def run(
         # Ensure local_dir exists, and create otherwise
         local_dir_path = pathlib.Path(config["general"]["local_dir"])
         local_dir_path.mkdir(parents=True, exist_ok=True)
+        local_dir_path_abs = local_dir_path.absolute()
+        container_data_dir_abs = CONTAINER_DATA_DIR.absolute()
 
         if (
             config["general"]["beobench_extras"] == "extended"
@@ -195,11 +199,12 @@ def run(
         config_path = local_dir_path / "tmp" / "config.yaml"
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path_abs = config_path.absolute()
+        config_container_path_abs = (CONTAINER_RO_DIR / "config.yaml").absolute()
         with open(config_path, "w", encoding="utf-8") as conf_file:
             yaml.dump(config, conf_file)
         docker_flags += [
             "-v",
-            f"{config_path_abs}:/tmp/beobench/config.yaml:ro",
+            f"{config_path_abs}:{config_container_path_abs}:ro",
         ]
 
         # setup container name with unique identifier
@@ -209,10 +214,10 @@ def run(
         # load agent file (e.g. if RLlib integration not used)
         if agent_file is not None:
             ag_file_abs = agent_file.absolute()
-            ag_file_on_docker = f"/tmp/beobench/{agent_file.name}"
+            ag_file_on_docker_abs = (CONTAINER_RO_DIR / agent_file.name).absolute()
             docker_flags += [
                 "-v",
-                f"{ag_file_abs}:{ag_file_on_docker}:ro",
+                f"{ag_file_abs}:{ag_file_on_docker_abs}:ro",
             ]
 
         # enable docker-from-docker access only for built-in boptest integration.
@@ -267,7 +272,7 @@ def run(
                 # mount local Beobench repo
                 dev_path = pathlib.Path(dev_path)
                 dev_abs = dev_path.absolute()
-                dev_path_on_docker = "/tmp/beobench/beobench"
+                dev_path_on_docker = (CONTAINER_RO_DIR / "beobench").absolute()
                 docker_flags += [
                     "-v",
                     f"{dev_abs}:{dev_path_on_docker}_mount:ro",
@@ -286,7 +291,7 @@ def run(
             "run",
             # mount experiment data dir
             "-v",
-            f"{ray_path_abs}:/root/ray_results",
+            f"{local_dir_path_abs}:{container_data_dir_abs}",
             # automatically remove container when stopped/exited
             "--rm",
             # add more memory
