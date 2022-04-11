@@ -15,7 +15,6 @@ try:
 except ImportError:
     pass
 
-import beobench.experiment.definitions.utils
 import beobench.experiment.containers
 import beobench.experiment.config_parser
 import beobench.utils
@@ -190,9 +189,6 @@ def run(
 
         # We don't want the key to be logged in wandb
         del config["general"]["wandb_api_key"]
-
-        ### create path to store ray results at
-        ray_path_abs = str((local_dir_path / "ray_results").absolute())
 
         # Save config to local dir and add mount flag for config
         config_path = local_dir_path / "tmp" / "config.yaml"
