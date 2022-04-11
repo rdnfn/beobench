@@ -3,7 +3,6 @@
 import contextlib
 import subprocess
 import os
-import pathlib
 
 # To enable compatiblity with Python<=3.6 (e.g. for sinergym dockerfile)
 try:
