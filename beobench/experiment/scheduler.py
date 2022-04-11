@@ -173,7 +173,6 @@ def run(
             build_context=config["env"]["gym"],
             use_no_cache=config["general"]["use_no_cache"],
             beobench_extras=beobench_extras,
-            local_dir=local_dir_path,
         )
 
         ### part 2: create args and run command in docker container

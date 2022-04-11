@@ -18,7 +18,6 @@ except ImportError:
 def build_experiment_container(
     build_context: str,
     use_no_cache: bool = False,
-    local_dir: pathlib.Path = None,
     version: str = "latest",
     beobench_extras: str = "extended",
 ) -> None:
