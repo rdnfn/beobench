@@ -6,7 +6,8 @@ History
 ------------------
 
 * Feature: add non-normalised observations to info in energym integration (#62)
-* Feature: enable logging full episode data from RLlib (#62)
+* Feature: enable logging full episode data from RLlib and adding this data
+  to wandb (#62)
 * Feature: ship integrations with package improving image build times (#44)
 * Feature: add wandb logging support for random agent script (#59)
 * Feature: add rule-based agent script based on energym controller (#60)
