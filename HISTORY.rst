@@ -11,6 +11,7 @@ History
 * Feature: add wandb logging support for random agent script (#59)
 * Feature: add rule-based agent script based on energym controller (#60)
 * Fix: add importlib-resources backport package to requirements
+* Fix: allow users to disable reset() method in energym envs (#43)
 
 0.4.2 (2022-04-04)
 ------------------
