@@ -8,9 +8,8 @@ include PYPI_README.rst
 recursive-include tests *
 recursive-include beobench/beobench_contrib/gyms/ *
 
-recursive-include beobench/experiment/definitions *
-recursive-include beobench/experiment/dockerfiles *
-recursive-exclude beobench/experiment/definitions/archive/ *
+recursive-include beobench/data/configs *
+recursive-include beobench/data/agents *
 
 recursive-exclude docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
 recursive-exclude * __pycache__
