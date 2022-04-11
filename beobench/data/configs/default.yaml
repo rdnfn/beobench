@@ -1,0 +1,46 @@
+# agent config
+agent:
+  origin: rllib # either path to agent script or name of agent library (rllib)
+  config: # given to ray.tune.run() as arguments (since rllib set before)
+    run_or_experiment: PPO
+    stop:
+      timesteps_total: 400000
+    config:
+      lr: 0.005
+      model:
+        fcnet_activation: relu
+        fcnet_hiddens: [256,256,256,256]
+        post_fcnet_activation: tanh
+      batch_mode: complete_episodes
+      gamma: 0.999
+      horizon: 1000
+      metrics_smoothing_episodes: 5
+      framework: torch
+# environment config
+env:
+  name: MixedUseFanFCU-v0
+  gym: energym
+  config:
+    days: 365
+    energym_environment: MixedUseFanFCU-v0
+    gym_kwargs:
+      max_episode_length: 35040
+      normalize: true
+      step_period: 15
+    weather: GRC_A_Athens
+# general config
+general:
+  local_dir: ./beobench_results
+  wandb_project: null
+  wandb_entity: null
+  wandb_group: null
+  wandb_api_key: null
+  mlflow_name: null
+  use_gpu: False
+  docker_shm_size: 4gb
+  use_no_cache: False
+  dev_path: null
+  docker_flags: null
+  beobench_extras: "extended"
+  # Whether to log all episode data to wandb after running experiment
+  log_episode_data_from_rllib: False

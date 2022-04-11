@@ -92,6 +92,20 @@ def create_rllib_config(config: dict) -> dict:
     return rllib_config
 
 
+def get_standard_config(name: str):
+
+    """Get standard beobench config from beobench.data.configs
+
+    Returns:
+        dict: default beobench config dict
+    """
+
+    defs_path = importlib.resources.files("beobench.data.configs")
+    config = parse(defs_path.joinpath(f"{name}.yaml"))
+
+    return config
+
+
 def get_default() -> dict:
     """Get default beobench config
 
@@ -99,7 +113,4 @@ def get_default() -> dict:
         dict: default beobench config dict
     """
 
-    defs_path = importlib.resources.files("beobench.experiment.definitions")
-    config = parse(defs_path.joinpath("default.yaml"))
-
-    return config
+    return get_standard_config("default")
