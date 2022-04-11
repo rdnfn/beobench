@@ -1,8 +1,10 @@
 """RLlib integration in beobench."""
 
+import json
 import ray.tune
 import ray.tune.integration.wandb
 import ray.tune.integration.mlflow
+import wandb
 
 import beobench.utils
 import beobench.experiment.config_parser
@@ -116,3 +118,62 @@ def _create_mlflow_callback(
         experiment_name=mlflow_name, tracking_uri="file:/root/ray_results/mlflow"
     )
     return mlflow_callback
+
+
+def get_cross_episodes_data(path: str) -> dict:
+    """Get concatenated episode data from RLlib output.
+
+    This currently only concatenates data from info variable.
+    It further assumes that each info returned by step() in the env is
+    a dict of dicts.
+
+    Args:
+        path (str): path to RLlib output json file.
+
+    Returns:
+        dict: dictionary with episode data
+    """
+    # TODO: add non-info data to this logging procedure
+
+    # Open RLlib output
+    outputs = []
+    with open(path, encoding="UTF-8") as json_file:
+        for line in json_file.readlines():
+            outputs.append(json.loads(line))
+
+    # Get all keys of observations saved in info dict
+    all_obs_keys = []
+    for info_key in outputs[0]["infos"][0].keys():
+        all_obs_keys += list(outputs[0]["infos"][0][info_key].keys())
+
+    # Create empty (flat) dict of obs saved in info dict
+    eps_dict = {obs_key: [] for obs_key in all_obs_keys}
+
+    # Add data to dict, one step at a time
+    for output in outputs[:]:
+        for info in output["infos"]:
+            for info_key in info.keys():
+                obs_keys = outputs[0]["infos"][0][info_key].keys()
+                for obs_key in obs_keys:
+                    eps_dict[obs_key].append(info[info_key][obs_key])
+
+    return eps_dict
+
+
+def log_eps_data_to_wandb(eps_dict: dict, wandb_run_id: str) -> None:
+    """Log episode data to wandb.
+
+    To be used with concatenated episode data from get_cross_episodes_data().
+
+    Args:
+        eps_dict (dict): episode data
+        wandb_run_id (str): unique wandb run id to attach the data to.
+
+    """
+
+    wandb.init(id=wandb_run_id)
+
+    eps_dict_len = len(list(eps_dict.values())[0])
+    for i in range(eps_dict_len):
+        single_eps_dict = {key: values[i] for key, values in eps_dict.items()}
+        wandb.log(single_eps_dict)
