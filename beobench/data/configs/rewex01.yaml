@@ -10,8 +10,9 @@ agent:
   origin: rllib # either path to agent script or name of agent library (rllib)
   config: # given to ray.tune.run() as arguments (since rllib set before)
     run_or_experiment: PPO
+    log_to_file: True
     stop:
-      timesteps_total: 35040
+      timesteps_total: 100 #960 #35040
     config:
       lr: 0.0005
       model:
@@ -29,7 +30,7 @@ agent:
       soft_horizon: True
       # Number of timesteps collected for each SGD round. This defines the size
       # of each SGD epoch.
-      train_batch_size: 94 # single day of 15min steps
+      train_batch_size: 96 # single day of 15min steps
       # Total SGD batch size across all devices for SGD. This defines the
       # minibatch size within each epoch.
       sgd_minibatch_size: 24
@@ -54,5 +55,7 @@ env:
       normalize: true
       # Number of real-world minutes between timesteps in building simulation
       step_period: 15
+      # Whether to allow a complete environment reset
+      ignore_reset: True
     # Weather file to use for the scenario (possible files depend on env chosen)
     weather: ESP_CT_Barcelona
