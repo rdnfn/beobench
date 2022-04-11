@@ -7,18 +7,22 @@ import uuid
 import subprocess
 import pathlib
 import yaml
+import contextlib
 from typing import Union
 
-# RLlib integration is only available with extended extras.
+# To enable compatiblity with Python<=3.6 (e.g. for sinergym dockerfile)
 try:
-    import beobench.integration.rllib
+    import importlib.resources
 except ImportError:
-    pass
+    import importlib_resources
+    import importlib
+
+    importlib.resources = importlib_resources
 
 import beobench.experiment.containers
 import beobench.experiment.config_parser
 import beobench.utils
-from beobench.constants import CONTAINER_DATA_DIR, CONTAINER_RO_DIR
+from beobench.constants import CONTAINER_DATA_DIR, CONTAINER_RO_DIR, AVAILABLE_AGENTS
 
 
 def run(
@@ -109,10 +113,14 @@ def run(
     )
 
     # select agent script
-    if config["agent"]["origin"] == "rllib":
-        agent_file = None
+    if config["agent"]["origin"] in AVAILABLE_AGENTS:
+        agent_file = beobench.experiment.config_parser.get_agent(
+            config["agent"]["origin"]
+        )
+        package_agent = True
     else:
         agent_file = pathlib.Path(config["agent"]["origin"])
+        package_agent = False
 
     # TODO add parsing of high level API arguments env and agent
     if env or method:
@@ -134,21 +142,9 @@ def run(
         # Execute experiment
         # (this is usually reached from inside an experiment container)
 
-        # run experiment in ray tune
-
-        if config["agent"]["origin"] == "rllib":
-            beobench.integration.rllib.run_in_tune(
-                config,
-                wandb_entity=config["general"]["wandb_entity"],
-                wandb_project=config["general"]["wandb_project"],
-                mlflow_name=config["general"]["mlflow_name"],
-                use_gpu=config["general"]["use_gpu"],
-            )
-        else:
-            # run custom RL agent
-            container_ro_dir_abs = CONTAINER_RO_DIR.absolute()
-            args = ["python", str(container_ro_dir_abs / agent_file.name)]
-            subprocess.check_call(args)
+        container_ro_dir_abs = CONTAINER_RO_DIR.absolute()
+        args = ["python", str(container_ro_dir_abs / agent_file.name)]
+        subprocess.check_call(args)
 
     else:
         # build and run experiments in docker container
@@ -205,15 +201,6 @@ def run(
         # setup container name with unique identifier
         unique_id = uuid.uuid4().hex[:6]
         container_name = f"auto_beobench_experiment_{unique_id}"
-
-        # load agent file (e.g. if RLlib integration not used)
-        if agent_file is not None:
-            ag_file_abs = agent_file.absolute()
-            ag_file_on_docker_abs = (CONTAINER_RO_DIR / agent_file.name).absolute()
-            docker_flags += [
-                "-v",
-                f"{ag_file_abs}:{ag_file_on_docker_abs}:ro",
-            ]
 
         # enable docker-from-docker access only for built-in boptest integration.
         if config["env"]["gym"] == "boptest":
@@ -281,35 +268,49 @@ def run(
 
         cmd_in_container = " && ".join(cmd_list_in_container)
 
-        args = [
-            "docker",
-            "run",
-            # mount experiment data dir
-            "-v",
-            f"{local_dir_path_abs}:{container_data_dir_abs}",
-            # automatically remove container when stopped/exited
-            "--rm",
-            # add more memory
-            f"--shm-size={config['general']['docker_shm_size']}",
-            "--name",
-            container_name,
-            *docker_flags,
-            image_tag,
-            "/bin/bash",
-            "-c",
-            (
-                f"export WANDB_API_KEY={wandb_api_key} {cmd_in_container} && "
-                f"beobench run {beobench_flag_str} "
-                "--no-additional-container && bash"
-            ),
-        ]
+        with contextlib.ExitStack() as stack:
+            # if using package agent, get (potentially temp.) agent file path
+            if package_agent:
+                agent_file = stack.enter_context(
+                    importlib.resources.as_file(agent_file)
+                )
+            # load agent file
+            ag_file_abs = agent_file.absolute()
+            ag_file_on_docker_abs = (CONTAINER_RO_DIR / agent_file.name).absolute()
+            docker_flags += [
+                "-v",
+                f"{ag_file_abs}:{ag_file_on_docker_abs}:ro",
+            ]
 
-        arg_str = " ".join(args)
-        if wandb_api_key:
-            arg_str = arg_str.replace(wandb_api_key, "<API_KEY_HIDDEN>")
-        print(f"Executing docker command: {arg_str}")
+            args = [
+                "docker",
+                "run",
+                # mount experiment data dir
+                "-v",
+                f"{local_dir_path_abs}:{container_data_dir_abs}",
+                # automatically remove container when stopped/exited
+                "--rm",
+                # add more memory
+                f"--shm-size={config['general']['docker_shm_size']}",
+                "--name",
+                container_name,
+                *docker_flags,
+                image_tag,
+                "/bin/bash",
+                "-c",
+                (
+                    f"export WANDB_API_KEY={wandb_api_key} {cmd_in_container} && "
+                    f"beobench run {beobench_flag_str} "
+                    "--no-additional-container && bash"
+                ),
+            ]
 
-        subprocess.check_call(args)
+            arg_str = " ".join(args)
+            if wandb_api_key:
+                arg_str = arg_str.replace(wandb_api_key, "<API_KEY_HIDDEN>")
+            print(f"Executing docker command: {arg_str}")
+
+            subprocess.check_call(args)
 
 
 def _create_config_from_kwargs(**kwargs) -> dict:
