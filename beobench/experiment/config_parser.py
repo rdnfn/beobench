@@ -101,7 +101,7 @@ def get_standard_config(name: str) -> dict:
     """
 
     defs_path = importlib.resources.files("beobench.data.configs")
-    with importlib_resources.as_file(defs_path.joinpath(f"{name}.yaml")) as def_file:
+    with importlib.resources.as_file(defs_path.joinpath(f"{name}.yaml")) as def_file:
         config = parse(def_file)
 
     return config
