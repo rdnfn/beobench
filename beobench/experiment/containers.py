@@ -4,6 +4,8 @@ import contextlib
 import subprocess
 import os
 
+from beobench.constants import AVAILABLE_INTEGRATIONS
+
 # To enable compatiblity with Python<=3.6 (e.g. for sinergym dockerfile)
 try:
     import importlib.resources
@@ -48,12 +50,6 @@ def build_experiment_container(
     if use_no_cache:
         flags.append("--no-cache")
 
-    # pylint: disable=invalid-name
-    AVAILABLE_INTEGRATIONS = [
-        "boptest",
-        "sinergym",
-        "energym",
-    ]
     if build_context in AVAILABLE_INTEGRATIONS:
         image_name = f"beobench_{build_context}"
         gym_name = build_context
