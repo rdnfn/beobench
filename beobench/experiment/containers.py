@@ -104,7 +104,7 @@ def build_experiment_container(
         # This includes installation of beobench in experiment image
         complete_image_tag = f"{image_name}_complete:{version}"
         complete_dockerfile = str(
-            importlib.resources.files("beobench.experiment.dockerfiles").joinpath(
+            importlib.resources.files("beobench.data.dockerfiles").joinpath(
                 "Dockerfile.experiment"
             )
         )
