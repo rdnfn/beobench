@@ -1,8 +1,10 @@
 """Random agent for testing beobench experiment containers"""
 
-from beobench.experiment.provider import config, create_env
 import wandb
 import numpy as np
+import beobench.integration.wandb
+
+from beobench.experiment.provider import config, create_env
 
 # Setting up experiment tracking via wandb
 wandb_used = config["general"]["wandb_project"] is not None
@@ -36,12 +38,15 @@ num_steps_per_ep = 0
 episode = 0
 ep_rewards = []
 
+infos = []
 for _ in range(num_timesteps):
     episode += 1
     num_steps_per_ep += 1
 
     action = env.action_space.sample()
     observation, reward, done, info = env.step(action)
+
+    infos.append(info)
 
     ep_rewards.append(reward)
 
@@ -55,4 +60,14 @@ for _ in range(num_timesteps):
         if done:
             observation = env.reset()
 env.close()
+
+if config["general"]["wandb_project"] and config["general"]["log_full_episode_data"]:
+
+    eps_data = {key: [] for key in infos[0].keys()}
+    for info in infos:
+        for key, value in info.items():
+            eps_data[key].append(value)
+
+    beobench.integration.wandb.log_eps_data(eps_data)
+
 print("Random agent: completed test.")
