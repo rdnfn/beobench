@@ -3,7 +3,7 @@
 import wandb
 
 
-def log_eps_data_to_wandb(eps_dict: dict) -> None:
+def log_eps_data(eps_dict: dict) -> None:
     """Log episode data to wandb.
 
     To be used with concatenated episode data from get_cross_episodes_data().

@@ -111,7 +111,7 @@ def run_in_tune(
 
         output_file = output_dir / os.listdir(output_dir)[0]
         data = get_cross_episodes_data(output_file)
-        beobench.integration.wandb.log_eps_data_to_wandb(data)
+        beobench.integration.wandb.log_eps_data(data)
 
     return analysis
 
