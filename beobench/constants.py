@@ -12,7 +12,7 @@ AVAILABLE_INTEGRATIONS = [
 # available agent scripts
 AVAILABLE_AGENTS = [
     "rllib",
-    "random",
+    "random_action",
 ]
 
 # read-only dir in container
