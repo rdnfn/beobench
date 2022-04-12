@@ -141,17 +141,6 @@ A reminder for the maintainers on how to deploy. Follow this checklist (inspired
 
         bump2version patch # possible: major / minor / patch
 
-3. Push commits
-4. Build the package
-
-    .. code-block:: console
-
-        python3 -m build
-
-5. Upload the package (this will ask for password/token from pypi.org)
-
-    .. code-block:: console
-
-        twine upload dist/*
-
-6. Add release tag on github
+3. Push commits *and tags* (`see here how to do this in vscode <https://stackoverflow.com/a/66086007>`_)
+4. Merge pull request into ``main`` branch.
+5. Add release on GitHub (using existing tag)
