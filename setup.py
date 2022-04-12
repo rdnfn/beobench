@@ -10,17 +10,19 @@ with open("PYPI_README.rst", encoding="UTF-8") as readme_file:
 with open("HISTORY.rst", encoding="UTF-8") as history_file:
     history = history_file.read()
 
-version = "0.4.2"  # pylint: disable=invalid-name
+version = "0.4.3"  # pylint: disable=invalid-name
 
 requirements = [
     "docker",
     "click",
     "pyyaml",
+    "importlib-resources",  # backport of importlib.resources, required for Python<=3.8
 ]
 
 # The extended requirements are only used inside experiment/gym containers
 extended_requirements = [
     "gym",
+    "wandb",
 ]
 
 rllib_requirements = [

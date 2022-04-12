@@ -1,13 +1,11 @@
-# REWEX Experiment 01
-# Run with the command
-# beobench run -c beobench/data/configs/rewex01_test01.yaml -d .[extended] --use-gpu --docker-shm-size 28gb
+# Simple test case for energym integration
 
 # agent config
 agent:
-  origin: beobench/data/agents/random_agent.py # either path to agent script or name of agent library (rllib)
+  origin: random_action # either path to agent script or name of standard agent
   config:
     stop:
-      timesteps_total: 35040
+      timesteps_total: 2
     config:
       horizon: 96
 
@@ -27,7 +25,7 @@ env:
       normalize: true
       # Number of real-world minutes between timesteps in building simulation
       step_period: 15
+      # Whether to allow a complete environment reset
+      ignore_reset: True
     # Weather file to use for the scenario (possible files depend on env chosen)
     weather: ESP_CT_Barcelona
-general:
-  wandb_group: random_agent

@@ -2,6 +2,21 @@
 History
 =======
 
+0.4.3 (2022-04-00)
+------------------
+
+* Feature: enable easy access to standard configs via util method
+* Feature: add non-normalised observations to info in energym integration (#62)
+* Feature: enable logging full episode data from RLlib and adding this data
+  to wandb (#62)
+* Feature: ship integrations with package improving image build times (#44)
+* Feature: add wandb logging support for random agent script (#59)
+* Feature: add rule-based agent script based on energym controller (#60)
+* Fix: add importlib-resources backport package to requirements
+* Fix: allow users to disable reset() method in energym envs (#43)
+* Aux: add automatic deployment of PyPI package via GitHub actions (#50)
+* Aux: add tests and automatic checks on PRs (#25)
+
 0.4.2 (2022-04-04)
 ------------------
 

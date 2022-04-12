@@ -4,7 +4,7 @@
 
 # agent config
 agent:
-  origin: beobench/data/agents/random_agent.py # either path to agent script or name of agent library (rllib)
+  origin: beobench/data/agents/energym_controller.py # either path to agent script or name of agent library (rllib)
   config:
     stop:
       timesteps_total: 35040
@@ -30,4 +30,4 @@ env:
     # Weather file to use for the scenario (possible files depend on env chosen)
     weather: ESP_CT_Barcelona
 general:
-  wandb_group: random_agent
+  wandb_group: energym_controller
