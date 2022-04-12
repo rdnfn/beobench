@@ -120,3 +120,4 @@ docs/generated/
 beobench_results*
 notebooks/archive
 *beo.yaml
+*beo.yml
