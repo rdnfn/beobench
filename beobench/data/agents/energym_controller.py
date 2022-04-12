@@ -61,7 +61,7 @@ for _ in range(num_timesteps):
     action["Bd_Ch_EV2Bat_sp"] = [0.0]
 
     # The steps below are based on the energym integration step() function
-    # See https://github.com/rdnfn/beobench_contrib/blob/4c240bb/gyms/energym/energymGymEnv.py#L232
+    # See https://github.com/rdnfn/beobench_contrib/blob/4c240bb/gyms/energym/energymGymEnv.py#L232 # pylint: disable=line-too-long
 
     # take step in energym environment
     outputs = env.env.step(action)
