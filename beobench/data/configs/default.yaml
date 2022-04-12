@@ -44,4 +44,4 @@ general:
   docker_flags: null
   beobench_extras: "extended"
   # Whether to log all episode data to wandb after running experiment
-  log_episode_data_from_rllib: False
+  log_full_episode_data: False

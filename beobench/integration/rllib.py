@@ -59,7 +59,7 @@ def run_in_tune(
     else:
         callbacks = []
 
-    if config["general"]["log_episode_data_from_rllib"]:
+    if config["general"]["log_full_episode_data"]:
         output_dir = (CONTAINER_DATA_DIR / "outputs" / f"outputs-{run_id}").absolute()
         config["agent"]["config"]["config"]["output"] = str(output_dir)
 
@@ -97,7 +97,7 @@ def run_in_tune(
 
     if (
         config["general"]["wandb_project"]
-        and config["general"]["log_episode_data_from_rllib"]
+        and config["general"]["log_full_episode_data"]
     ):
 
         wandb.init(
