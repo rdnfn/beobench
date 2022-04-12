@@ -14,6 +14,8 @@ History
 * Feature: add rule-based agent script based on energym controller (#60)
 * Fix: add importlib-resources backport package to requirements
 * Fix: allow users to disable reset() method in energym envs (#43)
+* Aux: add automatic deployment of PyPI package via GitHub actions (#50)
+* Aux: add tests and automatic checks on PRs (#25)
 
 0.4.2 (2022-04-04)
 ------------------
