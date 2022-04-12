@@ -10,6 +10,7 @@ import os
 
 import beobench.utils
 import beobench.experiment.config_parser
+import beobench.integration.wandb
 from beobench.constants import RAY_LOCAL_DIR_IN_CONTAINER, CONTAINER_DATA_DIR
 
 
@@ -110,7 +111,7 @@ def run_in_tune(
 
         output_file = output_dir / os.listdir(output_dir)[0]
         data = get_cross_episodes_data(output_file)
-        log_eps_data_to_wandb(data, wandb_run_id=wandb.run.id)
+        beobench.integration.wandb.log_eps_data_to_wandb(data)
 
     return analysis
 
@@ -170,22 +171,3 @@ def get_cross_episodes_data(path: str) -> dict:
                     eps_dict[obs_key].append(info[info_key][obs_key])
 
     return eps_dict
-
-
-def log_eps_data_to_wandb(eps_dict: dict, wandb_run_id: str) -> None:
-    """Log episode data to wandb.
-
-    To be used with concatenated episode data from get_cross_episodes_data().
-
-    Args:
-        eps_dict (dict): episode data
-        wandb_run_id (str): unique wandb run id to attach the data to.
-
-    """
-
-    wandb.init(id=wandb_run_id)
-
-    eps_dict_len = len(list(eps_dict.values())[0])
-    for i in range(eps_dict_len):
-        single_eps_dict = {key: values[i] for key, values in eps_dict.items()}
-        wandb.log(single_eps_dict)
