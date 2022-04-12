@@ -2,7 +2,7 @@
 History
 =======
 
-0.4.3 (2022-04-00)
+0.4.3 (2022-04-12)
 ------------------
 
 * Feature: enable easy access to standard configs via util method
