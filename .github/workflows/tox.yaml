@@ -1,10 +1,6 @@
-name: Beobench tests on pull request
+name: Tox tests
 
-on:
-  pull_request:
-    branches:
-      - main
-      - dev/general
+on: [push, pull_request]
 
 jobs:
   build:
