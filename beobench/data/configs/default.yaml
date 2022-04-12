@@ -16,6 +16,7 @@ agent:
       horizon: 1000
       metrics_smoothing_episodes: 5
       framework: torch
+      num_workers: 1 # this is required for energym to work (can fail silently otherwise)
 # environment config
 env:
   name: MixedUseFanFCU-v0
