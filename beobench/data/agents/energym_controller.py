@@ -4,6 +4,8 @@ from beobench.experiment.provider import config, create_env
 import wandb
 import numpy as np
 
+import beobench.integration.wandb
+
 import energym.examples.Controller  # import LabController
 
 # Setting up experiment tracking via wandb
@@ -36,9 +38,9 @@ env = create_env()
 inputs = env.env.get_inputs_names()
 controller = energym.examples.Controller.LabController(
     control_list=inputs,
-    lower_tol=0.3,
-    upper_tol=0.8,
-    nighttime_setback=True,
+    lower_tol=0.2,
+    upper_tol=0.2,
+    nighttime_setback=False,
     nighttime_start=18,
     nighttime_end=6,
     nighttime_temp=18,
@@ -50,6 +52,7 @@ outputs = env.env.get_output()
 num_steps_per_ep = 0
 episode = 0
 ep_rewards = []
+infos = []
 hour = 0
 
 for _ in range(num_timesteps):
@@ -70,6 +73,22 @@ for _ in range(num_timesteps):
     # evaluate reward
     reward = env.compute_reward(outputs)
 
+    if (
+        config["general"]["wandb_project"]
+        and config["general"]["log_full_episode_data"]
+    ):
+        # create info with original observations
+        flattened_acts = {
+            key: (
+                value[0]
+                if not isinstance(value[0], (list, np.ndarray))
+                else value[0][0]
+            )
+            for key, value in action.items()
+        }
+        info = {"obs": outputs, "acts": flattened_acts}
+        infos.append(info)
+
     ep_rewards.append(reward)
 
     if done or num_steps_per_ep >= horizon:
@@ -82,4 +101,13 @@ for _ in range(num_timesteps):
         if done:
             observation = env.reset()
 env.close()
+
+if config["general"]["wandb_project"] and config["general"]["log_full_episode_data"]:
+
+    eps_data = {key: [] for key in infos[0].keys()}
+    for info in infos:
+        for key, value in info.items():
+            eps_data[key].append(value)
+
+    beobench.integration.wandb.log_eps_data(infos)
 print("Energym rule-based controller agent: completed test.")
