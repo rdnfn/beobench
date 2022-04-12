@@ -13,6 +13,7 @@ AVAILABLE_INTEGRATIONS = [
 AVAILABLE_AGENTS = [
     "rllib",
     "random_action",
+    "energym_controller",
 ]
 
 # read-only dir in container
