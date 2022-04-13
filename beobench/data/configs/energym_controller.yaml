@@ -7,3 +7,5 @@ agent:
       timesteps_total: 480
     config:
       horizon: 480
+general:
+  wandb_group: energym_controller

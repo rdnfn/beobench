@@ -36,3 +36,5 @@ agent:
       log_level: "WARNING"
       num_workers: 1 # this is required for energym to work (can fail silently otherwise)
       num_gpus: 1
+general:
+  wandb_group: ppo
