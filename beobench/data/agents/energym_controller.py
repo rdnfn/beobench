@@ -109,5 +109,5 @@ if config["general"]["wandb_project"] and config["general"]["log_full_episode_da
         for key, value in info.items():
             eps_data[key].append(value)
 
-    beobench.integration.wandb.log_eps_data(infos)
+    beobench.integration.wandb.log_eps_data(eps_data)
 print("Energym rule-based controller agent: completed test.")
