@@ -110,8 +110,10 @@ def run_in_tune(
         print("Beobench: wandb run id", wandb.run.id)
 
         output_file = output_dir / os.listdir(output_dir)[0]
-        data = get_cross_episodes_data(output_file)
-        beobench.integration.wandb.log_eps_data(data)
+        infos = get_cross_episodes_data(output_file)
+
+        for info in infos:
+            wandb.log(info)
 
     return analysis
 
@@ -161,13 +163,11 @@ def get_cross_episodes_data(path: str) -> dict:
 
     # Create empty (flat) dict of obs saved in info dict
     eps_dict = {obs_key: [] for obs_key in all_obs_keys}
+    infos = []
 
     # Add data to dict, one step at a time
     for output in outputs[:]:
         for info in output["infos"]:
-            for info_key in info.keys():
-                obs_keys = outputs[0]["infos"][0][info_key].keys()
-                for obs_key in obs_keys:
-                    eps_dict[obs_key].append(info[info_key][obs_key])
+            infos.append(info)
 
-    return eps_dict
+    return infos

@@ -63,11 +63,7 @@ env.close()
 
 if config["general"]["wandb_project"] and config["general"]["log_full_episode_data"]:
 
-    eps_data = {key: [] for key in infos[0].keys()}
     for info in infos:
-        for key, value in info.items():
-            eps_data[key].append(value)
-
-    beobench.integration.wandb.log_eps_data(eps_data)
+        wandb.log(info)
 
 print("Random agent: completed test.")
