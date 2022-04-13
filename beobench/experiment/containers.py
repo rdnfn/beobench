@@ -20,6 +20,7 @@ def build_experiment_container(
     build_context: str,
     use_no_cache: bool = False,
     version: str = "latest",
+    beobench_package: str = "beobench",
     beobench_extras: str = "extended",
 ) -> None:
     """Build experiment container from beobench/integrations/boptest/Dockerfile.
@@ -70,9 +71,9 @@ def build_experiment_container(
         image_name = f"beobench_custom_{context_name}"
         package_build_context = False
 
-    base_image_tag = f"{image_name}_base:{version}"
+    stage0_image_tag = f"{image_name}_base:{version}"
 
-    print(f"Building experiment base image `{base_image_tag}`...")
+    print(f"Building experiment base image `{stage0_image_tag}`...")
 
     with contextlib.ExitStack() as stack:
         # if using build context from beobench package, get (potentially temp.) build
@@ -81,57 +82,102 @@ def build_experiment_container(
             build_context = stack.enter_context(importlib.resources.as_file(gym_source))
             build_context = str(build_context.absolute())
 
-        # Part 1: build base experiment image
-        args = [
+        # Part 1: build stage 0 (base) experiment image
+        stage0_build_args = [
             *build_commands,
             "-t",
-            base_image_tag,
+            stage0_image_tag,
             *flags,
             build_context,
         ]
         env = os.environ.copy()
-        print("Running command: " + " ".join(args))
+        print("Running command: " + " ".join(stage0_build_args))
         subprocess.check_call(
-            args,
+            stage0_build_args,
             env=env,  # this enables accessing dockerfile in subdir
         )
 
-        # Part 2: build complete experiment image
+        # Part 2: build stage 1 (intermediate) experiment image
         # This includes installation of beobench in experiment image
-        complete_image_tag = f"{image_name}_complete:{version}"
-        complete_dockerfile = str(
+        stage1_image_tag = f"{image_name}_intermediate:{version}"
+        stage1_dockerfile = str(
             importlib.resources.files("beobench.data.dockerfiles").joinpath(
                 "Dockerfile.experiment"
             )
         )
 
+        stage1_build_args = [
+            *build_commands,
+            "-t",
+            stage1_image_tag,
+            "-f",
+            "-",
+            "--build-arg",
+            f"GYM_IMAGE={stage0_image_tag}",
+            "--build-arg",
+            f"EXTRAS={beobench_extras}",
+            *flags,
+            build_context,
+        ]
+
         # Load dockerfile into pipe
         with subprocess.Popen(
-            ["cat", complete_dockerfile], stdout=subprocess.PIPE
+            ["cat", stage1_dockerfile], stdout=subprocess.PIPE
         ) as proc:
-            beobench_build_args = [
-                *build_commands,
-                "-t",
-                complete_image_tag,
-                "-f",
-                "-",
-                "--build-arg",
-                f"GYM_IMAGE={base_image_tag}",
-                "--build-arg",
-                f"EXTRAS={beobench_extras}",
-                *flags,
-                build_context,
-            ]
-            print("Running command: " + " ".join(beobench_build_args))
+            print("Running command: " + " ".join(stage1_build_args))
             subprocess.check_call(
-                beobench_build_args,
+                stage1_build_args,
+                stdin=proc.stdout,
+                env=env,  # this enables accessing dockerfile in subdir
+            )
+
+        # Part 3: build stage 2 (complete) experiment image
+        stage2_dockerfile = str(
+            importlib.resources.files("beobench.data.dockerfiles").joinpath(
+                "Dockerfile.beobench_install"
+            )
+        )
+        if beobench_package is None:
+            beobench_package = "beobench"
+        if beobench_package == "beobench":
+            package_type = "pypi"
+            build_context = "-"
+        else:
+            package_type = "local"
+            build_context = beobench_package
+        stage2_image_tag = f"{image_name}_complete:{version}"
+
+        stage2_build_args = [
+            *build_commands,
+            "-t",
+            stage2_image_tag,
+            "-f",
+            "-",
+            "--build-arg",
+            f"PREV_IMAGE={stage1_image_tag}",
+            "--build-arg",
+            f"PACKAGE={beobench_package}",
+            "--build-arg",
+            f"PACKAGE_TYPE={package_type}",
+            "--build-arg",
+            f"EXTRAS={beobench_extras}",
+            *flags,
+            beobench_package,
+        ]
+
+        with subprocess.Popen(
+            ["cat", stage2_dockerfile], stdout=subprocess.PIPE
+        ) as proc:
+            print("Running command: " + " ".join(stage2_build_args))
+            subprocess.check_call(
+                stage2_build_args,
                 stdin=proc.stdout,
                 env=env,  # this enables accessing dockerfile in subdir
             )
 
     print("Experiment gym image build finished.")
 
-    return complete_image_tag
+    return stage2_image_tag
 
 
 def create_docker_network(network_name: str) -> None:

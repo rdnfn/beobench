@@ -168,6 +168,7 @@ def run(
             build_context=config["env"]["gym"],
             use_no_cache=config["general"]["use_no_cache"],
             beobench_extras=beobench_extras,
+            beobench_package=dev_path,
         )
 
         ### part 2: create args and run command in docker container
@@ -229,45 +230,6 @@ def run(
         beobench_flags.append(f'--config="{config}"')
         beobench_flag_str = " ".join(beobench_flags)
 
-        # Setup dev mode
-        # In dev mode Beobench is installed directly from github or local path
-        dev_path = config["general"]["dev_path"]
-        cmd_list_in_container = [""]
-        if dev_path is not None:
-            cmd_list_in_container.append("pip uninstall --yes beobench")
-            if "https" in dev_path:
-                # clone directly from web adress
-                cmd_list_in_container.append(f"pip install {dev_path}")
-            else:
-                # use local Beobench repo
-                if "[" in dev_path:
-                    dev_paths = dev_path.split("[")
-                    if len(dev_paths) > 2:
-                        raise ValueError(
-                            f"Dev path does not appear compatible: {dev_path}"
-                        )
-                    dev_path = dev_paths[0]
-                    dev_extras = "[" + dev_paths[1]
-                else:
-                    dev_extras = ""
-
-                # mount local Beobench repo
-                dev_path = pathlib.Path(dev_path)
-                dev_abs = dev_path.absolute()
-                dev_path_on_docker = (CONTAINER_RO_DIR / "beobench").absolute()
-                docker_flags += [
-                    "-v",
-                    f"{dev_abs}:{dev_path_on_docker}_mount:ro",
-                ]
-                cmd_list_in_container.append(
-                    f"cp -r {dev_path_on_docker}_mount {dev_path_on_docker}"
-                )
-                cmd_list_in_container.append(
-                    f"python -m pip install {dev_path_on_docker}{dev_extras}"
-                )
-
-        cmd_in_container = " && ".join(cmd_list_in_container)
-
         with contextlib.ExitStack() as stack:
             # if using package agent, get (potentially temp.) agent file path
             if package_agent:
@@ -299,7 +261,7 @@ def run(
                 "/bin/bash",
                 "-c",
                 (
-                    f"export WANDB_API_KEY={wandb_api_key} {cmd_in_container} && "
+                    f"export WANDB_API_KEY={wandb_api_key} && "
                     f"beobench run {beobench_flag_str} "
                     "--no-additional-container && bash"
                 ),
