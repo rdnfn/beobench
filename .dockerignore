@@ -107,3 +107,6 @@ ENV/
 
 # Apple
 *.DS_Store
+
+# beobench
+*beobench_results/
