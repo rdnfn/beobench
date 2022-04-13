@@ -4,7 +4,7 @@ History
 
 0.4.4 (2022-04-00)
 ------------------
-* Improvements
+* Improvements:
 
   * Make dev beobench build part of image build process for improved
     Speed.
