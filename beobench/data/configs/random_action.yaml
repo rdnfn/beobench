@@ -3,8 +3,6 @@
 agent:
   origin: random_action
   config:
-    stop:
-      timesteps_total: 480
     config:
       horizon: 480
 general:

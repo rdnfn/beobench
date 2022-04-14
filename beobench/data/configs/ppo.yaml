@@ -8,8 +8,6 @@ agent:
   config: # given to ray.tune.run() as arguments (since rllib set before)
     run_or_experiment: PPO
     log_to_file: True
-    stop:
-      timesteps_total: 480 #960 #35040
     config:
       lr: 0.0005
       model:
@@ -17,7 +15,7 @@ agent:
         fcnet_hiddens: [256,256,256,256]
         post_fcnet_activation: tanh
       batch_mode: complete_episodes
-      gamma: 0.999
+      gamma: 0.999999
       # Number of steps after which the episode is forced to terminate. Defaults
       # to `env.spec.max_episode_steps` (if present) for Gym envs.
       horizon: 480
@@ -27,10 +25,10 @@ agent:
       soft_horizon: True
       # Number of timesteps collected for each SGD round. This defines the size
       # of each SGD epoch.
-      train_batch_size: 96 # 1/5 day of 3min steps
+      train_batch_size: 480 # 1/5 day of 3min steps
       # Total SGD batch size across all devices for SGD. This defines the
       # minibatch size within each epoch.
-      sgd_minibatch_size: 24
+      sgd_minibatch_size: 96
       metrics_smoothing_episodes: 1
       framework: torch
       log_level: "WARNING"
