@@ -9,6 +9,7 @@ from beobench.experiment.provider import config, create_env
 wandb_used = config["general"]["wandb_project"] is not None
 if wandb_used:
     wandb.init(
+        config=config,
         project=config["general"]["wandb_project"],
         entity=config["general"]["wandb_entity"],
         group=config["general"]["wandb_group"],

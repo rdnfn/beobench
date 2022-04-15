@@ -4,14 +4,13 @@ from beobench.experiment.provider import config, create_env
 import wandb
 import numpy as np
 
-import beobench.integration.wandb
-
 import energym.examples.Controller  # import LabController
 
 # Setting up experiment tracking via wandb
 wandb_used = config["general"]["wandb_project"] is not None
 if wandb_used:
     wandb.init(
+        config=config,
         project=config["general"]["wandb_project"],
         entity=config["general"]["wandb_entity"],
         group=config["general"]["wandb_group"],
