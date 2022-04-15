@@ -18,5 +18,6 @@ env:
       step_period: 3
       # Whether to allow a complete environment reset
       ignore_reset: True
+      power_in_reward: [Fa_E_HVAC]
     # Weather file to use for the scenario (possible files depend on env chosen)
     weather: ESP_CT_Barcelona
