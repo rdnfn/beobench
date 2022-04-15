@@ -109,4 +109,4 @@ ENV/
 *.DS_Store
 
 # beobench
-*beobench_results/
+beobench_results
