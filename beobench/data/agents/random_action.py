@@ -63,7 +63,9 @@ env.close()
 
 if config["general"]["wandb_project"] and config["general"]["log_full_episode_data"]:
 
+    env_step = 0
     for info in infos:
-        wandb.log(info)
+        env_step += 1
+        wandb.log({**info, "env_step": env_step})
 
 print("Random agent: completed test.")
