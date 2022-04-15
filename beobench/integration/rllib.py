@@ -111,18 +111,19 @@ def run_in_tune(
         ]
 
         wandb.init(
-            resume=False,
             id=run_id,
             project=config["general"]["wandb_project"],
             entity=config["general"]["wandb_entity"],
             group=config["general"]["wandb_group"],
         )
 
+        env_step = 0
         for out_file in output_files:
             print(f"Beobench: logging full episode data to wandb from '{out_file}'.")
             infos = get_cross_episodes_data(out_file)
             for info in infos:
-                wandb.log(info)
+                env_step += 1
+                wandb.log({**info, "env_step": env_step})
 
     return analysis
 
