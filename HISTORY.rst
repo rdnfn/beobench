@@ -7,7 +7,12 @@ History
 * Improvements:
 
   * Make dev beobench build part of image build process for improved
-    Speed.
+    speed.
+
+* Fixes
+
+  * Enable automatic episode data logging in RLlib integration for long
+    training periods.
 
 0.4.3 (2022-04-12)
 ------------------
