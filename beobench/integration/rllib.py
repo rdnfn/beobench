@@ -101,19 +101,28 @@ def run_in_tune(
         and config["general"]["log_full_episode_data"]
     ):
 
+        # get all output files (this can be more than one if a lot of data)
+        output_files = os.listdir(output_dir)
+        # get current order
+        order = [int(f.split("_")[-1][0]) for f in output_files]
+        # add dir to filenames and reorder
+        output_files = [
+            output_dir / output_files[order.index(i)] for i in range(len(output_files))
+        ]
+
         wandb.init(
+            resume=False,
             id=run_id,
             project=config["general"]["wandb_project"],
             entity=config["general"]["wandb_entity"],
             group=config["general"]["wandb_group"],
         )
-        print("Beobench: wandb run id", wandb.run.id)
 
-        output_file = output_dir / os.listdir(output_dir)[0]
-        infos = get_cross_episodes_data(output_file)
-
-        for info in infos:
-            wandb.log(info)
+        for out_file in output_files:
+            print(f"Beobench: logging full episode data to wandb from '{out_file}'.")
+            infos = get_cross_episodes_data(out_file)
+            for info in infos:
+                wandb.log(info)
 
     return analysis
 
