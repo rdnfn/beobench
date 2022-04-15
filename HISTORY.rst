@@ -8,8 +8,9 @@ History
 
   * Make dev beobench build part of image build process for improved
     speed.
+  * Add number of environment steps (``env_step``) to wandb logging.
 
-* Fixes
+* Fixes:
 
   * Enable automatic episode data logging in RLlib integration for long
     training periods.
