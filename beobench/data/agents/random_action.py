@@ -2,7 +2,6 @@
 
 import wandb
 import numpy as np
-import beobench.integration.wandb
 
 from beobench.experiment.provider import config, create_env
 
