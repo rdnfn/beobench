@@ -1,7 +1,8 @@
 """ The experiment provider provides access to environments inside containers."""
 
 import beobench.experiment.config_parser
-from beobench.constants import CONTAINER_RO_DIR
+import importlib
+from beobench.constants import CONTAINER_RO_DIR, AVAILABLE_WRAPPERS
 
 try:
     import env_creator  # pylint: disable=import-outside-toplevel,import-error
@@ -9,7 +10,7 @@ except ImportError as e:
     raise ImportError(
         (
             "Cannot import env_creator module. Is Beobench being executed"
-            "inside beobench experiment container?"
+            "inside a Beobench experiment container?"
         )
     ) from e
 
@@ -34,4 +35,22 @@ def create_env(env_config: dict = None) -> object:
     if env_config is None:
         env_config = config["env"]["config"]
 
-    return env_creator.create_env(env_config)
+    env = env_creator.create_env(env_config)
+
+    for wrapper_dict in config["wrappers"]:
+        wrapper = _get_wrapper(wrapper_dict)
+        env = wrapper(env, wrapper_dict["config"])
+
+    return env
+
+
+def _get_wrapper(wrapper_dict):
+    origin = wrapper_dict["origin"]
+
+    if origin in AVAILABLE_WRAPPERS:
+        wrapper_module_str = "beobench.wrappers." + origin
+        wrapper_module = importlib.import_module(wrapper_module_str)
+        wrapper_class = getattr(wrapper_module, wrapper_dict["class"])
+        return wrapper_class
+    else:
+        raise NotImplementedError("Non-standard wrappers are currently not supported.")

@@ -16,6 +16,11 @@ AVAILABLE_AGENTS = [
     "energym_controller",
 ]
 
+AVAILABLE_WRAPPERS = [
+    "general",
+    "energym",
+]
+
 # read-only dir in container
 CONTAINER_RO_DIR = pathlib.Path("/root/beobench_configs")
 
