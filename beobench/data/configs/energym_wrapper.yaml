@@ -1,0 +1,11 @@
+wrappers:
+  - origin: general
+    class: FixDictActs
+    config:
+      fixed_actions:
+        P1_onoff_HP_sp: [1]
+        P2_onoff_HP_sp: [1]
+        P3_onoff_HP_sp: [1]
+        P4_onoff_HP_sp: [1]
+        Bd_Ch_EV1Bat_sp: [1.]
+        Bd_Ch_EV2Bat_sp: [1.]
