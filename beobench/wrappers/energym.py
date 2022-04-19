@@ -26,5 +26,7 @@ class CustomReward(gym.Wrapper):
     def step(self, action):
         obs, _, done, info = self.env.step(action)
 
-        reward = sum([info["obs"][key] * value for key, value in self.info_obs_weights])
+        reward = sum(
+            [info["obs"][key] * value for key, value in self.info_obs_weights.items()]
+        )
         return obs, reward, done, info
