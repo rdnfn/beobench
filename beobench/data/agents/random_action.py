@@ -9,7 +9,7 @@ from beobench.experiment.provider import config, create_env
 wandb_used = config["general"]["wandb_project"] is not None
 if wandb_used:
     wandb.init(
-        config=config,
+        config={"beobench": config},
         project=config["general"]["wandb_project"],
         entity=config["general"]["wandb_entity"],
         group=config["general"]["wandb_group"],
@@ -60,12 +60,5 @@ for _ in range(num_timesteps):
         if done:
             observation = env.reset()
 env.close()
-
-if config["general"]["wandb_project"] and config["general"]["log_full_episode_data"]:
-
-    env_step = 0
-    for info in infos:
-        env_step += 1
-        wandb.log({**info, "env_step": env_step})
 
 print("Random agent: completed test.")

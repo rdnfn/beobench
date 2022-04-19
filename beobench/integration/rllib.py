@@ -4,13 +4,11 @@ import json
 import ray.tune
 import ray.tune.integration.wandb
 import ray.tune.integration.mlflow
-import wandb
-import os
 
 import beobench.utils
 import beobench.experiment.config_parser
 import beobench.integration.wandb
-from beobench.constants import RAY_LOCAL_DIR_IN_CONTAINER, CONTAINER_DATA_DIR
+from beobench.constants import RAY_LOCAL_DIR_IN_CONTAINER
 
 
 def run_in_tune(
@@ -38,7 +36,6 @@ def run_in_tune(
     Returns:
         ray.tune.ExperimentAnalysis: analysis object from experiment.
     """
-    run_id = config["autogen"]["run_id"]
 
     if config["general"]["wandb_project"] and config["general"]["wandb_entity"]:
 
@@ -59,10 +56,6 @@ def run_in_tune(
         callbacks = [_create_mlflow_callback(config["general"]["mlflow_name"])]
     else:
         callbacks = []
-
-    if config["general"]["log_full_episode_data"]:
-        output_dir = (CONTAINER_DATA_DIR / "outputs" / f"outputs-{run_id}").absolute()
-        config["agent"]["config"]["config"]["output"] = str(output_dir)
 
     # combine the three incomplete ray tune experiment
     # definitions into a single complete one.
@@ -95,35 +88,6 @@ def run_in_tune(
         local_dir=RAY_LOCAL_DIR_IN_CONTAINER,
         **rllib_config,
     )
-
-    if (
-        config["general"]["wandb_project"]
-        and config["general"]["log_full_episode_data"]
-    ):
-
-        # get all output files (this can be more than one if a lot of data)
-        output_files = os.listdir(output_dir)
-        # get current order
-        order = [int(f.split("_")[-1][0]) for f in output_files]
-        # add dir to filenames and reorder
-        output_files = [
-            output_dir / output_files[order.index(i)] for i in range(len(output_files))
-        ]
-
-        wandb.init(
-            id=run_id,
-            project=config["general"]["wandb_project"],
-            entity=config["general"]["wandb_entity"],
-            group=config["general"]["wandb_group"],
-        )
-
-        env_step = 0
-        for out_file in output_files:
-            print(f"Beobench: logging full episode data to wandb from '{out_file}'.")
-            infos = get_cross_episodes_data(out_file)
-            for info in infos:
-                env_step += 1
-                wandb.log({**info, "env_step": env_step})
 
     return analysis
 
