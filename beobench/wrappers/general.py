@@ -1,6 +1,7 @@
 """Environment wrappers that may be applied across gyms."""
 
 import gym
+import gym.spaces
 import warnings
 
 
@@ -41,11 +42,13 @@ class FixDictActs(gym.ActionWrapper):
         """
         super().__init__(env)
         self.fixed_actions = fixed_actions
-        self._action_space = {
-            self.env.action_space[key]
-            for key in self.env.action_space.keys()
-            if key not in fixed_actions.keys()
-        }
+        self._action_space = gym.spaces.Dict(
+            {
+                key: self.env.action_space[key]
+                for key in self.env.action_space.keys()
+                if key not in fixed_actions.keys()
+            }
+        )
 
     def action(self, action):
         return {**action, **self.fixed_actions}
