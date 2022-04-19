@@ -142,17 +142,19 @@ def build_experiment_container(
         if beobench_package == "beobench":
             package_type = "pypi"
             build_context = "-"
+            stage2_docker_flags = []
         else:
             package_type = "local"
             build_context = beobench_package
+            # need to add std-in-dockerfile via -f flag and not context directly
+            stage2_docker_flags = ["-f", "-"]
         stage2_image_tag = f"{image_name}_complete:{version}"
 
         stage2_build_args = [
             *build_commands,
             "-t",
             stage2_image_tag,
-            "-f",
-            "-",
+            *stage2_docker_flags,
             "--build-arg",
             f"PREV_IMAGE={stage1_image_tag}",
             "--build-arg",
@@ -162,7 +164,7 @@ def build_experiment_container(
             "--build-arg",
             f"EXTRAS={beobench_extras}",
             *flags,
-            beobench_package,
+            build_context,
         ]
 
         with subprocess.Popen(
