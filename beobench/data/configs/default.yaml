@@ -30,6 +30,7 @@ env:
       step_period: 15
     weather: GRC_A_Athens
 # general config
+wrappers: []
 general:
   local_dir: ./beobench_results
   wandb_project: null
