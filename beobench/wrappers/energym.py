@@ -13,9 +13,12 @@ class CustomReward(gym.Wrapper):
             env (gym.Env): environment to be wrapped.
             info_obs_weights (dict): dictionary with keys matching the info[obs] values
                 to be combined as a linear combination with the weights given. E.g.
-                {'power_ev':0.4, 'power_hvac':0.6} will return a negative reward signal
-                computed by info['obs']['power_ev'] * 0.4 + info['obs']['power_hvac']
-                * 0.6.
+                {'power_ev':0.4, 'power_hvac':0.6} will make the env.step() method
+                return a negative reward signal computed by
+
+                ```
+                info['obs']['power_ev'] * 0.4 + info['obs']['power_hvac'] * 0.6
+                ```
         """
         super().__init__(env)
         self.info_obs_weights = info_obs_weights
