@@ -5,7 +5,6 @@ import ray.tune
 import ray.tune.integration.wandb
 import ray.tune.integration.mlflow
 import wandb
-import uuid
 import os
 
 import beobench.utils
@@ -39,7 +38,7 @@ def run_in_tune(
     Returns:
         ray.tune.ExperimentAnalysis: analysis object from experiment.
     """
-    run_id = uuid.uuid4().hex
+    run_id = config["autogen"]["run_id"]
 
     if config["general"]["wandb_project"] and config["general"]["wandb_entity"]:
 
@@ -48,7 +47,7 @@ def run_in_tune(
                 project=config["general"]["wandb_project"],
                 entity=config["general"]["wandb_entity"],
                 group=config["general"]["wandb_group"],
-                id=run_id,
+                id=config["autogen"]["run_id"],
                 config={"beobench": config},
             )
         ]
@@ -173,7 +172,6 @@ def get_cross_episodes_data(path: str) -> dict:
         all_obs_keys += list(outputs[0]["infos"][0][info_key].keys())
 
     # Create empty (flat) dict of obs saved in info dict
-    eps_dict = {obs_key: [] for obs_key in all_obs_keys}
     infos = []
 
     # Add data to dict, one step at a time
