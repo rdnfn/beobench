@@ -3,6 +3,9 @@
 import gym
 import gym.spaces
 import warnings
+import wandb
+
+from beobench.experiment.provider import config
 
 
 class EnvResetCalledError(Exception):
@@ -78,3 +81,46 @@ class PreventReset(gym.Wrapper):
         else:
             self.first_reset_done = True
             return self.env.reset(**kwargs)
+
+
+class WandbLogger(gym.Wrapper):
+    """Wrapper to log all env data for every xth step."""
+
+    def __init__(self, env: gym.Env, log_freq: int = 1):
+        """Wrapper to log all env data for every xth step.
+
+        Args:
+            env (gym.Env): environment to wrap.
+            log_freq (int, optional): how often to log the step() method. E.g. for 2
+                every second step is logged. Defaults to 1.
+        """
+
+        super().__init__(env)
+        wandb.init(
+            id=config["autogen"]["run_id"],
+            project=config["general"]["wandb_project"],
+            entity=config["general"]["wandb_entity"],
+            group=config["general"]["wandb_group"],
+        )
+        self.log_freq = log_freq
+        self.total_env_steps = 0
+
+    def step(self, action):
+        obs, reward, done, info = self.env.step(action)
+
+        self.total_env_steps += 1
+
+        if self.total_env_steps % self.log_freq == 0:
+            log_dict = {
+                "env": {
+                    "action": action,
+                    "obs": obs,
+                    "reward": reward,
+                    "done": done,
+                    "info": info,
+                    "step": self.total_env_steps,
+                }
+            }
+            wandb.log(log_dict)
+
+        return obs, reward, done, info
