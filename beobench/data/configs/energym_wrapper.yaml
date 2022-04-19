@@ -9,3 +9,8 @@ wrappers:
         P4_onoff_HP_sp: 1
         Bd_Ch_EV1Bat_sp: 1.
         Bd_Ch_EV2Bat_sp: 1.
+  - origin: energym
+    class: CustomReward
+    config:
+      info_obs_weights:
+        Fa_E_HVAC: 1.
