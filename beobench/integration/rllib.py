@@ -49,7 +49,7 @@ def run_in_tune(
                 entity=config["general"]["wandb_entity"],
                 group=config["general"]["wandb_group"],
                 id=run_id,
-                config=config,
+                config={"beobench": config},
             )
         ]
     elif config["general"]["wandb_project"] or config["general"]["wandb_entity"]:
