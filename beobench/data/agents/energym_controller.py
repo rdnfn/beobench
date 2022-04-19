@@ -48,10 +48,10 @@ controller = energym.examples.Controller.LabController(
 observation = env.reset()
 outputs = env.env.get_output()
 
+total_num_steps = 0
 num_steps_per_ep = 0
 episode = 0
 ep_rewards = []
-infos = []
 hour = 0
 
 for _ in range(num_timesteps):
@@ -71,11 +71,9 @@ for _ in range(num_timesteps):
     done = env.compute_done(outputs)
     # evaluate reward
     reward = env.compute_reward(outputs)
+    ep_rewards.append(reward)
 
-    if (
-        config["general"]["wandb_project"]
-        and config["general"]["log_full_episode_data"]
-    ):
+    if config["general"]["wandb_project"] and "WandbLogger" in str(env):
         # create info with original observations
         flattened_acts = {
             key: (
@@ -86,9 +84,20 @@ for _ in range(num_timesteps):
             for key, value in action.items()
         }
         info = {"obs": outputs, "acts": flattened_acts}
-        infos.append(info)
 
-    ep_rewards.append(reward)
+        total_num_steps += 1
+        log_dict = {
+            "env": {
+                "action": None,
+                "obs": None,
+                "reward": reward,
+                "done": done,
+                "info": info,
+                "step": total_num_steps,
+            }
+        }
+
+        wandb.log(log_dict)
 
     if done or num_steps_per_ep >= horizon:
 
@@ -100,12 +109,5 @@ for _ in range(num_timesteps):
         if done:
             observation = env.reset()
 env.close()
-
-if config["general"]["wandb_project"] and config["general"]["log_full_episode_data"]:
-
-    env_step = 0
-    for info in infos:
-        env_step += 1
-        wandb.log({**info, "env_step": env_step})
 
 print("Energym rule-based controller agent: completed test.")
