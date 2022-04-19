@@ -2,6 +2,7 @@
 
 from typing import Union
 import pathlib
+import uuid
 import yaml
 import ast
 import sys
@@ -129,3 +130,11 @@ def get_agent(name: str) -> pathlib.Path:
     agent_path = agents_path.joinpath(f"{name}.py")
 
     return agent_path
+
+
+def get_autogen_config() -> dict:
+    run_id = uuid.uuid4().hex
+
+    config = {"autogen": {"run_id": run_id}}
+
+    return config

@@ -101,15 +101,19 @@ def run(
         docker_flags=docker_flags,
         beobench_extras=beobench_extras,
     )
-    config = [config, kwarg_config]
 
     # parse combined config
-    config = beobench.experiment.config_parser.parse(config)
+    config = beobench.experiment.config_parser.parse([config, kwarg_config])
 
     # adding any defaults that haven't been set by user given config
     default_config = beobench.experiment.config_parser.get_default()
     config = beobench.utils.merge_dicts(
         a=default_config, b=config, let_b_overrule_a=True
+    )
+
+    autogen_config = beobench.experiment.config_parser.get_autogen_config()
+    config = beobench.utils.merge_dicts(
+        a=autogen_config, b=config, let_b_overrule_a=True
     )
 
     # select agent script
