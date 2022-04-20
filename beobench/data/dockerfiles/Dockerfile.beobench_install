@@ -15,4 +15,4 @@ ONBUILD ENV INSTALL_PACKAGE /tmp/beobench_repo
 FROM ${PACKAGE_TYPE}_beobench
 # install beobench
 ARG EXTRAS="extended,rllib"
-RUN pip3 --disable-pip-version-check --no-cache-dir install "${INSTALL_PACKAGE}[${EXTRAS}]"
+RUN pip --disable-pip-version-check --no-cache-dir install "${INSTALL_PACKAGE}[${EXTRAS}]"
