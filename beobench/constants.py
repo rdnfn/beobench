@@ -6,6 +6,7 @@ import pathlib
 AVAILABLE_INTEGRATIONS = [
     "boptest",
     "sinergym",
+    "sinergym_minimal",
     "energym",
 ]
 
