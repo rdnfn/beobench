@@ -13,9 +13,9 @@ Contents
    :includehidden:
 
    Home <self>
-   guides/installation
-   guides
+   getting_started
    envs
+   guides
    api
    contributing
    credits

@@ -14,7 +14,7 @@ The diagram below gives an overview of how beobench experiments work. The ``beob
 Experiment configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Beobench experiments are configured either using a *Python dictionary* or an equivalent *yaml file*. For example, the following ``example.yaml`` file configures an experiment that evaluates an RLlib-based *proximal policy optimisation* (PPO) agent on the ``MixedUseFanFCU-v0`` environment of Energym:
+Beobench experiments are configured either using a *Python dictionary* or an equivalent *yaml file*. For example, the following ``config.yaml`` file configures an experiment that evaluates an RLlib-based *proximal policy optimisation* (PPO) agent on the ``MixedUseFanFCU-v0`` environment of Energym:
 
 
 .. literalinclude:: ../../beobench/experiment/definitions/default.yaml
@@ -22,7 +22,7 @@ Beobench experiments are configured either using a *Python dictionary* or an equ
 
 
 
-Given this configuration file ``example.yaml``, we can run the experiment using the following commands:
+Given this configuration file ``config.yaml``, we can run the experiment using the following commands:
 
 .. include:: ../snippets/run_standard_experiment.rst
 
@@ -33,7 +33,7 @@ Once you're up and running with Beobench, you will likely eventually want to sta
 
 .. code-block:: console
 
-    nohup beobench run -c example.yaml &
+    nohup beobench run -c config.yaml &
 
 This will save the console output of your experiment to `nohup.out` in your current directory.
 
@@ -41,5 +41,5 @@ If you have setup the Beobench development environment, you may want to start yo
 
 .. code-block:: console
 
-    nohup docker exec <devcontainer_name> beobench run -c example.yaml &
+    nohup docker exec <devcontainer_name> beobench run -c config.yaml &
 
