@@ -121,3 +121,4 @@ beobench_results*
 notebooks/archive
 *beo.yaml
 *beo.yml
+perf_tests*
