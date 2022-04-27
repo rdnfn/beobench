@@ -18,7 +18,7 @@ Installation
 
         - **Linux:** recommended and tested (Ubuntu 20.04).
         - **Windows:** use via `Windows Subsystem for Linux (WSL) <https://docs.microsoft.com/en-us/windows/wsl/install>`_ recommended.
-        - **macOS:** experimental support for apple silicon systems --- only intended for development purposes (not running experiments). Intel-based macOS support untested.
+        - **macOS:** experimental support for Apple silicon systems --- only intended for development purposes (not running experiments). Intel-based macOS support untested.
 
 .. toctree::
         :hidden:
