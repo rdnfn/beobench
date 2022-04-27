@@ -25,7 +25,7 @@
 	//	"source=${localEnv:HOME}/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached",
 	//],
 	//"initializeCommand": "export DOCKER_BUILDKIT=0 && export COMPOSE_DOCKER_CLI_BUILD=0",
-	"postCreateCommand": "pip install -e .",
+	"postCreateCommand": "pip install -e . && git config --system --add safe.directory /beobench",
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
 		"python.defaultInterpreterPath": "/usr/local/bin/python",
