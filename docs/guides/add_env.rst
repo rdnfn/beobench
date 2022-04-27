@@ -24,7 +24,7 @@ The path to the folder with these two files, ``path/to/folder/<your_gym_name>/``
 Defining experiment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In order run an experiment on your gym, we need to add the build context to an experiment definition. This can be done by adding/changing the following parameter in your experiment definition file ``example.yaml`` (see :doc:`/guides/intro_experiment` for how to create a complete experiment definition file):
+In order run an experiment on your gym, we need to add the build context to an experiment definition. This can be done by adding/changing the following parameter in your experiment definition file ``config.yaml`` (see :doc:`/guides/intro_experiment` for how to create a complete experiment definition file):
 
 .. code-block:: yaml
 
@@ -43,7 +43,7 @@ For example, we could set the ``gym`` key to ``"https://github.com/rdnfn/beobenc
 Running experiment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-With a complete experiment definition file ``example.yaml``, we can then use the standard command below to start the experiment:
+With a complete experiment definition file ``config.yaml``, we can then use the standard command below to start the experiment:
 
 .. include:: ../snippets/run_standard_experiment.rst
 

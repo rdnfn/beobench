@@ -1,9 +1,9 @@
 
-Getting started
----------------
+Visualisation
+-------------
 
-Run your first experiment
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Running a basic experiment
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Let's run your first experiment with beobench. After installing beobench using the :ref:`installation guide <sec-installation>`, you can simply use one of the following two commands to run a first experiment:
 
