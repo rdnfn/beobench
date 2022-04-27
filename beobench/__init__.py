@@ -1,6 +1,6 @@
 """Top-level package for beobench."""
 
-__author__ = """rdnfn"""
+__author__ = """Beobench authors"""
 __email__ = "-"
 __version__ = "0.4.3"
 

@@ -33,7 +33,7 @@ rllib_requirements = [
 ]
 
 setup(
-    author="rdnfn",
+    author="Beobench authors",
     python_requires=">=3.6",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
