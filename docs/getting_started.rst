@@ -105,3 +105,8 @@ Execution
 Given the configuration and agent script above, we can run the experiment using the command:
 
 .. include:: ./snippets/run_standard_experiment.rst
+
+This will command will:
+
+1. Build an experiment container with Sinergym installed.
+2. Execute ``agent.py`` inside that container.
