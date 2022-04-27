@@ -47,8 +47,11 @@
 			88
 		],
 		"python.terminal.activateEnvInCurrentTerminal": true,
-		"esbonio.server.enabled": false,
-		"esbonio.sphinx.confDir": "${workspaceFolder}/docs"
+		"esbonio.server.enabled": true,
+		"esbonio.sphinx.confDir": "${workspaceFolder}/docs",
+		"restructuredtext.linter.doc8.extraArgs": [
+			"max-line-length=2000"
+		]
 	},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
