@@ -1,7 +1,16 @@
 """Tests to evaluate the performance of energym environments in Beobench."""
 
+import timeit
+from datetime import datetime
 
-def test_performance_of_10k_actions(use_beobench: bool = False, config: dict = None):
+
+def test_performance_on_fixed_actions(
+    use_beobench: bool = False,
+    config: dict = None,
+    num_steps: int = 100,
+    beobench_normalize: bool = False,
+    beobench_use_native_env: bool = False,
+):
 
     if config is None:
         config = {
@@ -26,7 +35,6 @@ def test_performance_of_10k_actions(use_beobench: bool = False, config: dict = N
     }
 
     if not use_beobench:
-
         import energym  # pylint: disable=import-outside-toplevel
 
         env = energym.make(
@@ -35,15 +43,84 @@ def test_performance_of_10k_actions(use_beobench: bool = False, config: dict = N
             simulation_days=config["simulation_days"],
         )
 
-        for _ in range(100):
-            env.step(action)
+        def take_steps():
+            for _ in range(num_steps):
+                env.step(action)
+
+        step_time = timeit.timeit(take_steps, number=1)
+        print("Performance test, step time (native): ", step_time)
+        with open(
+            "beobench_results/perf_test_results.txt", "a", encoding="utf-8"
+        ) as text_file:
+            text_file.write(
+                f"  Performance, time for taking {num_steps} in env: {step_time} seconds\n"
+            )
 
     else:
+        import beobench  # pylint: disable=import-outside-toplevel
 
-        import beobench
+        if not beobench_use_native_env:
+            # if beobench_normalize:
+            action = {key: value[0] for key, value in action.items()}
 
-        config = {"agent": ""}
+        beobench_config = {
+            "agent": {
+                "origin": "../tests/performance/energym_fixed_action.py",
+                "config": {
+                    "action": action,
+                    "num_steps": num_steps,
+                    "use_native_env": beobench_use_native_env,
+                },
+            },
+            "env": {
+                "gym": "energym",
+                "config": {
+                    "energym_environment": config["env_name"],
+                    "weather": config["weather"],
+                    "days": config["simulation_days"],
+                    "gym_kwargs": {
+                        "normalize": beobench_normalize,
+                    },
+                },
+            },
+            "general": {
+                "dev_path": "../",
+                # "use_no_cache": True,
+            },
+        }
+        beobench.run(config=beobench_config)
 
 
 if __name__ == "__main__":
-    test_performance_of_10k_actions(use_beobench=False, config=None)
+
+    NUM_STEPS = 10000
+    for use_beobench, beobench_normalize, beobench_use_native_env in [
+        (True, False, False),
+        (True, True, False),
+        (True, False, True),
+        (False, None, None),
+    ]:
+        with open(
+            "beobench_results/perf_test_results.txt", "a", encoding="utf-8"
+        ) as text_file:
+            text_file.write(str(datetime.now()) + "\n")
+            text_file.write("New test - Configuration:\n")
+            text_file.write(f"  use_beobench: {use_beobench}\n")
+            text_file.write(f"  beobench_normalize: {beobench_normalize}\n")
+            text_file.write(f"  beobench_use_native_env: {beobench_use_native_env}\n")
+            text_file.write(f"  num_steps: {NUM_STEPS}\n\n")
+
+        func_time = timeit.timeit(
+            lambda: test_performance_on_fixed_actions(
+                use_beobench=use_beobench,
+                config=None,
+                num_steps=NUM_STEPS,
+                beobench_normalize=beobench_normalize,
+                beobench_use_native_env=beobench_use_native_env,
+            ),
+            number=1,
+        )
+        with open(
+            "beobench_results/perf_test_results.txt", "a", encoding="utf-8"
+        ) as text_file:
+            text_file.write(f"  Performance, overall time: {func_time} seconds\n\n")
