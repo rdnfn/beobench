@@ -2,7 +2,7 @@
 
    <p align="center">
 
-.. image:: ./docs/_static/beobench_logo.png
+.. image:: ./docs/_static/beobench_logo_v2_large.png
         :align: center
         :width: 300 px
         :alt: Beobench

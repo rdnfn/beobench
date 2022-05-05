@@ -171,8 +171,8 @@ texinfo_documents = [
 
 ## Custom elements
 
-html_logo = "_static/beobench_logo.png"
-html_favicon = "_static/beobench_favicon_v2.png"
+html_logo = "_static/beobench_logo_v2_large.png"
+html_favicon = "_static/beobench_favicon_v3.png"
 
 if html_theme == "alabaster":
     html_theme_options = {
