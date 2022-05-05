@@ -2,14 +2,18 @@
 
    <p align="center">
 
-.. image:: ./docs/_static/beobench_logo_v2_large.png
+.. image:: https://github.com/rdnfn/beobench/raw/0c520a7acd992fef2901c0b576fb948e061e2e1a/docs/_static/beobench_logo_v2_large.png
         :align: center
-        :width: 450 px
+        :width: 400 px
         :alt: Beobench
 
 .. raw:: html
 
    </p>
+
+*******
+Heading
+*******
 
 .. start-in-sphinx-docs
 
@@ -26,7 +30,7 @@
 
 A toolkit providing easy and unified access to building control environments for reinforcement learning (RL).
 
-Compared to other domains, `RL environments for building control <https://github.com/rdnfn/rl-building-control>`_ tend to be more difficult to install and handle. Most environments require the user to either manually install a building simulator (e.g. `EnergyPlus <https://github.com/NREL/EnergyPlus>`_) or to manually manage Docker containers. This is tedious.
+Compared to other domains, `RL environments for building control <https://github.com/rdnfn/rl-building-control#environments>`_ tend to be more difficult to install and handle. Most environments require the user to either manually install a building simulator (e.g. `EnergyPlus <https://github.com/NREL/EnergyPlus>`_) or to manually manage Docker containers. This is tedious.
 
 Beobench was created to make building control environments easier to use and experiments more reproducible. Beobench uses Docker to manage all environment dependencies in the background so that the user doesn't have to. A standardised API, illustrated in the figure below, allows the user to easily configure experiments and create RL agents.
 
@@ -34,9 +38,9 @@ Beobench was created to make building control environments easier to use and exp
 
    <p align="center">
 
-.. image:: ./docs/_static/beobench_architecture_horizontal_v1.png
+.. image:: https://github.com/rdnfn/beobench/raw/0c520a7acd992fef2901c0b576fb948e061e2e1a/docs/_static/beobench_architecture_horizontal_v1.png
         :align: center
-        :width: 600 px
+        :width: 550 px
         :alt: Beobench
 
 .. raw:: html
@@ -45,7 +49,8 @@ Beobench was created to make building control environments easier to use and exp
 
 
 Features
---------
+========
+
 - **Large collection of building control environments:** Out-of-the-box Beobench provides access to environments from `BOPTEST <https://github.com/ibpsa/project1-boptest>`_, `Energym <https://github.com/bsl546/energym>`_, and `Sinergym <https://github.com/jajimer/sinergym>`_. Beobench combines the environments from these frameworks into the *(to the best of our knowledge)* largest single collection of building control environments. `See environment list here <https://beobench.readthedocs.io/en/latest/envs.html>`_.
 - **Clean and light-weight installation:** Beobench is installed via pip and only requires Docker as an additional non-python dependency (`see installation guide <https://beobench.readthedocs.io/en/latest/guides/installation.html>`_). Without Beobench, most building control environments will require manually installing building simulators or directly managing docker containers.
 - **Built-in RL agents:** Beobench allows the user to apply any agent from the `Ray RLlib collection <https://github.com/ray-project/ray/tree/master/rllib>`_ *in addition* to agents provided by the user directly.
@@ -57,9 +62,12 @@ Features
 .. _sec_quickstart:
 
 Quickstart
-----------
+==========
 
-Run your first beobench experiment in three steps:
+.. _sec_installation:
+
+Installation
+------------
 
 1. `Install docker <https://docs.docker.com/get-docker/>`_ on your machine (if on Linux, check the `additional installation steps <https://beobench.readthedocs.io/en/latest/guides/installation_linux.html>`_)
 2. Install *beobench* using:
@@ -68,13 +76,103 @@ Run your first beobench experiment in three steps:
 
                 pip install beobench
 
-3. Finally, start your first experiment using:
 
-        .. code-block:: console
+.. admonition:: OS support
 
-                beobench run
+        - **Linux:** recommended and tested (Ubuntu 20.04).
+        - **Windows:** use via `Windows Subsystem for Linux (WSL) <https://docs.microsoft.com/en-us/windows/wsl/install>`_ recommended.
+        - **macOS:** experimental support for Apple silicon systems --- only intended for development purposes (not running experiments). Intel-based macOS support untested.
 
-Done, you have just started your first experiment... congrats! Check out the `full getting started guide in the documentation <https://beobench.readthedocs.io/en/latest/guides/getting_started.html>`_ for the next steps.
+.. toctree::
+        :hidden:
+
+        guides/installation_linux
+
+Running a first experiment
+--------------------------
+
+Configuration
+^^^^^^^^^^^^^
+
+To get started with our first experiment, we set up an *experiment configuration*.
+Experiment configurations
+can be given as a yaml file or a Python dictionary. Such a configuration
+fully defines an experiment, configuring everything
+from the RL agent to the environment and its wrappers.
+
+Let's look at a concrete example. Consider this ``config.yaml`` file:
+
+
+.. code-block:: yaml
+
+  agent:
+    origin: ./agent.py
+    config:
+      num_steps: 100
+  env:
+    gym: sinergym
+    config:
+      name: Eplus-5Zone-hot-continuous-v1
+      normalize: True
+  general:
+    local_dir: ./beobench_results
+
+Here, the first ``agent`` part of the configuration determines what code is run inside the experiment container. Simply put, we can think of Beobench as a tool to (1) build a special Docker container and then (2) execute your code inside that container. The code run in step (2) is referred to as the *agent script*. In the ``config.yaml`` file above, this agent script is set to ``./agent.py`` via the ``agent.origin`` configuration.
+
+Before looking more closely at an ``agent.py`` file, let us first consider the remaining configuration. The ``env`` part sets the environment to ``Eplus-5Zone-hot-continuous-v1`` from Sinergym. The ``env.config.normalize`` setting ensures that the observations returned by the environment are normalized. Finally, the ``general.local_dir`` setting determines that all data from the experiment will be saved to the ``./beobench_results`` directory.
+
+Agent script
+^^^^^^^^^^^^
+
+
+Next, let's have look at an example *agent script*, ``agent.py``:
+
+.. code-block:: python
+
+  from beobench.experiment.provider import create_env, config
+
+  # create environment and get starting observation
+  env = create_env()
+  observation = env.reset()
+
+  for _ in range(config["agent"]["config"]["num_steps"]):
+      # sample random action from environment's action space
+      action = env.action_space.sample()
+      # take selected action in environment
+      observation, reward, done, info = env.step(action)
+
+  env.close()
+
+The most important part of this script is the first line:
+we import the ``create_env`` function and the ``config`` dictionary from ``beobench.experiment.provider``.
+These two imports are only available inside an experiment container. The ``create_env`` function allows us to create the environment
+as definded in our configuration.
+The ``config``
+dictionary gives us access to the full experiment configuration
+(as defined before).
+
+.. note:: We can use these two imports *regardless* of the gym framework we are using. This invariability allows us to create agent scripts that work across frameworks.
+
+After the imports, the ``agent.py`` script above sets up a loop that takes random
+actions in the environment. Feel free to customize the agent script to your
+requirements.
+
+Alternatively, there
+are also a number of pre-defined agent scripts available, including
+a script for
+using RLlib.
+
+Execution
+^^^^^^^^^
+
+Given the configuration and agent script above, we can run the experiment using the command:
+
+.. include:: ./snippets/run_standard_experiment.rst
+
+This will command will:
+
+1. Build an experiment container with Sinergym installed.
+2. Execute ``agent.py`` inside that container.
 
 .. end-quickstart
 
