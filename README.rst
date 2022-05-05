@@ -24,11 +24,9 @@
         :target: https://opensource.org/licenses/MIT
         :alt: License
 
-A toolkit providing easy and unified access to building control environments for reinforcement learning (RL).
+A toolkit providing easy and unified access to building control environments for reinforcement learning (RL). Compared to other domains, `RL environments for building control <https://github.com/rdnfn/rl-building-control#environments>`_ tend to be more difficult to install and handle. Most environments require the user to either manually install a building simulator (e.g. `EnergyPlus <https://github.com/NREL/EnergyPlus>`_) or to manually manage Docker containers. This is tedious.
 
-Compared to other domains, `RL environments for building control <https://github.com/rdnfn/rl-building-control#environments>`_ tend to be more difficult to install and handle. Most environments require the user to either manually install a building simulator (e.g. `EnergyPlus <https://github.com/NREL/EnergyPlus>`_) or to manually manage Docker containers. This is tedious.
-
-Beobench was created to make building control environments easier to use and experiments more reproducible. Beobench uses Docker to manage all environment dependencies in the background so that the user doesn't have to. A standardised API, illustrated in the figure below, allows the user to easily configure experiments and create RL agents.
+Beobench was created to make building control environments easier to use and experiments more reproducible. Beobench uses Docker to manage all environment dependencies in the background so that the user doesn't have to. A standardised API, illustrated in the figure below, allows the user to easily configure experiments and evaluate new RL agents on building control environments.
 
 .. raw:: html
 
