@@ -28,7 +28,7 @@ A toolkit providing easy and unified access to building control environments for
 
 Compared to other domains, `RL environments for building control <https://github.com/rdnfn/rl-building-control>`_ tend to be more difficult to install and handle. Most environments require the user to either manually install a building simulator (e.g. `EnergyPlus <https://github.com/NREL/EnergyPlus>`_) or to manually manage Docker containers. This is tedious.
 
-We created Beobench to make building control environments easier to use and experiments more reproducible. Beobench uses Docker to manage all environment dependencies in the background so that the user doesn't have to. A standardised API, illustrated in the figure below, allows the user to easily configure experiments and create RL agents.
+Beobench was created to make building control environments easier to use and experiments more reproducible. Beobench uses Docker to manage all environment dependencies in the background so that the user doesn't have to. A standardised API, illustrated in the figure below, allows the user to easily configure experiments and create RL agents.
 
 .. raw:: html
 
@@ -36,7 +36,7 @@ We created Beobench to make building control environments easier to use and expe
 
 .. image:: ./docs/_static/beobench_architecture_horizontal_v1.png
         :align: center
-        :width: 450 px
+        :width: 650 px
         :alt: Beobench
 
 .. raw:: html
