@@ -20,10 +20,7 @@ Installation
         - **Windows:** use via `Windows Subsystem for Linux (WSL) <https://docs.microsoft.com/en-us/windows/wsl/install>`_ recommended.
         - **macOS:** experimental support for Apple silicon systems --- only intended for development purposes (not running experiments). Intel-based macOS support untested.
 
-.. toctree::
-        :hidden:
 
-        guides/installation_linux
 
 Running a first experiment
 --------------------------
@@ -112,3 +109,9 @@ This will command will:
 
 1. Build an experiment container with Sinergym installed.
 2. Execute ``agent.py`` inside that container.
+
+
+.. toctree::
+        :hidden:
+
+        guides/installation_linux
