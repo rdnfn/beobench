@@ -36,7 +36,7 @@ Beobench was created to make building control environments easier to use and exp
 
 .. image:: ./docs/_static/beobench_architecture_horizontal_v1.png
         :align: center
-        :width: 650 px
+        :width: 600 px
         :alt: Beobench
 
 .. raw:: html
@@ -46,7 +46,7 @@ Beobench was created to make building control environments easier to use and exp
 
 Features
 --------
-- **Large collection of building control environments:** Out-of-the-box Beobench provides access to environments from `BOPTEST <https://github.com/ibpsa/project1-boptest>`_, `Energym <https://github.com/bsl546/energym>`_, and `Sinergym <https://github.com/jajimer/sinergym>`_. Beobench combines the environments from these frameworks into the (*to the best of our knowledge*) largest single collection of building control environments (`see environment list here <https://beobench.readthedocs.io/en/latest/envs.html>`_).
+- **Large collection of building control environments:** Out-of-the-box Beobench provides access to environments from `BOPTEST <https://github.com/ibpsa/project1-boptest>`_, `Energym <https://github.com/bsl546/energym>`_, and `Sinergym <https://github.com/jajimer/sinergym>`_. Beobench combines the environments from these frameworks into the *(to the best of our knowledge)* largest single collection of building control environments. `See environment list here <https://beobench.readthedocs.io/en/latest/envs.html>`_.
 - **Clean and light-weight installation:** Beobench is installed via pip and only requires Docker as an additional non-python dependency (`see installation guide <https://beobench.readthedocs.io/en/latest/guides/installation.html>`_). Without Beobench, most building control environments will require manually installing building simulators or directly managing docker containers.
 - **Built-in RL agents:** Beobench allows the user to apply any agent from the `Ray RLlib collection <https://github.com/ray-project/ray/tree/master/rllib>`_ *in addition* to agents provided by the user directly.
 - **Easily extendable:** want to use Beobench with an environment not yet included? The support for user-defined Docker contexts makes it easy to use Beobench with any RL environment.
