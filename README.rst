@@ -11,10 +11,6 @@
 
    </p>
 
-*******
-Heading
-*******
-
 .. start-in-sphinx-docs
 
 .. image:: https://img.shields.io/pypi/v/beobench.svg
