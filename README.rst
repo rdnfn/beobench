@@ -4,7 +4,7 @@
 
 .. image:: ./docs/_static/beobench_logo_v2_large.png
         :align: center
-        :width: 300 px
+        :width: 450 px
         :alt: Beobench
 
 .. raw:: html
