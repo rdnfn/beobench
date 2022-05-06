@@ -165,7 +165,7 @@ Given the configuration and agent script above, we can run the experiment using 
 
 .. code-block:: console
 
-        beobench run --config config.yamls
+        beobench run --config config.yaml
 
 or in Python:
 
