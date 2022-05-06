@@ -145,7 +145,10 @@ The ``config``
 dictionary gives us access to the full experiment configuration
 (as defined before).
 
-.. note:: We can use these two imports *regardless* of the gym framework we are using. This invariability allows us to create agent scripts that work across frameworks.
+
+        ℹ️ **Info**
+
+        We can use these two imports *regardless* of the gym framework we are using. This invariability allows us to create agent scripts that work across frameworks.
 
 After the imports, the ``agent.py`` script above sets up a loop that takes random
 actions in the environment. Feel free to customize the agent script to your
