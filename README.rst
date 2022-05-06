@@ -66,16 +66,21 @@ Installation
 1. `Install docker <https://docs.docker.com/get-docker/>`_ on your machine (if on Linux, check the `additional installation steps <https://beobench.readthedocs.io/en/latest/guides/installation_linux.html>`_)
 2. Install *beobench* using:
 
-        .. code-block:: console
+    .. code-block:: console
 
-                pip install beobench
+            pip install beobench
 
 
-.. admonition:: OS support
+.. 
+    just to split quote blocks
 
-        - **Linux:** recommended and tested (Ubuntu 20.04).
-        - **Windows:** use via `Windows Subsystem for Linux (WSL) <https://docs.microsoft.com/en-us/windows/wsl/install>`_ recommended.
-        - **macOS:** experimental support for Apple silicon systems --- only intended for development purposes (not running experiments). Intel-based macOS support untested.
+.. epigraph::
+
+    ℹ️ OS support
+
+    - **Linux:** recommended and tested (Ubuntu 20.04).
+    - **Windows:** use via `Windows Subsystem for Linux (WSL) <https://docs.microsoft.com/en-us/windows/wsl/install>`_ recommended.
+    - **macOS:** experimental support for Apple silicon systems --- only intended for development purposes (not running experiments). Intel-based macOS support untested.
 
 
 
