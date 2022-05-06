@@ -71,12 +71,10 @@ Installation
             pip install beobench
 
 
-.. 
-    just to split quote blocks
+..
 
-.. epigraph::
 
-    ℹ️ OS support
+    ℹ️ **OS support**
 
     - **Linux:** recommended and tested (Ubuntu 20.04).
     - **Windows:** use via `Windows Subsystem for Linux (WSL) <https://docs.microsoft.com/en-us/windows/wsl/install>`_ recommended.
