@@ -18,7 +18,6 @@ if use_native_env:
         for _ in range(num_steps):
             env.env.step(action)
 
-
 else:
 
     def take_steps():
