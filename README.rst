@@ -85,8 +85,8 @@ Installation
 Running a first experiment
 --------------------------
 
-Configuration
-^^^^^^^^^^^^^
+Experiment configuration
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 To get started with our first experiment, we set up an *experiment configuration*.
 Experiment configurations
@@ -100,26 +100,30 @@ Let's look at a concrete example. Consider this ``config.yaml`` file:
 .. code-block:: yaml
 
   agent:
+    # script to run inside experiment container
     origin: ./agent.py
+    # configuration that can be accessed by script above
     config:
       num_steps: 100
   env:
+    # gym framework from which we want use an environment
     gym: sinergym
+    # gym-specific environment configuration
     config:
+      # sinergym environment name
       name: Eplus-5Zone-hot-continuous-v1
+      # whether to normalise observations
       normalize: True
   general:
+    # save experiment data to ``./beobench_results`` directory
     local_dir: ./beobench_results
 
-Here, the first ``agent`` part of the configuration determines what code is run inside the experiment container. Simply put, we can think of Beobench as a tool to (1) build a special Docker container and then (2) execute your code inside that container. The code run in step (2) is referred to as the *agent script*. In the ``config.yaml`` file above, this agent script is set to ``./agent.py`` via the ``agent.origin`` configuration.
-
-Before looking more closely at an ``agent.py`` file, let us first consider the remaining configuration. The ``env`` part sets the environment to ``Eplus-5Zone-hot-continuous-v1`` from Sinergym. The ``env.config.normalize`` setting ensures that the observations returned by the environment are normalized. Finally, the ``general.local_dir`` setting determines that all data from the experiment will be saved to the ``./beobench_results`` directory.
+The first ``agent`` part of the file above determines what code is run inside the experiment container. Simply put, we can think of Beobench as a tool to (1) build a special Docker container and then (2) execute code inside that container. The code run in step (2) is referred to as the *agent script*. In the ``config.yaml`` file above, this agent script is set to ``./agent.py`` via the ``agent.origin`` configuration.
 
 Agent script
 ^^^^^^^^^^^^
 
-
-Next, let's have look at an example *agent script*, ``agent.py``:
+Let's have look at an example of such an *agent script*, ``agent.py``:
 
 .. code-block:: python
 
@@ -137,36 +141,41 @@ Next, let's have look at an example *agent script*, ``agent.py``:
 
   env.close()
 
-The most important part of this script is the first line:
+The only Beobench-specific part of this script is the first line:
 we import the ``create_env`` function and the ``config`` dictionary from ``beobench.experiment.provider``.
-These two imports are only available inside an experiment container. The ``create_env`` function allows us to create the environment
+The ``create_env`` function allows us to create the environment
 as definded in our configuration.
 The ``config``
 dictionary gives us access to the full experiment configuration
-(as defined before).
+(as defined before). These two imports are only available inside an experiment container.
 
 
-        ℹ️ **Info**
+        ℹ️ **info**
 
         We can use these two imports *regardless* of the gym framework we are using. This invariability allows us to create agent scripts that work across frameworks.
 
-After the imports, the ``agent.py`` script above sets up a loop that takes random
-actions in the environment. Feel free to customize the agent script to your
-requirements.
+After these Beobench imports, the ``agent.py`` script above just takes a few random actions in the environment. Feel free to customize the agent script to your requirements.
 
-Alternatively, there
-are also a number of pre-defined agent scripts available, including
-a script for
-using RLlib.
+Alternatively, there are also a number of pre-defined agent scripts available, including a script for using RLlib.
 
 Execution
 ^^^^^^^^^
 
-Given the configuration and agent script above, we can run the experiment using the command:
+Given the configuration and agent script above, we can run the experiment using either via the command line:
 
-.. include:: ./snippets/run_standard_experiment.rst
+.. code-block:: console
 
-This will command will:
+        beobench run --config config.yamls
+
+or in Python:
+
+.. code-block:: python
+
+        import beobench
+
+        beobench.run(config = "config.yaml")
+
+Either command will:
 
 1. Build an experiment container with Sinergym installed.
 2. Execute ``agent.py`` inside that container.
