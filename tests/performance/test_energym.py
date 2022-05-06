@@ -1,4 +1,4 @@
-"""Tests to evaluate the performance of energym environments in Beobench."""
+"""Tests to evaluate the performance of Beobench energym environments."""
 
 import timeit
 from datetime import datetime
@@ -53,7 +53,10 @@ def test_performance_on_fixed_actions(
             "beobench_results/perf_test_results.txt", "a", encoding="utf-8"
         ) as text_file:
             text_file.write(
-                f"  Performance, time for taking {num_steps} in env: {step_time} seconds\n"
+                (
+                    f"  Performance, time for taking {num_steps}"
+                    " in env: {step_time} seconds\n"
+                )
             )
 
     else:
@@ -91,9 +94,11 @@ def test_performance_on_fixed_actions(
         beobench.run(config=beobench_config)
 
 
-if __name__ == "__main__":
+def main():
+    """Main test function."""
+    # pylint: disable=cell-var-from-loop
 
-    NUM_STEPS = 10000
+    NUM_STEPS = 10000  # pylint: disable=invalid-name
     for use_beobench, beobench_normalize, beobench_use_native_env in [
         (True, False, False),
         (True, True, False),
@@ -124,3 +129,7 @@ if __name__ == "__main__":
             "beobench_results/perf_test_results.txt", "a", encoding="utf-8"
         ) as text_file:
             text_file.write(f"  Performance, overall time: {func_time} seconds\n\n")
+
+
+if __name__ == "__main__":
+    main()
