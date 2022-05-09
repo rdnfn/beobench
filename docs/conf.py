@@ -56,7 +56,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "beobench"
-copyright = "2021, Beobench authors"  # pylint: disable=redefined-builtin
+copyright = "2021-2022"  # pylint: disable=redefined-builtin
 author = "Beobench authors"
 
 # The version info for the project you're documenting, acts as replacement
