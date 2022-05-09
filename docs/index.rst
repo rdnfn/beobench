@@ -1,5 +1,5 @@
 *************
-Beobench Docs
+Beobench docs
 *************
 
 .. include:: ../README.rst
