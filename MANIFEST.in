@@ -10,6 +10,7 @@ recursive-include beobench/beobench_contrib/gyms/ *
 
 recursive-include beobench/data/configs *
 recursive-include beobench/data/agents *
+recursive-include beobench/data/dockerfiles *
 
 recursive-exclude docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
 recursive-exclude * __pycache__

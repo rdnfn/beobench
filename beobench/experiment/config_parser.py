@@ -2,6 +2,7 @@
 
 from typing import Union
 import pathlib
+import uuid
 import yaml
 import ast
 import sys
@@ -87,7 +88,14 @@ def create_rllib_config(config: dict) -> dict:
 
     rllib_config = config["agent"]["config"]
     rllib_config["config"]["env_config"] = config["env"]["config"]
-    rllib_config["config"]["env"] = config["env"]["name"]
+    if "name" in config["env"].keys():
+        rllib_config["config"]["env"] = config["env"]["name"]
+    elif "name" in config["env"]["config"].keys():
+        rllib_config["config"]["env"] = config["env"]["config"]["name"]
+    else:
+        raise ValueError(
+            "No name found in config. Either env.name or env.config.name should be set."
+        )
 
     return rllib_config
 
@@ -129,3 +137,11 @@ def get_agent(name: str) -> pathlib.Path:
     agent_path = agents_path.joinpath(f"{name}.py")
 
     return agent_path
+
+
+def get_autogen_config() -> dict:
+    run_id = uuid.uuid4().hex
+
+    config = {"autogen": {"run_id": run_id}}
+
+    return config

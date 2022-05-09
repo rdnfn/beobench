@@ -1,25 +1,27 @@
+*************
 Beobench Docs
-=============================
+*************
 
 .. include:: ../README.rst
    :start-after: start-in-sphinx-docs
    :end-before: end-in-sphinx-docs
 
 Contents
---------
+========
 
 .. toctree::
    :maxdepth: 2
    :includehidden:
 
    Home <self>
-   guides/installation
-   guides
+   getting_started
    envs
+   advanced_usage
    api
    contributing
    credits
    history
+   support
 
 Indices and tables
 ------------------

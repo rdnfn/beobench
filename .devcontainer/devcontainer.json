@@ -25,14 +25,14 @@
 	//	"source=${localEnv:HOME}/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached",
 	//],
 	//"initializeCommand": "export DOCKER_BUILDKIT=0 && export COMPOSE_DOCKER_CLI_BUILD=0",
-	"postCreateCommand": "pip install -e .",
+	"postCreateCommand": "pip install -e . && git config --system --add safe.directory /beobench",
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
 		"python.defaultInterpreterPath": "/usr/local/bin/python",
 		"python.linting.enabled": true,
 		"python.linting.pylintEnabled": true,
 		"python.formatting.autopep8Path": "/usr/local/py-utils/bin/autopep8",
-		"python.formatting.blackPath": "/usr/local/py-utils/bin/black",
+		"python.formatting.blackPath": "/usr/local/bin/black",
 		"python.formatting.yapfPath": "/usr/local/py-utils/bin/yapf",
 		"python.linting.banditPath": "/usr/local/py-utils/bin/bandit",
 		"python.linting.flake8Path": "/usr/local/py-utils/bin/flake8",
@@ -47,8 +47,11 @@
 			88
 		],
 		"python.terminal.activateEnvInCurrentTerminal": true,
-		"esbonio.server.enabled": false,
-		"esbonio.sphinx.confDir": "${workspaceFolder}/docs"
+		"esbonio.server.enabled": true,
+		"esbonio.sphinx.confDir": "${workspaceFolder}/docs",
+		"restructuredtext.linter.doc8.extraArgs": [
+			"max-line-length=2000"
+		]
 	},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [

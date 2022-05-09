@@ -4,13 +4,11 @@ import json
 import ray.tune
 import ray.tune.integration.wandb
 import ray.tune.integration.mlflow
-import wandb
-import uuid
-import os
 
 import beobench.utils
 import beobench.experiment.config_parser
-from beobench.constants import RAY_LOCAL_DIR_IN_CONTAINER, CONTAINER_DATA_DIR
+import beobench.integration.wandb
+from beobench.constants import RAY_LOCAL_DIR_IN_CONTAINER
 
 
 def run_in_tune(
@@ -38,7 +36,6 @@ def run_in_tune(
     Returns:
         ray.tune.ExperimentAnalysis: analysis object from experiment.
     """
-    run_id = uuid.uuid4().hex
 
     if config["general"]["wandb_project"] and config["general"]["wandb_entity"]:
 
@@ -47,7 +44,8 @@ def run_in_tune(
                 project=config["general"]["wandb_project"],
                 entity=config["general"]["wandb_entity"],
                 group=config["general"]["wandb_group"],
-                id=run_id,
+                id=config["autogen"]["run_id"],
+                config={"beobench": config},
             )
         ]
     elif config["general"]["wandb_project"] or config["general"]["wandb_entity"]:
@@ -58,10 +56,6 @@ def run_in_tune(
         callbacks = [_create_mlflow_callback(config["general"]["mlflow_name"])]
     else:
         callbacks = []
-
-    if config["general"]["log_episode_data_from_rllib"]:
-        output_dir = (CONTAINER_DATA_DIR / "outputs" / f"outputs-{run_id}").absolute()
-        config["agent"]["config"]["config"]["output"] = str(output_dir)
 
     # combine the three incomplete ray tune experiment
     # definitions into a single complete one.
@@ -94,23 +88,6 @@ def run_in_tune(
         local_dir=RAY_LOCAL_DIR_IN_CONTAINER,
         **rllib_config,
     )
-
-    if (
-        config["general"]["wandb_project"]
-        and config["general"]["log_episode_data_from_rllib"]
-    ):
-
-        wandb.init(
-            id=run_id,
-            project=config["general"]["wandb_project"],
-            entity=config["general"]["wandb_entity"],
-            group=config["general"]["wandb_group"],
-        )
-        print("Beobench: wandb run id", wandb.run.id)
-
-        output_file = output_dir / os.listdir(output_dir)[0]
-        data = get_cross_episodes_data(output_file)
-        log_eps_data_to_wandb(data, wandb_run_id=wandb.run.id)
 
     return analysis
 
@@ -159,33 +136,11 @@ def get_cross_episodes_data(path: str) -> dict:
         all_obs_keys += list(outputs[0]["infos"][0][info_key].keys())
 
     # Create empty (flat) dict of obs saved in info dict
-    eps_dict = {obs_key: [] for obs_key in all_obs_keys}
+    infos = []
 
     # Add data to dict, one step at a time
     for output in outputs[:]:
         for info in output["infos"]:
-            for info_key in info.keys():
-                obs_keys = outputs[0]["infos"][0][info_key].keys()
-                for obs_key in obs_keys:
-                    eps_dict[obs_key].append(info[info_key][obs_key])
+            infos.append(info)
 
-    return eps_dict
-
-
-def log_eps_data_to_wandb(eps_dict: dict, wandb_run_id: str) -> None:
-    """Log episode data to wandb.
-
-    To be used with concatenated episode data from get_cross_episodes_data().
-
-    Args:
-        eps_dict (dict): episode data
-        wandb_run_id (str): unique wandb run id to attach the data to.
-
-    """
-
-    wandb.init(id=wandb_run_id)
-
-    eps_dict_len = len(list(eps_dict.values())[0])
-    for i in range(eps_dict_len):
-        single_eps_dict = {key: values[i] for key, values in eps_dict.items()}
-        wandb.log(single_eps_dict)
+    return infos

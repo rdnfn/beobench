@@ -1,0 +1,9 @@
+# Random action agent config
+
+agent:
+  origin: random_action
+  config:
+    config:
+      horizon: 480
+general:
+  wandb_group: random_action

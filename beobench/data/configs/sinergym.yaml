@@ -1,0 +1,6 @@
+env:
+  name: Eplus-5Zone-hot-continuous-v1
+  gym: sinergym
+  config:
+    name: Eplus-5Zone-hot-continuous-v1
+    normalize: True

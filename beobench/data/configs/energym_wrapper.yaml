@@ -1,0 +1,24 @@
+wrappers:
+  - origin: general
+    class: FixDictActs
+    config:
+      fixed_actions:
+        P1_onoff_HP_sp: 1
+        P2_onoff_HP_sp: 1
+        P3_onoff_HP_sp: 1
+        P4_onoff_HP_sp: 1
+        Bd_Ch_EV1Bat_sp: 1.
+        Bd_Ch_EV2Bat_sp: 1.
+        P1_T_Thermostat_sp: 0.
+        P2_T_Thermostat_sp: 0.
+        P3_T_Thermostat_sp: 0.
+        P4_T_Thermostat_sp: 0.
+  - origin: energym
+    class: CustomReward
+    config:
+      info_obs_weights:
+        Fa_E_HVAC: -0.0001
+  - origin: general
+    class: WandbLogger
+    config:
+      log_freq: 1

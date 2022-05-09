@@ -1,0 +1,38 @@
+# Config for RLlib-based PPO agent
+
+# Some of the descriptions of RLlib config values are taken from
+# https://docs.ray.io/en/latest/rllib/rllib-training.html
+
+agent:
+  origin: rllib # either path to agent script or name of agent library (rllib)
+  config: # given to ray.tune.run() as arguments (since rllib set before)
+    run_or_experiment: PPO
+    log_to_file: True
+    config:
+      lr: 0.0005
+      model:
+        fcnet_activation: relu
+        fcnet_hiddens: [256,256,256,256]
+        post_fcnet_activation: tanh
+      batch_mode: complete_episodes
+      gamma: 0.999999
+      # Number of steps after which the episode is forced to terminate. Defaults
+      # to `env.spec.max_episode_steps` (if present) for Gym envs.
+      horizon: 480
+      # Calculate rewards but don't reset the environment when the horizon is
+      # hit. This allows value estimation and RNN state to span across logical
+      # episodes denoted by horizon. This only has an effect if horizon != inf.
+      soft_horizon: True
+      # Number of timesteps collected for each SGD round. This defines the size
+      # of each SGD epoch.
+      train_batch_size: 480 # 1/5 day of 3min steps
+      # Total SGD batch size across all devices for SGD. This defines the
+      # minibatch size within each epoch.
+      sgd_minibatch_size: 96
+      metrics_smoothing_episodes: 1
+      framework: torch
+      log_level: "WARNING"
+      num_workers: 1 # this is required for energym to work (can fail silently otherwise)
+      num_gpus: 1
+general:
+  wandb_group: ppo

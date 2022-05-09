@@ -56,8 +56,8 @@ master_doc = "index"
 
 # General information about the project.
 project = "beobench"
-copyright = "2021, rdnfn"  # pylint: disable=redefined-builtin
-author = "rdnfn"
+copyright = "2021-2022"  # pylint: disable=redefined-builtin
+author = "Beobench authors"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -134,7 +134,13 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass
 # [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "beobench.tex", "beobench Documentation", "rdnfn", "manual"),
+    (
+        master_doc,
+        "beobench.tex",
+        "beobench Documentation",
+        "Beobench authors",
+        "manual",
+    ),
 ]
 
 
@@ -165,8 +171,8 @@ texinfo_documents = [
 
 ## Custom elements
 
-html_logo = "_static/beobench_logo.png"
-html_favicon = "_static/beobench_favicon_v2.png"
+html_logo = "_static/beobench_logo_v2_large.png"
+html_favicon = "_static/beobench_favicon_v3.png"
 
 if html_theme == "alabaster":
     html_theme_options = {

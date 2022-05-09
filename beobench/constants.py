@@ -6,6 +6,7 @@ import pathlib
 AVAILABLE_INTEGRATIONS = [
     "boptest",
     "sinergym",
+    "sinergym_minimal",
     "energym",
 ]
 
@@ -13,6 +14,12 @@ AVAILABLE_INTEGRATIONS = [
 AVAILABLE_AGENTS = [
     "rllib",
     "random_action",
+    "energym_controller",
+]
+
+AVAILABLE_WRAPPERS = [
+    "general",
+    "energym",
 ]
 
 # read-only dir in container

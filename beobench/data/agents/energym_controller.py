@@ -10,6 +10,7 @@ import energym.examples.Controller  # import LabController
 wandb_used = config["general"]["wandb_project"] is not None
 if wandb_used:
     wandb.init(
+        config=config,
         project=config["general"]["wandb_project"],
         entity=config["general"]["wandb_entity"],
         group=config["general"]["wandb_group"],
@@ -36,9 +37,9 @@ env = create_env()
 inputs = env.env.get_inputs_names()
 controller = energym.examples.Controller.LabController(
     control_list=inputs,
-    lower_tol=0.3,
-    upper_tol=0.8,
-    nighttime_setback=True,
+    lower_tol=0.2,
+    upper_tol=0.2,
+    nighttime_setback=False,
     nighttime_start=18,
     nighttime_end=6,
     nighttime_temp=18,
@@ -47,6 +48,7 @@ controller = energym.examples.Controller.LabController(
 observation = env.reset()
 outputs = env.env.get_output()
 
+total_num_steps = 0
 num_steps_per_ep = 0
 episode = 0
 ep_rewards = []
@@ -69,8 +71,33 @@ for _ in range(num_timesteps):
     done = env.compute_done(outputs)
     # evaluate reward
     reward = env.compute_reward(outputs)
-
     ep_rewards.append(reward)
+
+    if config["general"]["wandb_project"] and "WandbLogger" in str(env):
+        # create info with original observations
+        flattened_acts = {
+            key: (
+                value[0]
+                if not isinstance(value[0], (list, np.ndarray))
+                else value[0][0]
+            )
+            for key, value in action.items()
+        }
+        info = {"obs": outputs, "acts": flattened_acts}
+
+        total_num_steps += 1
+        log_dict = {
+            "env": {
+                "action": None,
+                "obs": None,
+                "reward": reward,
+                "done": done,
+                "info": info,
+                "step": total_num_steps,
+            }
+        }
+
+        wandb.log(log_dict)
 
     if done or num_steps_per_ep >= horizon:
 
@@ -82,4 +109,5 @@ for _ in range(num_timesteps):
         if done:
             observation = env.reset()
 env.close()
+
 print("Energym rule-based controller agent: completed test.")

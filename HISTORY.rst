@@ -2,7 +2,27 @@
 History
 =======
 
-0.4.3 (2022-04-00)
+0.4.4 (2022-05-09)
+------------------
+
+* Features:
+
+  * Add general support for wrappers. (#28)
+
+* Improvements:
+
+  * Make dev beobench build part of image build process for improved
+    speed.
+  * Add number of environment steps (``env_step``) to wandb logging.
+  * Update logo to new version (#48)
+  * Update docs and main readme to include more useful quickstart guide, which includes a custom agent (#47)
+
+* Fixes:
+
+  * Enable automatic episode data logging in RLlib integration for long training periods.
+  * Update broken links in main readme env list (#40)
+
+0.4.3 (2022-04-12)
 ------------------
 
 * Feature: enable easy access to standard configs via util method

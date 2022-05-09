@@ -30,6 +30,7 @@ env:
       step_period: 15
     weather: GRC_A_Athens
 # general config
+wrappers: []
 general:
   local_dir: ./beobench_results
   wandb_project: null
@@ -44,4 +45,4 @@ general:
   docker_flags: null
   beobench_extras: "extended"
   # Whether to log all episode data to wandb after running experiment
-  log_episode_data_from_rllib: False
+  log_full_episode_data: False

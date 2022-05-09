@@ -1,0 +1,9 @@
+# Random action agent config
+
+agent:
+  origin: energym_controller
+  config:
+    config:
+      horizon: 480
+general:
+  wandb_group: energym_controller
