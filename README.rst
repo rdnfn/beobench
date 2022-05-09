@@ -98,11 +98,18 @@ can be given as a yaml file or a Python dictionary. The configuration
 fully defines an experiment, configuring everything
 from the RL agent to the environment and its wrappers. The figure below illustrates the config structure.
 
+.. raw:: html
+
+   <p align="center">
+
 .. image:: https://github.com/rdnfn/beobench/raw/2cf961a8135b25c9a66e70d67eea9890ce0b878a/docs/_static/beobench_config_v1.png
         :align: center
         :width: 350 px
         :alt: Beobench
 
+.. raw:: html
+
+   </p>
 
 
 Let's look at a concrete example. Consider this ``config.yaml`` file:
