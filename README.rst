@@ -272,6 +272,11 @@ Available environments
 .. |industry| image:: https://raw.githubusercontent.com/tabler/tabler-icons/master/icons/building-factory.svg
 
 
+Support
+=======
+
+Need help using Beobench or want to discuss the toolkit? Reach out via ``contact-gh (at) arduin.io`` and we are very happy to help either via email or in a call.
+
 License
 =======
 MIT license, see `credits and license page in docs <https://beobench.readthedocs.io/en/latest/credits.html>`_ for more detailed information.
