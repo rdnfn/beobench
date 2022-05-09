@@ -66,7 +66,7 @@ Installation
 ------------
 
 1. `Install docker <https://docs.docker.com/get-docker/>`_ on your machine (if on Linux, check the `additional installation steps <https://beobench.readthedocs.io/en/latest/guides/installation_linux.html>`_)
-2. Install *beobench* using:
+2. Install Beobench using:
 
         .. code-block:: console
 
