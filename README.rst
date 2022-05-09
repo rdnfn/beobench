@@ -52,11 +52,13 @@ Features
 
 .. end-in-sphinx-docs
 
-.. start-quickstart
+
 .. _sec_quickstart:
 
 Quickstart
 ==========
+
+.. start-qs-sec1
 
 .. _sec_installation:
 
@@ -71,6 +73,8 @@ Installation
                 pip install beobench
 
 
+.. end-qs-sec1
+
 ..
 
 
@@ -80,7 +84,7 @@ Installation
     - **Windows:** use via `Windows Subsystem for Linux (WSL) <https://docs.microsoft.com/en-us/windows/wsl/install>`_ recommended.
     - **macOS:** experimental support for Apple silicon systems — only intended for development purposes (not running experiments). Intel-based macOS support untested.
 
-
+.. start-qs-sec2
 
 Running a first experiment
 --------------------------
@@ -114,16 +118,18 @@ Let's look at a concrete example. Consider this ``config.yaml`` file:
       name: Eplus-5Zone-hot-continuous-v1
       # whether to normalise observations
       normalize: True
+  wrappers: [] # no wrappers added for this example
   general:
     # save experiment data to ``./beobench_results`` directory
     local_dir: ./beobench_results
 
-The first ``agent`` part of the file above determines what code is run inside the experiment container. Simply put, we can think of Beobench as a tool to (1) build a special Docker container and then (2) execute code inside that container. The code run in step (2) is referred to as the *agent script*. In the ``config.yaml`` file above, this agent script is set to ``./agent.py`` via the ``agent.origin`` configuration.
 
 Agent script
 ^^^^^^^^^^^^
 
-Let's have look at an example of such an *agent script*, ``agent.py``:
+The ``agent.origin`` setting in the configuration file above sets the *agent script* to be ``./agent.py``. The *agent script* is the main code that is run inside the experiment container. Most of the time this script will define an RL agent but it could really be anything. Simply put, we can think of Beobench as a tool to (1) build a special Docker container and then (2) execute an *agent script* inside that container.
+
+Let's create an example *agent script*, ``agent.py``:
 
 .. code-block:: python
 
@@ -149,10 +155,15 @@ The ``config``
 dictionary gives us access to the full experiment configuration
 (as defined before). These two imports are only available inside an experiment container.
 
+.. end-qs-sec2
+
+..
 
         ℹ️ **info**
 
         We can use these two imports *regardless* of the gym framework we are using. This invariability allows us to create agent scripts that work across frameworks.
+
+.. start-qs-sec3
 
 After these Beobench imports, the ``agent.py`` script above just takes a few random actions in the environment. Feel free to customize the agent script to your requirements.
 
@@ -160,6 +171,8 @@ Alternatively, there are also a number of pre-defined agent scripts available, i
 
 Execution
 ^^^^^^^^^
+
+.. end-qs-sec3
 
 Given the configuration and agent script above, we can run the experiment using either via the command line:
 
@@ -175,12 +188,22 @@ or in Python:
 
         beobench.run(config = "config.yaml")
 
+.. start-qs-sec4
+
 Either command will:
 
 1. Build an experiment container with Sinergym installed.
 2. Execute ``agent.py`` inside that container.
 
-.. end-quickstart
+You have just run your first Beobench experiment.
+
+
+Next steps
+^^^^^^^^^^
+
+To learn more about using Beobench, look at the `advanced usage section <https://beobench.readthedocs.io/en/latest/advanced_usage.html>`_ in the documentation.
+
+.. end-qs-sec4
 
 Documentation
 =============

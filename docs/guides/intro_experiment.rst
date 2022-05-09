@@ -17,7 +17,7 @@ Experiment configuration
 Beobench experiments are configured either using a *Python dictionary* or an equivalent *yaml file*. For example, the following ``config.yaml`` file configures an experiment that evaluates an RLlib-based *proximal policy optimisation* (PPO) agent on the ``MixedUseFanFCU-v0`` environment of Energym:
 
 
-.. literalinclude:: ../../beobench/experiment/definitions/default.yaml
+.. literalinclude:: ../../beobench/data/configs/default.yaml
     :language: yaml
 
 

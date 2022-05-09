@@ -1,12 +1,13 @@
+*************
 Beobench Docs
-=============================
+*************
 
 .. include:: ../README.rst
    :start-after: start-in-sphinx-docs
    :end-before: end-in-sphinx-docs
 
 Contents
---------
+========
 
 .. toctree::
    :maxdepth: 2
@@ -15,7 +16,7 @@ Contents
    Home <self>
    getting_started
    envs
-   guides
+   advanced_usage
    api
    contributing
    credits
