@@ -100,7 +100,7 @@ from the RL agent to the environment and its wrappers. The figure below illustra
 
 .. raw:: html
 
-   <p align="center">
+   <p>
 
 .. image:: https://github.com/rdnfn/beobench/raw/2cf961a8135b25c9a66e70d67eea9890ce0b878a/docs/_static/beobench_config_v1.png
         :align: center
