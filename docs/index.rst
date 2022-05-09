@@ -18,10 +18,10 @@ Contents
    envs
    advanced_usage
    api
-   support
    contributing
    credits
    history
+   support
 
 Indices and tables
 ------------------
