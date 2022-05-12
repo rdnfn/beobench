@@ -188,7 +188,7 @@ Execution
 
 .. end-qs-sec3
 
-Given the configuration and agent script above, we can run the experiment using either via the command line:
+Given the configuration and agent script above, we can run the experiment either via the command line:
 
 .. code-block:: console
 
