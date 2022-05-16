@@ -8,6 +8,7 @@ History
 * Improvements
 
   * Add ``CITATION.cff`` file to citing software easier.
+  * By default skip docker build if image already exists.
 
 0.4.4 (2022-05-09)
 ------------------
