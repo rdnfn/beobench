@@ -16,7 +16,7 @@ Contents
    Home <self>
    getting_started
    envs
-   advanced_usage
+   guides/index
    api
    contributing
    credits
