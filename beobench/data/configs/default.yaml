@@ -1,13 +1,16 @@
 # Default Beobench configuration.
 #
-# Some of the descriptions of RLlib config values are taken from
+# Some of the descriptions of RLlib config
+# values are taken from
 # https://docs.ray.io/en/latest/rllib/rllib-training.html.
 #
 # Agent config
 agent:
-  # Either path to agent script or name of built-in agent (e.g. `rllib`)
+  # Either path to agent script or name of built-in agent
+  # (e.g. `rllib`)
   origin: rllib
-   # Config used by agent. In this case given to ray.tune.run() as arguments
+   # Config used by agent. In this case given to
+   # ray.tune.run() as arguments.
    # (since rllib set before)
   config:
     # RLlib algorithm name
@@ -27,21 +30,25 @@ agent:
       batch_mode: complete_episodes
       # Discount factor
       gamma: 0.999
-      # Number of steps after which the episode is forced to terminate. Defaults
-      # to `env.spec.max_episode_steps` (if present) for Gym envs.
+      # Number of steps after which the episode is forced to
+      # terminate. Defaults to `env.spec.max_episode_steps`
+      # (if present) for Gym envs.
       horizon: 1000
-      # Calculate rewards but don't reset the environment when the horizon is
-      # hit. This allows value estimation and RNN state to span across logical
-      # episodes denoted by horizon. This only has an effect if horizon != inf.
+      # Calculate rewards but don't reset the environment when
+      # the horizon is hit. This allows value estimation and
+      # RNN state to span across logical episodes denoted by
+      # horizon. This only has an effect if horizon != inf.
       soft_horizon: True
-      # Number of episodes over which RLlib internal metrics are smoothed
+      # Number of episodes over which RLlib internal metrics
+      # are smoothed
       metrics_smoothing_episodes: 5
       # Deep learning framework
       framework: torch
-      # Number of parallel workers interacting with environment
-      # for most gym frameworks this has to be set to 1
-      # as often the background building simulations are not setup
-      # for parallel usage (can fail silently otherwise).
+      # Number of parallel workers interacting with
+      # environment for most gym frameworks this has to be
+      # set to 1 as often the background building simulations
+      # are not setup for parallel usage
+      # (can fail silently otherwise).
       num_workers: 1
 # Environment config
 env:
@@ -49,8 +56,9 @@ env:
   gym: energym
   # Environment name
   name: MixedUseFanFCU-v0
-  # Configuration passed to integration's `create_env()` function.
-  # Specific to whatever gym framework you use (in this case Energym).
+  # Configuration passed to integration's `create_env()`
+  # function. Specific to whatever gym framework you use
+  # (in this case Energym).
   config:
     # Number of days in environment
     days: 365
@@ -63,7 +71,8 @@ env:
       # Whether to normalise state and action spaces.
       normalize: true
       # Length of step period
-      # Warning: this needs to correct for environment chosen.
+      # Warning: this needs to correct for environment
+      # chosen.
       step_period: 15
     # Weather file to use
     weather: GRC_A_Athens
@@ -72,7 +81,8 @@ wrappers: []
 # General Beobench config
 general:
   # Directory to write experiment files to. This argument
-  # is equivalent to the `local_dir` argument in `tune.run()`.
+  # is equivalent to the `local_dir` argument in
+  # `tune.run()`.
   local_dir: ./beobench_results
   # Name of wandb project.
   wandb_project: null
@@ -84,23 +94,29 @@ general:
   wandb_api_key: null
   # Name of MLflow experiment
   mlflow_name: null
-  # Whether to use GPU from the host system. Requires that GPU is available.
+  # Whether to use GPU from the host system. Requires that
+  # GPU is available.
   use_gpu: False
-  # Size of the shared memory available to the experiment container.
+  # Size of the shared memory available to the experiment
+  # container.
   docker_shm_size: 4gb
-  # whether to force a re-build, even if image already exists.
+  # Whether to force a re-build, even if image already
+  # exists.
   force_build: False
-  # Whether to use cache IF building experiment container. This will not do anything
-  # if force_build is disabled, and image already exists.
+  # Whether to use cache IF building experiment container.
+  # This will not do anything if force_build is disabled,
+  # and image already exists.
   use_no_cache: False
-  # File or github path to beobench package. For developement purpose only.
-  # This will install a custom beobench version inside the experiment container.
+  # File or github path to beobench package. For
+  # developement purpose only. This will install a custom
+  # beobench version inside the experiment container.
   # By default the latest PyPI version is installed.
   dev_path: null
-  # List of docker flags to be added to docker run command of
-  # Beobench experiment container.
+  # List of docker flags to be added to docker run command
+  # of Beobench experiment container.
   docker_flags: null
-  # Extra dependencies to install with beobench. Used during pip installation
-  # in experiment image, as in using the command:
+  # Extra dependencies to install with beobench. Used
+  # during pip installation in experiment image,
+  # as in using the command:
   # `pip install beobench[<beobench_extras>]`
   beobench_extras: "extended"
