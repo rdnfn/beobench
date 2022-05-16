@@ -42,6 +42,13 @@ beobench could always use more documentation, whether as part of the
 official beobench docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
+To update the API docs, use the following command inside the ``/docs`` directory:
+
+.. code-block::
+
+    sphinx-apidoc -f -o . ..
+
+
 Submit Feedback
 ~~~~~~~~~~~~~~~
 
