@@ -46,3 +46,4 @@ general:
   beobench_extras: "extended"
   # Whether to log all episode data to wandb after running experiment
   log_full_episode_data: False
+  force_build: False

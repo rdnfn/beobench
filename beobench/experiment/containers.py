@@ -3,7 +3,9 @@
 import contextlib
 import subprocess
 import os
+import docker
 
+import beobench
 from beobench.constants import AVAILABLE_INTEGRATIONS
 
 # To enable compatiblity with Python<=3.6 (e.g. for sinergym dockerfile)
@@ -16,12 +18,22 @@ except ImportError:
     importlib.resources = importlib_resources
 
 
+def check_image_exists(image: str):
+    client = docker.from_env()
+
+    try:
+        client.images.get(image)
+        return True
+    except docker.errors.ImageNotFound:
+        return False
+
+
 def build_experiment_container(
     build_context: str,
     use_no_cache: bool = False,
-    version: str = "latest",
     beobench_package: str = "beobench",
     beobench_extras: str = "extended",
+    force_build: bool = False,
 ) -> None:
     """Build experiment container from beobench/integrations/boptest/Dockerfile.
 
@@ -31,10 +43,13 @@ def build_experiment_container(
             of existing beobench integration (e.g. `boptest`). See the official docs
             https://docs.docker.com/engine/reference/commandline/build/ for more info.
         use_no_cache (bool, optional): wether to use cache in build. Defaults to False.
-        version (str, optional): version to add to container tag. Defaults to "latest".
         beobench_extras (str, optional): which beobench extra dependencies to install
             As in `pip install beobench[extras]`. Defaults to "extended".
+        force_build (bool, optional): whether to force a re-build, even if
+            image already exists.
     """
+
+    version = beobench.__version__
 
     # Flags are shared between gym image build and gym_and_beobench image build
     flags = []
@@ -59,19 +74,27 @@ def build_experiment_container(
         )
         package_build_context = True
 
-        print(
-            (
-                f"Recognised integration named {gym_name}: using build"
-                f" context {build_context}"
-            )
-        )
+        print(f"Beobench: recognised integration named {gym_name}.")
     else:
         # get alphanumeric name from context
         context_name = "".join(e for e in build_context if e.isalnum())
         image_name = f"beobench_custom_{context_name}"
         package_build_context = False
 
+    # Create tags of different image stages
     stage0_image_tag = f"{image_name}_base:{version}"
+    stage1_image_tag = f"{image_name}_intermediate:{version}"
+    stage2_image_tag = f"{image_name}_complete:{version}"
+
+    # skip build if image already exists.
+    if not force_build and check_image_exists(stage2_image_tag):
+        print(f"Beobench: existing image found ({stage2_image_tag}). Skipping build.")
+        return stage2_image_tag
+
+    print(
+        f"Beobench: image not found ({stage2_image_tag}) or forced",
+        "rebuild. Building image.",
+    )
 
     print(f"Building experiment base image `{stage0_image_tag}`...")
 
@@ -99,7 +122,6 @@ def build_experiment_container(
 
         # Part 2: build stage 1 (intermediate) experiment image
         # This includes installation of beobench in experiment image
-        stage1_image_tag = f"{image_name}_intermediate:{version}"
         stage1_dockerfile = str(
             importlib.resources.files("beobench.data.dockerfiles").joinpath(
                 "Dockerfile.experiment"
@@ -148,7 +170,6 @@ def build_experiment_container(
             build_context = beobench_package
             # need to add std-in-dockerfile via -f flag and not context directly
             stage2_docker_flags = ["-f", "-"]
-        stage2_image_tag = f"{image_name}_complete:{version}"
 
         stage2_build_args = [
             *build_commands,

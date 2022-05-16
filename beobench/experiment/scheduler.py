@@ -42,6 +42,7 @@ def run(
     no_additional_container: bool = False,
     docker_flags: list[str] = None,
     beobench_extras: str = None,
+    force_build: str = False,
 ) -> None:
     """Run experiment.
 
@@ -84,6 +85,8 @@ def run(
         beobench_extras (str, optional): extra dependencies to install with beobench.
             Used during pip installation in experiment image, as in using the command:
             `pip install beobench[<beobench_extras>]`
+        force_build (bool, optional): whether to force a re-build, even if
+            image already exists.
     """
     print("Beobench: starting experiment run ...")
     # parsing relevant kwargs and adding them to config
@@ -100,6 +103,7 @@ def run(
         dev_path=dev_path,
         docker_flags=docker_flags,
         beobench_extras=beobench_extras,
+        force_build=force_build,
     )
 
     # parse combined config
@@ -173,6 +177,7 @@ def run(
             use_no_cache=config["general"]["use_no_cache"],
             beobench_extras=beobench_extras,
             beobench_package=config["general"]["dev_path"],
+            force_build=config["general"]["force_build"],
         )
 
         ### part 2: create args and run command in docker container

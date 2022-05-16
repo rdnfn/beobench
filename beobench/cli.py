@@ -82,6 +82,11 @@ def cli():
     default=None,
     help="For developer use only: location of custom beobench package version.",
 )
+@click.option(
+    "--force-build",
+    is_flag=True,
+    help="whether to force a re-build, even if image already exists.",
+)
 def run(
     config: str,
     method: str,
@@ -96,6 +101,7 @@ def run(
     no_additional_container: bool,
     use_no_cache: bool,
     dev_path: str,
+    force_build: bool,
 ) -> None:
     """Run beobench experiment from command line.
 
@@ -121,6 +127,7 @@ def run(
         no_additional_container=no_additional_container,
         use_no_cache=use_no_cache,
         dev_path=dev_path,
+        force_build=force_build,
     )
 
 
