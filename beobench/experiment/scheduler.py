@@ -72,12 +72,13 @@ def run(
         docker_shm_size(str, optional): size of the shared memory available to the
             container. Defaults to None."
         use_no_cache (bool, optional): whether to use cache to build experiment
-            container. Defaults to False.
+            container. Defaults to False. This will not do anything if force_build is
+            disabled, and image already exists.
         dev_path (str, optional): file or github path to beobench package. For
             developement purpose only. This will install a custom beobench version
             inside the experiment container. By default the latest PyPI version is
             installed.
-        no_additional_container (bool, optional): wether not to start another container
+        no_additional_container (bool, optional): whether not to start another container
             to run experiments in. Defaults to False, which means that another container
             is started to run experiments in.
         docker_flags (list[str], optional): list of docker flags to be added to
