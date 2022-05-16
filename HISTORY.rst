@@ -2,6 +2,13 @@
 History
 =======
 
+0.4.5 (2022-05-00)
+------------------
+
+* Improvements
+
+  * Add ``CITATION.cff`` file to citing software easier.
+
 0.4.4 (2022-05-09)
 ------------------
 
