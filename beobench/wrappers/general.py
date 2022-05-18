@@ -104,11 +104,13 @@ class WandbLogger(gym.Wrapper):
         )
         self.log_freq = log_freq
         self.total_env_steps = 0
+        self.cum_reward = 0
 
     def step(self, action):
         obs, reward, done, info = self.env.step(action)
 
         self.total_env_steps += 1
+        self.cum_reward += reward
 
         if self.total_env_steps % self.log_freq == 0:
             log_dict = {
@@ -119,6 +121,10 @@ class WandbLogger(gym.Wrapper):
                     "done": done,
                     "info": info,
                     "step": self.total_env_steps,
+                    "metrics": {
+                        "cum_reward": self.cum_reward,
+                        "mean_reward": self.cum_reward / self.total_env_steps,
+                    },
                 }
             }
             wandb.log(log_dict)
