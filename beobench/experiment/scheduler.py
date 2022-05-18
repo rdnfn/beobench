@@ -8,6 +8,7 @@ import uuid
 import subprocess
 import pathlib
 import yaml
+import copy
 import contextlib
 from typing import Union
 
@@ -170,6 +171,11 @@ def _build_and_run_in_container(config: dict) -> None:
         config (dict): Beobench configuration.
     """
 
+    # We need to deepcopy the config as some sensitive data (API keys) is deleted at
+    # some point below. This can otherwise cause problems when running multiple
+    # samples of the same experiment.
+    config = copy.deepcopy(config)
+
     ### part 1: build docker images
     # Ensure local_dir exists, and create otherwise
     local_dir_path = pathlib.Path(config["general"]["local_dir"])
@@ -312,7 +318,7 @@ def _create_config_from_kwargs(**kwargs) -> dict:
 
 
 def _get_agent_file(config: dict) -> Union[Traversable, pathlib.Path]:
-    """Get agent file path from config.
+    """Get agent file path based on config.
 
     Args:
         config (dict): Beobench config.
