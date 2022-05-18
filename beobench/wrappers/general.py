@@ -115,15 +115,19 @@ class WandbLogger(gym.Wrapper):
         if self.total_env_steps % self.log_freq == 0:
             log_dict = {
                 "env": {
-                    "action": action,
-                    "obs": obs,
-                    "reward": reward,
-                    "done": done,
-                    "info": info,
-                    "step": self.total_env_steps,
+                    "inputs": {
+                        "action": action,
+                    },
+                    "returns": {
+                        "obs": obs,
+                        "reward": reward,
+                        "done": done,
+                        "info": info,
+                    },
                     "metrics": {
                         "cum_reward": self.cum_reward,
                         "mean_reward": self.cum_reward / self.total_env_steps,
+                        "step": self.total_env_steps,
                     },
                 }
             }
