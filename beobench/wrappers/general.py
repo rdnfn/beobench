@@ -86,14 +86,25 @@ class PreventReset(gym.Wrapper):
 class WandbLogger(gym.Wrapper):
     """Wrapper to log all env data for every xth step."""
 
-    def __init__(self, env: gym.Env, log_freq: int = 1):
+    def __init__(
+        self,
+        env: gym.Env,
+        log_freq: int = 1,
+        summary_metric_keys: list = None,
+    ):
         """Wrapper to log all env data for every xth step.
 
         Args:
             env (gym.Env): environment to wrap.
             log_freq (int, optional): how often to log the step() method. E.g. for 2
                 every second step is logged. Defaults to 1.
+            summary_metric_keys (list, optional): list of keys of logged metrics for
+                summary metrics such as cummulative sum and mean are computed. This
+                defaults to ["env.returns.reward"].
         """
+
+        if summary_metric_keys is None:
+            summary_metric_keys = ["env.returns.reward"]
 
         super().__init__(env)
         wandb.init(
@@ -104,33 +115,44 @@ class WandbLogger(gym.Wrapper):
         )
         self.log_freq = log_freq
         self.total_env_steps = 0
-        self.cum_reward = 0
+        self.cum_metrics = {key: 0 for key in summary_metric_keys}
 
     def step(self, action):
         obs, reward, done, info = self.env.step(action)
 
         self.total_env_steps += 1
-        self.cum_reward += reward
 
         if self.total_env_steps % self.log_freq == 0:
+            # TODO: enable flat dict for dict action and observation spaces
+            # This would allow for summary values of invididual actions/observations
             log_dict = {
-                "env": {
-                    "inputs": {
-                        "action": action,
-                    },
-                    "returns": {
-                        "obs": obs,
-                        "reward": reward,
-                        "done": done,
-                        "info": info,
-                    },
-                    "metrics": {
-                        "cum_reward": self.cum_reward,
-                        "mean_reward": self.cum_reward / self.total_env_steps,
-                        "step": self.total_env_steps,
-                    },
-                }
+                "env.inputs.action": action,
+                "env.returns.obs": obs,
+                "env.returns.reward": reward,
+                "env.returns.done": done,
+                "env.total_steps": self.total_env_steps,
+                **{f"env.returns.info.{key}": value for key, value in info.items()},
             }
+            log_dict = self._create_summary_metrics(log_dict)
             wandb.log(log_dict)
 
         return obs, reward, done, info
+
+    def _create_summary_metrics(self, log_dict: dict):
+        """Create summary of variables in log dict.
+
+        In particular, the
+
+        Args:
+            log_dict (dict): _description_
+
+        Returns:
+            _type_: _description_
+        """
+
+        for key in self.cum_metrics.keys():
+            self.cum_metrics[key] += log_dict[key]
+            log_dict[key + "_cum"] = self.cum_metrics[key]
+            log_dict[key + "_mean"] = self.cum_metrics[key] / self.total_env_steps
+
+        return log_dict
