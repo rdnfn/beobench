@@ -5,11 +5,15 @@ History
 0.4.5 (2022-05-00)
 ------------------
 
+* Features:
+
+  * Mean and cummulative metrics can now be logged by WandbLogger wrapper.
+
 * Improvements
 
   * Add ``CITATION.cff`` file to citing software easier.
-  * By default skip docker build if image already exists.
-  * Update docs by removing outdated guides and adding yaml configuration description.
+  * By default, docker builds of experiment images are now skipped if an image with tag corresponding to installed Beobench version already exists.
+  * Remove outdated guides and add yaml configuration description from docs.
 
 0.4.4 (2022-05-09)
 ------------------
