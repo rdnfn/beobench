@@ -100,7 +100,9 @@ class WandbLogger(gym.Wrapper):
                 every second step is logged. Defaults to 1.
             summary_metric_keys (list, optional): list of keys of logged metrics for
                 summary metrics such as cummulative sum and mean are computed. This
-                defaults to ["env.returns.reward"].
+                defaults to ["env.returns.reward"]. WARNING: summary metrics only
+                work for log_feq == 1, otherwise the cummulative metrics will not be
+                correct.
         """
 
         if summary_metric_keys is None:
