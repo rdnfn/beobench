@@ -132,7 +132,8 @@ def run(
         )
 
     # running experiment num_samples times
-    for i in range(1, config["general"]["num_samples"] + 1):
+    num_samples = config["general"]["num_samples"]
+    for i in range(1, num_samples + 1):
         # TODO: enable checking whether something is run in container
         # and do not print the statement below if inside experiment container.
         print(
@@ -140,7 +141,7 @@ def run(
                 f"Beobench: running experiment in container with environment "
                 f"{config['env']['name']}"
                 f" and agent from {config['agent']['origin']}. Sample {i} of"
-                f" {config['general']['num_samples']}."
+                f" {num_samples}."
             )
         )
 
