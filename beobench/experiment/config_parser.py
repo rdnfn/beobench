@@ -6,6 +6,7 @@ import uuid
 import yaml
 import ast
 import sys
+import random
 
 import beobench.utils
 
@@ -125,23 +126,14 @@ def get_default() -> dict:
     return get_standard_config("default")
 
 
-def get_agent(name: str) -> pathlib.Path:
-
-    """Get standard beobench agent from beobench.data.agents.
-
-    Returns:
-        Path: path/traversible to agent.
-    """
-
-    agents_path = importlib.resources.files("beobench.data.agents")
-    agent_path = agents_path.joinpath(f"{name}.py")
-
-    return agent_path
-
-
 def get_autogen_config() -> dict:
-    run_id = uuid.uuid4().hex
+    """Get automatically generated parts of a Beobench configuration."""
 
-    config = {"autogen": {"run_id": run_id}}
+    config = {
+        "autogen": {
+            "run_id": uuid.uuid4().hex,
+            "random_seed": random.randint(1, 10000000),
+        },
+    }
 
     return config
