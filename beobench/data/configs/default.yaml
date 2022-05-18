@@ -120,3 +120,7 @@ general:
   # as in using the command:
   # `pip install beobench[<beobench_extras>]`
   beobench_extras: "extended"
+  # Number of experiment samples to run. This defaults
+  # to a single sample, i.e. just running the
+  # experiment once.
+  num_samples: 1
