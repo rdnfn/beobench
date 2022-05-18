@@ -9,9 +9,9 @@ agent:
   # Either path to agent script or name of built-in agent
   # (e.g. `rllib`)
   origin: rllib
-   # Config used by agent. In this case given to
-   # ray.tune.run() as arguments.
-   # (since rllib set before)
+  # Config used by agent. In this case given to
+  # ray.tune.run() as arguments.
+  # (since rllib set before)
   config:
     # RLlib algorithm name
     run_or_experiment: PPO
