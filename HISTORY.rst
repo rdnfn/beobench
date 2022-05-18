@@ -8,6 +8,7 @@ History
 * Features:
 
   * Mean and cummulative metrics can now be logged by WandbLogger wrapper.
+  * Support for automatically running multiple samples/trials of same experiment via ``num_samples`` config parameter.
 
 * Improvements
 
