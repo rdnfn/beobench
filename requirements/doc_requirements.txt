@@ -15,3 +15,6 @@ docutils==0.16
 # Because of the following bug
 # https://github.com/readthedocs/readthedocs.org/issues/9038
 Jinja2<3.1
+
+# For allowing type hints
+sphinx-autodoc-typehints
