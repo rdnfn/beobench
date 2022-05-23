@@ -35,7 +35,7 @@ agent:
       # which is then passed to SGD.
       train_batch_size: 24
     stop:
-      timesteps_total: 35040 # = 365 * 96 (full year)
+      timesteps_total: 105120 # = 3 years # 35040 # = 365 * 96 (full year)
 wrappers:
   - origin: general
     class: WandbLogger
@@ -47,4 +47,5 @@ wrappers:
         - env.returns.info.comfort_penalty
 general:
   wandb_project: sinergym_fig4_baseline
+  num_samples: 5
 
