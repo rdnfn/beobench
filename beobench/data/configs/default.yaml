@@ -59,23 +59,7 @@ env:
   # Configuration passed to integration's `create_env()`
   # function. Specific to whatever gym framework you use
   # (in this case Energym).
-  config:
-    # Number of days in environment
-    days: 365
-    # Repeat of environment name before
-    energym_environment: MixedUseFanFCU-v0
-    # Kwargs that are used to initialise env
-    gym_kwargs:
-      # Maximum length of episode
-      max_episode_length: 35040
-      # Whether to normalise state and action spaces.
-      normalize: true
-      # Length of step period
-      # Warning: this needs to correct for environment
-      # chosen.
-      step_period: 15
-    # Weather file to use
-    weather: GRC_A_Athens
+  config: null
 # Wrappers (None added by default)
 wrappers: []
 # General Beobench config
