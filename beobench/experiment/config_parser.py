@@ -9,6 +9,7 @@ import sys
 import random
 import os
 
+import beobench
 import beobench.utils
 
 from beobench.constants import USER_CONFIG_PATH
@@ -178,3 +179,20 @@ def get_autogen_config() -> dict:
     }
 
     return config
+
+
+def check_config(config: dict) -> None:
+    """Check if config is valid.
+
+    Args:
+        config (dict): Beobench config.
+    """
+    requested_version = config["general"]["version"]
+    if requested_version != beobench.__version__:
+        raise ValueError(
+            f"Beobench config requests version {requested_version}"
+            f" that does not match installed version {beobench.__version__}. "
+            "Change the installed Beobench version to the requested version "
+            f"{requested_version} or remove general.version parameter from config "
+            "to prevent this error."
+        )

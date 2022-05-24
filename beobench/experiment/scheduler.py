@@ -120,6 +120,7 @@ def run(
     # The configs can be conflicting:
     # config overrules user_config which overrules default_config.
     config = beobench.experiment.config_parser.add_default_and_user_configs(config)
+    beobench.experiment.config_parser.check_config(config)
 
     # TODO add parsing of high level API arguments env and agent
     if env or method:
