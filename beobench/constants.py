@@ -2,6 +2,8 @@
 
 import pathlib
 
+USER_CONFIG_PATH = pathlib.Path("./.beobench.yml")
+
 # available gym-framework integrations
 AVAILABLE_INTEGRATIONS = [
     "boptest",
