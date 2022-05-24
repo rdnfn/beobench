@@ -10,6 +10,7 @@ History
   * Mean and cummulative metrics can now be logged by WandbLogger wrapper.
   * Support for automatically running multiple samples/trials of same experiment via ``num_samples`` config parameter.
   * Configs named `.beobench.yml` will be automatically parsed when Beobench is run in directory containing such a config. This allows users to set e.g. wandb API keys without referring to the config in every Beobench command call.
+  * Configs from experiments now specify the Beobench version used. When trying to rerun an experiment this version will be checked, and an error thrown if there is a mismatch between installed and requested version.
 
 * Improvements
 
