@@ -119,6 +119,5 @@ docs/generated/
 #beobench
 beobench_results*
 notebooks/archive
-*beo.yaml
-*beo.yml
+.beobench.yml
 perf_tests*
