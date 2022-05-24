@@ -108,3 +108,5 @@ general:
   # to a single sample, i.e. just running the
   # experiment once.
   num_samples: 1
+  # Beobench version
+  version: 0.4.4
