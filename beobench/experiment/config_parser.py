@@ -7,8 +7,11 @@ import yaml
 import ast
 import sys
 import random
+import os
 
 import beobench.utils
+
+from beobench.constants import USER_CONFIG_PATH
 
 # To enable compatiblity with Python<=3.8 (e.g. for sinergym dockerfile)
 if sys.version_info[1] >= 9:
@@ -117,13 +120,51 @@ def get_standard_config(name: str) -> dict:
 
 
 def get_default() -> dict:
-    """Get default beobench config
+    """Get default beobench config.
 
     Returns:
         dict: default beobench config dict
     """
 
     return get_standard_config("default")
+
+
+def get_user() -> dict:
+    """Get user beobench config.
+
+    Returns:
+        dict: default beobench config dict
+    """
+
+    if os.path.isfile(USER_CONFIG_PATH):
+        print(f"Beobench: recognised user config at '{USER_CONFIG_PATH}'.")
+        user_config = parse(USER_CONFIG_PATH)
+    else:
+        user_config = {}
+
+    return user_config
+
+
+def add_default_and_user_configs(config: dict) -> dict:
+    """Add default and user configs to existing beobench config.
+
+    Args:
+        config (dict): beobench config
+
+    Returns:
+        dict: merged dict of given config, and user and default configs.
+    """
+
+    default_config = get_default()
+    user_config = get_user()
+    user_default_config = beobench.utils.merge_dicts(
+        a=default_config, b=user_config, let_b_overrule_a=True
+    )
+    config = beobench.utils.merge_dicts(
+        a=user_default_config, b=config, let_b_overrule_a=True
+    )
+
+    return config
 
 
 def get_autogen_config() -> dict:
