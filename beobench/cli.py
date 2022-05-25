@@ -26,6 +26,11 @@ def cli():
     help="Name of RL method to use in experiment.",
 )
 @click.option(
+    "--gym",
+    default=None,
+    help="Name of gym framework to use in experiment.",
+)
+@click.option(
     "--env",
     default=None,
     help="Name of RL environment to use in experiment.",
@@ -90,6 +95,7 @@ def cli():
 def run(
     config: str,
     method: str,
+    gym: str,
     env: str,
     local_dir: str,
     wandb_project: str,
@@ -116,6 +122,7 @@ def run(
     beobench.experiment.scheduler.run(
         config=list(config),
         method=method,
+        gym=gym,
         env=env,
         local_dir=local_dir,
         wandb_project=wandb_project,
