@@ -212,12 +212,12 @@ def get_high_level_config(method: str, gym: str, env: str) -> dict:
 
     config = {}
     if method is not None:
-        beobench.utils.merge_dicts(
+        config = beobench.utils.merge_dicts(
             config,
             get_standard_config(f"method_{method}"),
         )
     if gym is not None and env is not None:
-        beobench.utils.merge_dicts(
+        config = beobench.utils.merge_dicts(
             config,
             get_standard_config(f"gym_{gym}"),
         )
