@@ -30,6 +30,7 @@ from beobench.constants import CONTAINER_DATA_DIR, CONTAINER_RO_DIR, AVAILABLE_A
 def run(
     config: Union[str, dict, pathlib.Path, list] = None,
     method: str = None,
+    gym: str = None,
     env: str = None,
     local_dir: str = None,
     wandb_project: str = None,
@@ -116,20 +117,18 @@ def run(
     # parse combined config
     config = beobench.experiment.config_parser.parse([config, kwarg_config])
 
+    high_level_config = beobench.experiment.config_parser.get_high_level_config(
+        method=method, gym=gym, env=env
+    )
+    config = beobench.utils.merge_dicts(
+        config, high_level_config, let_b_overrule_a=True
+    )
+
     # adding any defaults that haven't been set by given config
     # The configs can be conflicting:
     # config overrules user_config which overrules default_config.
     config = beobench.experiment.config_parser.add_default_and_user_configs(config)
     beobench.experiment.config_parser.check_config(config)
-
-    # TODO add parsing of high level API arguments env and agent
-    if env or method:
-        raise ValueError(
-            (
-                "This functionality has been deprecated. Directly configure"
-                " the environment or method in the config argument."
-            )
-        )
 
     # running experiment num_samples times
     num_samples = config["general"]["num_samples"]

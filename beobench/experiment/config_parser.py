@@ -196,3 +196,31 @@ def check_config(config: dict) -> None:
             f"{requested_version} or remove general.version parameter from config "
             "to prevent this error."
         )
+
+
+def get_high_level_config(method: str, gym: str, env: str) -> dict:
+    """Get config from agent, gym and env params.
+
+    Args:
+        method (str): name of method
+        gym (str): name of gym
+        env (str): name of environment.
+
+    Returns:
+        dict: Beobench configuration.
+    """
+
+    config = {}
+    if method is not None:
+        beobench.utils.merge_dicts(
+            config,
+            get_standard_config(f"method_{method}"),
+        )
+    if gym is not None and env is not None:
+        beobench.utils.merge_dicts(
+            config,
+            get_standard_config(f"gym_{gym}"),
+        )
+        config["env"]["name"] = env
+
+    return config
