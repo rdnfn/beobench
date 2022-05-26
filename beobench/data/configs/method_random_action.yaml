@@ -1,0 +1,11 @@
+# Random action agent config
+
+agent:
+  origin: random_action
+  config:
+    stop:
+      timesteps_total: 35040
+    config:
+      horizon: 480
+general:
+  wandb_group: random_action
