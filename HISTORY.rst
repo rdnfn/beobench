@@ -2,7 +2,7 @@
 History
 =======
 
-0.4.5 (2022-05-00)
+0.5.0 (2022-05-26)
 ------------------
 
 * Features:
@@ -11,12 +11,15 @@ History
   * Support for automatically running multiple samples/trials of same experiment via ``num_samples`` config parameter.
   * Configs named `.beobench.yml` will be automatically parsed when Beobench is run in directory containing such a config. This allows users to set e.g. wandb API keys without referring to the config in every Beobench command call.
   * Configs from experiments now specify the Beobench version used. When trying to rerun an experiment this version will be checked, and an error thrown if there is a mismatch between installed and requested version.
+  * Add improved high-level API for getting started. This uses the CLI arguments ``--method``, ``--gym`` and ``--env``. Example usage: ``beobench run --method ppo --gym sinergym --env Eplus-5Zone-hot-continuous-v1``.
 
 * Improvements
 
   * Add ``CITATION.cff`` file to citing software easier.
   * By default, docker builds of experiment images are now skipped if an image with tag corresponding to installed Beobench version already exists.
   * Remove outdated guides and add yaml configuration description from docs.
+  * Add support for logging multidimensional actions to wandb.
+  * Add support for logging summary metrics on every env reset to wandb.
 
 * Fixes
 
