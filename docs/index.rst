@@ -17,7 +17,6 @@ Contents
    getting_started
    envs
    guides/index
-   api
    contributing
    credits
    history
