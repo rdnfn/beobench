@@ -4,6 +4,7 @@ import gym
 import gym.spaces
 import warnings
 import wandb
+import numpy as np
 
 from beobench.experiment.provider import config
 
@@ -91,6 +92,7 @@ class WandbLogger(gym.Wrapper):
         env: gym.Env,
         log_freq: int = 1,
         summary_metric_keys: list = None,
+        restart_sum_metrics_at_reset: bool = False,
     ):
         """Wrapper to log all env data for every xth step.
 
@@ -117,7 +119,10 @@ class WandbLogger(gym.Wrapper):
         )
         self.log_freq = log_freq
         self.total_env_steps = 0
+        self.restart_sum_metrics_at_reset = restart_sum_metrics_at_reset
         self.cum_metrics = {key: 0 for key in summary_metric_keys}
+        self.num_env_resets = 0
+        self.last_log_dict = {}
 
     def step(self, action):
         obs, reward, done, info = self.env.step(action)
@@ -127,6 +132,11 @@ class WandbLogger(gym.Wrapper):
         if self.total_env_steps % self.log_freq == 0:
             # TODO: enable flat dict for dict action and observation spaces
             # This would allow for summary values of invididual actions/observations
+            if isinstance(action, (list, np.ndarray)):
+                for i, act in enumerate(action):
+                    new_action = {f"{i}": act}
+                action = new_action
+
             log_dict = {
                 "env.inputs.action": action,
                 "env.returns.obs": obs,
@@ -137,8 +147,18 @@ class WandbLogger(gym.Wrapper):
             }
             log_dict = self._create_summary_metrics(log_dict)
             wandb.log(log_dict)
+            self.last_log_dict = log_dict
 
         return obs, reward, done, info
+
+    def reset(self):
+
+        if self.restart_sum_metrics_at_reset:
+            wandb.log({"reset": self.last_log_dict, "reset.num": self.num_env_resets})
+            self.cum_metrics = {key: 0 for key in self.cum_metrics.keys()}
+            self.num_env_resets += 1
+
+        return self.env.reset()
 
     def _create_summary_metrics(self, log_dict: dict):
         """Create summary of variables in log dict.
