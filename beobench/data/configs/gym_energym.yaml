@@ -1,0 +1,20 @@
+# Energym default config
+
+env:
+  gym: energym
+  config:
+    # Number of simulation days
+    days: 365
+    # Name of energym environment
+    name: Apartments2Thermal-v0
+    gym_kwargs:
+      # Maximum number of timesteps in one episode
+      max_episode_length: 35040 # corresponds to a year of 15 min steps
+      # Whether state and action spaces are normalized
+      normalize: true
+      # Number of real-world minutes between timesteps in building simulation
+      step_period: 15
+      # Whether to allow a complete environment reset
+      ignore_reset: True
+    # Weather file to use for the scenario (possible files depend on env chosen)
+    weather: ESP_CT_Barcelona
