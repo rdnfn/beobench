@@ -11,13 +11,12 @@ agent:
 
 # environment config
 env:
-  name: Apartments2Thermal-v0
   gym: energym
   config:
     # Number of simulation days
     days: 365
     # Name of energym environment
-    energym_environment: Apartments2Thermal-v0
+    name: Apartments2Thermal-v0
     gym_kwargs:
       # Maximum number of timesteps in one episode
       max_episode_length: 35040 # corresponds to a year of 15 min steps
