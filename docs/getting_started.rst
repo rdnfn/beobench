@@ -5,7 +5,7 @@ Getting started
 ===============
 
 .. tip::
-  This section is (almost) identical to the quickstart section in the repository README. If you already read that one, you may want to skip to the :doc:`advanced usage guides<advanced_usage>`.
+  This section is (almost) identical to the quickstart section in the repository README. If you already read that one, you may want to skip to the :doc:`advanced usage guides<guides/index>`.
 
 .. Note that below we import multiple separate parts from the main repo readme. This separation is done to allow us to add rst elements inbetween that can't be parsed by GitHubs rst parser.
 

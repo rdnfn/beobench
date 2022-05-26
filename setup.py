@@ -10,7 +10,7 @@ with open("PYPI_README.rst", encoding="UTF-8") as readme_file:
 with open("HISTORY.rst", encoding="UTF-8") as history_file:
     history = history_file.read()
 
-version = "0.4.4"  # pylint: disable=invalid-name
+version = "0.5.0"  # pylint: disable=invalid-name
 
 requirements = [
     "docker",
@@ -36,7 +36,7 @@ setup(
     author="Beobench authors",
     python_requires=">=3.6",
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
@@ -44,8 +44,9 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
-    description="Beobench is a toolbox for benchmarking reinforcement learning (RL) algorithms on building energy optimisation (BEO) problems.",  # pylint: disable=line-too-long
+    description="Beobench is a toolkit providing easy and unified access to building control environments for reinforcement learning (RL).",  # pylint: disable=line-too-long
     install_requires=requirements,
     extras_require={
         "extended": extended_requirements,

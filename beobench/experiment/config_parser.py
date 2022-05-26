@@ -6,8 +6,13 @@ import uuid
 import yaml
 import ast
 import sys
+import random
+import os
 
+import beobench
 import beobench.utils
+
+from beobench.constants import USER_CONFIG_PATH
 
 # To enable compatiblity with Python<=3.8 (e.g. for sinergym dockerfile)
 if sys.version_info[1] >= 9:
@@ -116,7 +121,7 @@ def get_standard_config(name: str) -> dict:
 
 
 def get_default() -> dict:
-    """Get default beobench config
+    """Get default beobench config.
 
     Returns:
         dict: default beobench config dict
@@ -125,23 +130,97 @@ def get_default() -> dict:
     return get_standard_config("default")
 
 
-def get_agent(name: str) -> pathlib.Path:
-
-    """Get standard beobench agent from beobench.data.agents.
+def get_user() -> dict:
+    """Get user beobench config.
 
     Returns:
-        Path: path/traversible to agent.
+        dict: default beobench config dict
     """
 
-    agents_path = importlib.resources.files("beobench.data.agents")
-    agent_path = agents_path.joinpath(f"{name}.py")
+    if os.path.isfile(USER_CONFIG_PATH):
+        print(f"Beobench: recognised user config at '{USER_CONFIG_PATH}'.")
+        user_config = parse(USER_CONFIG_PATH)
+    else:
+        user_config = {}
 
-    return agent_path
+    return user_config
+
+
+def add_default_and_user_configs(config: dict) -> dict:
+    """Add default and user configs to existing beobench config.
+
+    Args:
+        config (dict): beobench config
+
+    Returns:
+        dict: merged dict of given config, and user and default configs.
+    """
+
+    default_config = get_default()
+    user_config = get_user()
+    user_default_config = beobench.utils.merge_dicts(
+        a=default_config, b=user_config, let_b_overrule_a=True
+    )
+    config = beobench.utils.merge_dicts(
+        a=user_default_config, b=config, let_b_overrule_a=True
+    )
+
+    return config
 
 
 def get_autogen_config() -> dict:
-    run_id = uuid.uuid4().hex
+    """Get automatically generated parts of a Beobench configuration."""
 
-    config = {"autogen": {"run_id": run_id}}
+    config = {
+        "autogen": {
+            "run_id": uuid.uuid4().hex,
+            "random_seed": random.randint(1, 10000000),
+        },
+    }
+
+    return config
+
+
+def check_config(config: dict) -> None:
+    """Check if config is valid.
+
+    Args:
+        config (dict): Beobench config.
+    """
+    requested_version = config["general"]["version"]
+    if requested_version != beobench.__version__:
+        raise ValueError(
+            f"Beobench config requests version {requested_version}"
+            f" that does not match installed version {beobench.__version__}. "
+            "Change the installed Beobench version to the requested version "
+            f"{requested_version} or remove general.version parameter from config "
+            "to prevent this error."
+        )
+
+
+def get_high_level_config(method: str, gym: str, env: str) -> dict:
+    """Get config from agent, gym and env params.
+
+    Args:
+        method (str): name of method
+        gym (str): name of gym
+        env (str): name of environment.
+
+    Returns:
+        dict: Beobench configuration.
+    """
+
+    config = {}
+    if method is not None:
+        config = beobench.utils.merge_dicts(
+            config,
+            get_standard_config(f"method_{method}"),
+        )
+    if gym is not None and env is not None:
+        config = beobench.utils.merge_dicts(
+            config,
+            get_standard_config(f"gym_{gym}"),
+        )
+        config["env"]["name"] = env
 
     return config

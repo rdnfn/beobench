@@ -1,0 +1,22 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  Beobench: A Toolkit for Unified Access to Building
+  Simulations for Reinforcement Learning
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+version: 0.5.0
+url: https://github.com/rdnfn/beobench
+authors:
+  - given-names: Arduin
+    family-names: Findeis
+  - given-names: Fiodar
+    family-names: Kazhamiaka
+  - given-names: Scott
+    family-names: Jeen
+  - given-names: Srinivasan
+    family-names: Keshav

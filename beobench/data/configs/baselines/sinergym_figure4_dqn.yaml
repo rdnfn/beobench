@@ -1,0 +1,51 @@
+# Reproduction of experiment shown in Figure 4 of Sinergym paper.
+# The paper can be found at: https://dl.acm.org/doi/abs/10.1145/3486611.3488729
+#
+# Some of the descriptions of RLlib config values are taken from
+# https://docs.ray.io/en/latest/rllib/rllib-training.html
+#
+# From environment output we can deduce that the step size is 15 minutes
+# (In january there are 2976 steps / 31 days -> 96 steps per day
+# -> step size of 15 min)
+
+env:
+  gym: sinergym
+  name: Eplus-5Zone-hot-discrete-v1
+  config:
+    name: Eplus-5Zone-hot-discrete-v1
+    # whether to normalise the observations
+    normalize: True
+agent:
+  origin: rllib
+  config:
+    run_or_experiment: DQN
+    config:
+      lr: 0.0001
+      gamma: 0.99
+      # Number of steps after which the episode is forced to terminate. Defaults
+      # to `env.spec.max_episode_steps` (if present) for Gym envs.
+      horizon: 24 # one week 672 = 96 * 7 # other previous values: 96 # 10000 #
+      # Calculate rewards but don't reset the environment when the horizon is
+      # hit. This allows value estimation and RNN state to span across logical
+      # episodes denoted by horizon. This only has an effect if horizon != inf.
+      soft_horizon: True
+      num_workers: 1 # this is required, otherwise effectively assuming simulator.
+      # Training batch size, if applicable. Should be >= rollout_fragment_length.
+      # Samples batches will be concatenated together to a batch of this size,
+      # which is then passed to SGD.
+      train_batch_size: 24
+    stop:
+      timesteps_total: 105120 # = 3 years # 35040 # = 365 * 96 (full year)
+wrappers:
+  - origin: general
+    class: WandbLogger
+    config:
+      log_freq: 1
+      summary_metric_keys:
+        - env.returns.reward
+        - env.returns.info.total_power
+        - env.returns.info.comfort_penalty
+general:
+  wandb_project: sinergym_fig4_baseline
+  num_samples: 5
+

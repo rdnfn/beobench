@@ -4,6 +4,7 @@ import gym
 import gym.spaces
 import warnings
 import wandb
+import numpy as np
 
 from beobench.experiment.provider import config
 
@@ -86,14 +87,28 @@ class PreventReset(gym.Wrapper):
 class WandbLogger(gym.Wrapper):
     """Wrapper to log all env data for every xth step."""
 
-    def __init__(self, env: gym.Env, log_freq: int = 1):
+    def __init__(
+        self,
+        env: gym.Env,
+        log_freq: int = 1,
+        summary_metric_keys: list = None,
+        restart_sum_metrics_at_reset: bool = False,
+    ):
         """Wrapper to log all env data for every xth step.
 
         Args:
             env (gym.Env): environment to wrap.
             log_freq (int, optional): how often to log the step() method. E.g. for 2
                 every second step is logged. Defaults to 1.
+            summary_metric_keys (list, optional): list of keys of logged metrics for
+                summary metrics such as cummulative sum and mean are computed. This
+                defaults to ["env.returns.reward"]. WARNING: summary metrics only
+                work for log_feq == 1, otherwise the cummulative metrics will not be
+                correct.
         """
+
+        if summary_metric_keys is None:
+            summary_metric_keys = ["env.returns.reward"]
 
         super().__init__(env)
         wandb.init(
@@ -104,6 +119,10 @@ class WandbLogger(gym.Wrapper):
         )
         self.log_freq = log_freq
         self.total_env_steps = 0
+        self.restart_sum_metrics_at_reset = restart_sum_metrics_at_reset
+        self.cum_metrics = {key: 0 for key in summary_metric_keys}
+        self.num_env_resets = 0
+        self.last_log_dict = {}
 
     def step(self, action):
         obs, reward, done, info = self.env.step(action)
@@ -111,16 +130,51 @@ class WandbLogger(gym.Wrapper):
         self.total_env_steps += 1
 
         if self.total_env_steps % self.log_freq == 0:
+            # TODO: enable flat dict for dict action and observation spaces
+            # This would allow for summary values of invididual actions/observations
+            if isinstance(action, (list, np.ndarray)):
+                for i, act in enumerate(action):
+                    new_action = {f"{i}": act}
+                action = new_action
+
             log_dict = {
-                "env": {
-                    "action": action,
-                    "obs": obs,
-                    "reward": reward,
-                    "done": done,
-                    "info": info,
-                    "step": self.total_env_steps,
-                }
+                "env.inputs.action": action,
+                "env.returns.obs": obs,
+                "env.returns.reward": reward,
+                "env.returns.done": done,
+                "env.total_steps": self.total_env_steps,
+                **{f"env.returns.info.{key}": value for key, value in info.items()},
             }
+            log_dict = self._create_summary_metrics(log_dict)
             wandb.log(log_dict)
+            self.last_log_dict = log_dict
 
         return obs, reward, done, info
+
+    def reset(self):
+
+        if self.restart_sum_metrics_at_reset:
+            wandb.log({"reset": self.last_log_dict, "reset.num": self.num_env_resets})
+            self.cum_metrics = {key: 0 for key in self.cum_metrics.keys()}
+            self.num_env_resets += 1
+
+        return self.env.reset()
+
+    def _create_summary_metrics(self, log_dict: dict):
+        """Create summary of variables in log dict.
+
+        In particular, the
+
+        Args:
+            log_dict (dict): _description_
+
+        Returns:
+            _type_: _description_
+        """
+
+        for key in self.cum_metrics.keys():
+            self.cum_metrics[key] += log_dict[key]
+            log_dict[key + "_cum"] = self.cum_metrics[key]
+            log_dict[key + "_mean"] = self.cum_metrics[key] / self.total_env_steps
+
+        return log_dict

@@ -1,0 +1,39 @@
+# Reproduction of experiment shown in Figure 4 of Sinergym paper.
+# The paper can be found at: https://dl.acm.org/doi/abs/10.1145/3486611.3488729
+#
+# Some of the descriptions of RLlib config values are taken from
+# https://docs.ray.io/en/latest/rllib/rllib-training.html
+#
+# From environment output we can deduce that the step size is 15 minutes
+# (In january there are 2976 steps / 31 days -> 96 steps per day
+# -> step size of 15 min)
+
+env:
+  gym: sinergym
+  name: Eplus-5Zone-hot-discrete-v1
+  config:
+    name: Eplus-5Zone-hot-discrete-v1
+    # whether to normalise the observations
+    normalize: True
+agent:
+  origin: random_action
+  config:
+    config:
+      horizon: 96
+    stop:
+      timesteps_total: 105120 # 35040
+    imitate_rllib_env_checks: True
+wrappers:
+  - origin: general
+    class: WandbLogger
+    config:
+      log_freq: 1
+      summary_metric_keys:
+        - env.returns.reward
+        - env.returns.info.total_power
+        - env.returns.info.comfort_penalty
+general:
+  wandb_project: sinergym_fig4_baseline
+  wandb_group: random_action
+  num_samples: 5
+

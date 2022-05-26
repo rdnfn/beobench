@@ -38,6 +38,8 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.autosummary",
     "sphinx_tabs.tabs",
+    "sphinx.ext.napoleon",
+    "sphinx_autodoc_typehints",
     # "myst_parser",
     # "m2r2",
 ]

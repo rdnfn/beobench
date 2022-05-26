@@ -24,7 +24,7 @@
         :target: https://opensource.org/licenses/MIT
         :alt: License
 
-A toolkit providing easy and unified access to building control environments for reinforcement learning (RL). Compared to other domains, `RL environments for building control <https://github.com/rdnfn/rl-building-control#environments>`_ tend to be more difficult to install and handle. Most environments require the user to either manually install a building simulator (e.g. `EnergyPlus <https://github.com/NREL/EnergyPlus>`_) or to manually manage Docker containers. This is tedious.
+A toolkit providing easy and unified access to building control environments for reinforcement learning (RL). Compared to other domains, `RL environments for building control <https://github.com/rdnfn/rl-building-control#environments>`_ tend to be more difficult to install and handle. Most environments require the user to either manually install a building simulator (e.g. `EnergyPlus <https://github.com/NREL/EnergyPlus>`_) or to manually manage Docker containers. This can be tedious.
 
 Beobench was created to make building control environments easier to use and experiments more reproducible. Beobench uses Docker to manage all environment dependencies in the background so that the user doesn't have to. A standardised API, illustrated in the figure below, allows the user to easily configure experiments and evaluate new RL agents on building control environments.
 
@@ -66,7 +66,7 @@ Installation
 ------------
 
 1. `Install docker <https://docs.docker.com/get-docker/>`_ on your machine (if on Linux, check the `additional installation steps <https://beobench.readthedocs.io/en/latest/guides/installation_linux.html>`_)
-2. Install *beobench* using:
+2. Install Beobench using:
 
         .. code-block:: console
 
@@ -94,9 +94,23 @@ Experiment configuration
 
 To get started with our first experiment, we set up an *experiment configuration*.
 Experiment configurations
-can be given as a yaml file or a Python dictionary. Such a configuration
+can be given as a yaml file or a Python dictionary. The configuration
 fully defines an experiment, configuring everything
-from the RL agent to the environment and its wrappers.
+from the RL agent to the environment and its wrappers. The figure below illustrates the config structure.
+
+.. raw:: html
+
+   <p align="center">
+
+.. image:: https://github.com/rdnfn/beobench/raw/2cf961a8135b25c9a66e70d67eea9890ce0b878a/docs/_static/beobench_config_v1.png
+        :align: center
+        :width: 350 px
+        :alt: Beobench
+
+.. raw:: html
+
+   </p>
+
 
 Let's look at a concrete example. Consider this ``config.yaml`` file:
 
@@ -174,7 +188,7 @@ Execution
 
 .. end-qs-sec3
 
-Given the configuration and agent script above, we can run the experiment using either via the command line:
+Given the configuration and agent script above, we can run the experiment either via the command line:
 
 .. code-block:: console
 

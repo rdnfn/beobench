@@ -8,8 +8,10 @@ agent:
   config: # given to ray.tune.run() as arguments (since rllib set before)
     run_or_experiment: PPO
     log_to_file: True
+    stop:
+      timesteps_total: 35040 # 1 year w 15 min timesteps
     config:
-      lr: 0.0005
+      lr: 0.005
       model:
         fcnet_activation: relu
         fcnet_hiddens: [256,256,256,256]

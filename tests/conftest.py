@@ -9,4 +9,4 @@ collect_ignore_glob = ["performance"]
 
 @pytest.fixture
 def run_config():
-    return beobench.experiment.config_parser.get_standard_config("simple")
+    return beobench.experiment.config_parser.get_standard_config("test_energym")

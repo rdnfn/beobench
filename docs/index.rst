@@ -1,5 +1,5 @@
 *************
-Beobench Docs
+Beobench docs
 *************
 
 .. include:: ../README.rst
@@ -16,8 +16,7 @@ Contents
    Home <self>
    getting_started
    envs
-   advanced_usage
-   api
+   guides/index
    contributing
    credits
    history

@@ -28,10 +28,24 @@ try:
 except KeyError:
     horizon = 1000
 
+try:
+    imitate_rllib_env_checks = config["agent"]["config"]["imitate_rllib_env_checks"]
+except KeyError:
+    imitate_rllib_env_checks = False
+
 
 print("Random agent: starting test.")
 
 env = create_env()
+
+if imitate_rllib_env_checks:
+    # RLlib appears to reset and take single action in env
+    # this may be to check compliance of env with space etc.
+    env.reset()
+    action = env.action_space.sample()
+    _, _, _, _ = env.step(action)
+
+
 observation = env.reset()
 
 num_steps_per_ep = 0

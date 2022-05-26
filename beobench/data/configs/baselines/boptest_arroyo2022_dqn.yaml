@@ -1,0 +1,72 @@
+# A first attempt at reproduction of experiments in the following paper by Arroyo et al.
+# https://lirias.kuleuven.be/retrieve/658452
+#
+# Some of the descriptions of RLlib config values are taken from
+# https://docs.ray.io/en/latest/rllib/rllib-training.html
+# other from
+# https://github.com/ibpsa/project1-boptest-gym/blob/master/boptestGymEnv.py
+
+env:
+  gym: boptest
+  config:
+    name: bestest_hydronic_heat_pump
+    # whether to normalise the observations and actions
+    normalize: True
+    discretize: True
+    gym_kwargs:
+      actions: ["oveHeaPumY_u"]
+      # Dictionary mapping observation keys to a tuple with the lower
+      # and upper bound of each observation. Observation keys must
+      # belong either to the set of measurements or to the set of
+      # forecasting variables of the BOPTEST test case. Contrary to
+      # the actions, the expected minimum and maximum values of the
+      # measurement and forecasting variables are not provided from
+      # the BOPTEST framework, although they are still relevant here
+      # e.g. for normalization or discretization. Therefore, these
+      # bounds need to be provided by the user.
+      # If `time` is included as an observation, the time in seconds
+      # will be passed to the agent. This is the remainder time from
+      # the beginning of the episode and for periods of the length
+      # specified in the upper bound of the time feature.
+      observations:
+        reaTZon_y: [280.0, 310.0]
+      # Set to True if desired to use a random start time for each episode
+      random_start_time: True
+      # Maximum duration of each episode in seconds
+      max_episode_length: 31536000 # one year in seconds
+      # Desired simulation period to initialize each episode
+      warmup_period: 10
+      # Sampling time in seconds
+      step_period: 900 # = 15min
+agent:
+  origin: rllib
+  config:
+    run_or_experiment: DQN
+    config:
+      lr: 0.0001
+      gamma: 0.99
+      # Number of steps after which the episode is forced to terminate. Defaults
+      # to `env.spec.max_episode_steps` (if present) for Gym envs.
+      horizon: 24 # one week 672 = 96 * 7 # other previous values: 96 # 10000 #
+      # Calculate rewards but don't reset the environment when the horizon is
+      # hit. This allows value estimation and RNN state to span across logical
+      # episodes denoted by horizon. This only has an effect if horizon != inf.
+      soft_horizon: True
+      num_workers: 1 # this is required, otherwise effectively assuming simulator.
+      # Training batch size, if applicable. Should be >= rollout_fragment_length.
+      # Samples batches will be concatenated together to a batch of this size,
+      # which is then passed to SGD.
+      train_batch_size: 24
+    stop:
+      timesteps_total: 105120 # = 3 years # 35040 # = 365 * 96 (full year)
+wrappers:
+  - origin: general
+    class: WandbLogger
+    config:
+      log_freq: 1
+      summary_metric_keys:
+        - env.returns.reward
+general:
+  wandb_project: boptest_arroyo2022_baseline
+  wandb_group: random_action
+  num_samples: 1

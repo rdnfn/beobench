@@ -7,6 +7,7 @@ import uuid
 import subprocess
 import pathlib
 import yaml
+import copy
 import contextlib
 from typing import Union
 
@@ -28,6 +29,7 @@ from beobench.constants import CONTAINER_DATA_DIR, CONTAINER_RO_DIR, AVAILABLE_A
 def run(
     config: Union[str, dict, pathlib.Path, list] = None,
     method: str = None,
+    gym: str = None,
     env: str = None,
     local_dir: str = None,
     wandb_project: str = None,
@@ -42,6 +44,8 @@ def run(
     no_additional_container: bool = False,
     docker_flags: list[str] = None,
     beobench_extras: str = None,
+    force_build: str = False,
+    num_samples: int = None,
 ) -> None:
     """Run experiment.
 
@@ -71,12 +75,13 @@ def run(
         docker_shm_size(str, optional): size of the shared memory available to the
             container. Defaults to None."
         use_no_cache (bool, optional): whether to use cache to build experiment
-            container. Defaults to False.
+            container. Defaults to False. This will not do anything if force_build is
+            disabled, and image already exists.
         dev_path (str, optional): file or github path to beobench package. For
             developement purpose only. This will install a custom beobench version
             inside the experiment container. By default the latest PyPI version is
             installed.
-        no_additional_container (bool, optional): wether not to start another container
+        no_additional_container (bool, optional): whether not to start another container
             to run experiments in. Defaults to False, which means that another container
             is started to run experiments in.
         docker_flags (list[str], optional): list of docker flags to be added to
@@ -84,6 +89,10 @@ def run(
         beobench_extras (str, optional): extra dependencies to install with beobench.
             Used during pip installation in experiment image, as in using the command:
             `pip install beobench[<beobench_extras>]`
+        force_build (bool, optional): whether to force a re-build, even if
+            image already exists.
+        num_samples (int, optional): number of experiment samples to run. This defaults
+            to a single sample, i.e. just running the experiment once.
     """
     print("Beobench: starting experiment run ...")
     # parsing relevant kwargs and adding them to config
@@ -100,183 +109,201 @@ def run(
         dev_path=dev_path,
         docker_flags=docker_flags,
         beobench_extras=beobench_extras,
+        force_build=force_build,
+        num_samples=num_samples,
     )
 
     # parse combined config
     config = beobench.experiment.config_parser.parse([config, kwarg_config])
 
-    # adding any defaults that haven't been set by user given config
-    default_config = beobench.experiment.config_parser.get_default()
+    high_level_config = beobench.experiment.config_parser.get_high_level_config(
+        method=method, gym=gym, env=env
+    )
     config = beobench.utils.merge_dicts(
-        a=default_config, b=config, let_b_overrule_a=True
+        config, high_level_config, let_b_overrule_a=True
     )
 
-    autogen_config = beobench.experiment.config_parser.get_autogen_config()
-    config = beobench.utils.merge_dicts(
-        a=autogen_config, b=config, let_b_overrule_a=True
-    )
+    # adding any defaults that haven't been set by given config
+    # The configs can be conflicting:
+    # config overrules user_config which overrules default_config.
+    config = beobench.experiment.config_parser.add_default_and_user_configs(config)
+    beobench.experiment.config_parser.check_config(config)
 
-    # select agent script
-    if config["agent"]["origin"] in AVAILABLE_AGENTS:
-        agent_file = beobench.experiment.config_parser.get_agent(
-            config["agent"]["origin"]
-        )
-        package_agent = True
-    else:
-        agent_file = pathlib.Path(config["agent"]["origin"])
-        package_agent = False
-
-    # TODO add parsing of high level API arguments env and agent
-    if env or method:
-        raise ValueError(
+    # running experiment num_samples times
+    num_samples = config["general"]["num_samples"]
+    for i in range(1, num_samples + 1):
+        # TODO: enable checking whether something is run in container
+        # and do not print the statement below if inside experiment container.
+        print(
             (
-                "This functionality has been deprecated. Directly configure"
-                " the environment or method in the config argument."
+                f"Beobench: running experiment in container with environment "
+                f"{config['env']['name']}"
+                f" and agent from {config['agent']['origin']}. Sample {i} of"
+                f" {num_samples}."
             )
         )
 
-    print(
-        (
-            f"Beobench: running experiment with environment {config['env']['name']}"
-            f" and agent from {config['agent']['origin']}."
+        autogen_config = beobench.experiment.config_parser.get_autogen_config()
+        config = beobench.utils.merge_dicts(
+            a=config, b=autogen_config, let_b_overrule_a=True
         )
+
+        if no_additional_container:
+            # Execute experiment
+            # (this is usually reached from inside an experiment container)
+
+            container_ro_dir_abs = CONTAINER_RO_DIR.absolute()
+            args = [
+                "python",
+                str(container_ro_dir_abs / _get_agent_file(config)[0].name),
+            ]
+            subprocess.check_call(args)
+
+        else:
+            # First build container image and then execute experiment inside container
+            # But only run one experiment per container.
+            config["general"]["num_samples"] = 1
+            _build_and_run_in_container(config)
+
+
+def _build_and_run_in_container(config: dict) -> None:
+    """Build container image and run experiment in docker container.
+
+    Args:
+        config (dict): Beobench configuration.
+    """
+
+    # We need to deepcopy the config as some sensitive data (API keys) is deleted at
+    # some point below. This can otherwise cause problems when running multiple
+    # samples of the same experiment.
+    config = copy.deepcopy(config)
+
+    ### part 1: build docker images
+    # Ensure local_dir exists, and create otherwise
+    local_dir_path = pathlib.Path(config["general"]["local_dir"])
+    local_dir_path.mkdir(parents=True, exist_ok=True)
+    local_dir_path_abs = local_dir_path.absolute()
+    container_data_dir_abs = CONTAINER_DATA_DIR.absolute()
+
+    if (
+        config["general"]["beobench_extras"] == "extended"
+        and config["agent"]["origin"] == "rllib"
+    ):
+        beobench_extras = "extended,rllib"
+    else:
+        beobench_extras = config["general"]["beobench_extras"]
+
+    image_tag = beobench.experiment.containers.build_experiment_container(
+        build_context=config["env"]["gym"],
+        use_no_cache=config["general"]["use_no_cache"],
+        beobench_extras=beobench_extras,
+        beobench_package=config["general"]["dev_path"],
+        force_build=config["general"]["force_build"],
     )
 
-    if no_additional_container:
-        # Execute experiment
-        # (this is usually reached from inside an experiment container)
-
-        container_ro_dir_abs = CONTAINER_RO_DIR.absolute()
-        args = ["python", str(container_ro_dir_abs / agent_file.name)]
-        subprocess.check_call(args)
-
+    ### part 2: create args and run command in docker container
+    if config["general"]["docker_flags"] is None:
+        docker_flags = []
     else:
-        # build and run experiments in docker container
+        docker_flags = config["general"]["docker_flags"]
 
-        ### part 1: build docker images
-        # Ensure local_dir exists, and create otherwise
-        local_dir_path = pathlib.Path(config["general"]["local_dir"])
-        local_dir_path.mkdir(parents=True, exist_ok=True)
-        local_dir_path_abs = local_dir_path.absolute()
-        container_data_dir_abs = CONTAINER_DATA_DIR.absolute()
+    # if no wandb API key is given try to get it from env
+    if config["general"]["wandb_api_key"] is None:
+        # this will return "" if env var not set
+        wandb_api_key = os.getenv("WANDB_API_KEY", "")
+    else:
+        wandb_api_key = config["general"]["wandb_api_key"]
 
-        if (
-            config["general"]["beobench_extras"] == "extended"
-            and config["agent"]["origin"] == "rllib"
-        ):
-            beobench_extras = "extended,rllib"
-        else:
-            beobench_extras = config["general"]["beobench_extras"]
+    # We don't want the key to be logged in wandb
+    del config["general"]["wandb_api_key"]
 
-        image_tag = beobench.experiment.containers.build_experiment_container(
-            build_context=config["env"]["gym"],
-            use_no_cache=config["general"]["use_no_cache"],
-            beobench_extras=beobench_extras,
-            beobench_package=config["general"]["dev_path"],
-        )
+    # Save config to local dir and add mount flag for config
+    config_path = local_dir_path / "tmp" / "config.yaml"
+    config_path.parent.mkdir(parents=True, exist_ok=True)
+    config_path_abs = config_path.absolute()
+    config_container_path_abs = (CONTAINER_RO_DIR / "config.yaml").absolute()
+    with open(config_path, "w", encoding="utf-8") as conf_file:
+        yaml.dump(config, conf_file)
+    docker_flags += [
+        "-v",
+        f"{config_path_abs}:{config_container_path_abs}:ro",
+    ]
 
-        ### part 2: create args and run command in docker container
-        if config["general"]["docker_flags"] is None:
-            docker_flags = []
-        else:
-            docker_flags = config["general"]["docker_flags"]
+    # setup container name with unique identifier
+    unique_id = uuid.uuid4().hex[:6]
+    container_name = f"auto_beobench_experiment_{unique_id}"
 
-        # if no wandb API key is given try to get it from env
-        if config["general"]["wandb_api_key"] is None:
-            # this will return "" if env var not set
-            wandb_api_key = os.getenv("WANDB_API_KEY", "")
-        else:
-            wandb_api_key = config["general"]["wandb_api_key"]
+    # enable docker-from-docker access only for built-in boptest integration.
+    if config["env"]["gym"] == "boptest":
 
-        # We don't want the key to be logged in wandb
-        del config["general"]["wandb_api_key"]
+        # Create docker network (only useful if starting other containers)
+        beobench.experiment.containers.create_docker_network("beobench-net")
 
-        # Save config to local dir and add mount flag for config
-        config_path = local_dir_path / "tmp" / "config.yaml"
-        config_path.parent.mkdir(parents=True, exist_ok=True)
-        config_path_abs = config_path.absolute()
-        config_container_path_abs = (CONTAINER_RO_DIR / "config.yaml").absolute()
-        with open(config_path, "w", encoding="utf-8") as conf_file:
-            yaml.dump(config, conf_file)
         docker_flags += [
+            # enable access to docker-from-docker
             "-v",
-            f"{config_path_abs}:{config_container_path_abs}:ro",
+            "/var/run/docker.sock:/var/run/docker.sock",
+            # network allows access to BOPTEST API in other containers
+            "--network",
+            "beobench-net",
         ]
 
-        # setup container name with unique identifier
-        unique_id = uuid.uuid4().hex[:6]
-        container_name = f"auto_beobench_experiment_{unique_id}"
+    # enabling GPU access in docker container
+    if config["general"]["use_gpu"]:
+        docker_flags += [
+            # add all available GPUs
+            "--gpus=all",
+        ]
 
-        # enable docker-from-docker access only for built-in boptest integration.
-        if config["env"]["gym"] == "boptest":
+    # define flags for beobench scheduler call inside experiment container
+    beobench_flags = []
+    beobench_flags.append(f'--config="{config}"')
+    beobench_flag_str = " ".join(beobench_flags)
 
-            # Create docker network (only useful if starting other containers)
-            beobench.experiment.containers.create_docker_network("beobench-net")
+    with contextlib.ExitStack() as stack:
+        # get agent file path
+        agent_file, uses_importlib = _get_agent_file(config)
+        # if using package built-in agent, then make sure agent file path exists
+        # by entering context (because it's potentially temp.).
+        if uses_importlib:
+            agent_file = stack.enter_context(importlib.resources.as_file(agent_file))
+        # load agent file
+        ag_file_abs = agent_file.absolute()
+        ag_file_on_docker_abs = (CONTAINER_RO_DIR / agent_file.name).absolute()
+        docker_flags += [
+            "-v",
+            f"{ag_file_abs}:{ag_file_on_docker_abs}:ro",
+        ]
 
-            docker_flags += [
-                # enable access to docker-from-docker
-                "-v",
-                "/var/run/docker.sock:/var/run/docker.sock",
-                # network allows access to BOPTEST API in other containers
-                "--network",
-                "beobench-net",
-            ]
+        args = [
+            "docker",
+            "run",
+            # mount experiment data dir
+            "-v",
+            f"{local_dir_path_abs}:{container_data_dir_abs}",
+            # automatically remove container when stopped/exited
+            "--rm",
+            # add more memory
+            f"--shm-size={config['general']['docker_shm_size']}",
+            "--name",
+            container_name,
+            *docker_flags,
+            image_tag,
+            "/bin/bash",
+            "-c",
+            (
+                f"export WANDB_API_KEY={wandb_api_key} && "
+                f"beobench run {beobench_flag_str} "
+                "--no-additional-container && bash"
+            ),
+        ]
 
-        # enabling GPU access in docker container
-        if config["general"]["use_gpu"]:
-            docker_flags += [
-                # add all available GPUs
-                "--gpus=all",
-            ]
+        arg_str = " ".join(args)
+        if wandb_api_key:
+            arg_str = arg_str.replace(wandb_api_key, "<API_KEY_HIDDEN>")
+        print(f"Executing docker command: {arg_str}")
 
-        # define flags for beobench scheduler call inside experiment container
-        beobench_flags = []
-        beobench_flags.append(f'--config="{config}"')
-        beobench_flag_str = " ".join(beobench_flags)
-
-        with contextlib.ExitStack() as stack:
-            # if using package agent, get (potentially temp.) agent file path
-            if package_agent:
-                agent_file = stack.enter_context(
-                    importlib.resources.as_file(agent_file)
-                )
-            # load agent file
-            ag_file_abs = agent_file.absolute()
-            ag_file_on_docker_abs = (CONTAINER_RO_DIR / agent_file.name).absolute()
-            docker_flags += [
-                "-v",
-                f"{ag_file_abs}:{ag_file_on_docker_abs}:ro",
-            ]
-
-            args = [
-                "docker",
-                "run",
-                # mount experiment data dir
-                "-v",
-                f"{local_dir_path_abs}:{container_data_dir_abs}",
-                # automatically remove container when stopped/exited
-                "--rm",
-                # add more memory
-                f"--shm-size={config['general']['docker_shm_size']}",
-                "--name",
-                container_name,
-                *docker_flags,
-                image_tag,
-                "/bin/bash",
-                "-c",
-                (
-                    f"export WANDB_API_KEY={wandb_api_key} && "
-                    f"beobench run {beobench_flag_str} "
-                    "--no-additional-container && bash"
-                ),
-            ]
-
-            arg_str = " ".join(args)
-            if wandb_api_key:
-                arg_str = arg_str.replace(wandb_api_key, "<API_KEY_HIDDEN>")
-            print(f"Executing docker command: {arg_str}")
-
-            subprocess.check_call(args)
+        subprocess.check_call(args)
 
 
 def _create_config_from_kwargs(**kwargs) -> dict:
@@ -290,3 +317,25 @@ def _create_config_from_kwargs(**kwargs) -> dict:
         if value:
             config["general"][key] = value
     return config
+
+
+def _get_agent_file(config: dict) -> tuple:
+    """Get agent file path based on config.
+
+    Args:
+        config (dict): Beobench config.
+
+    Returns:
+        tuple: path or traversible of agent file, and whether agent is accessed via
+            importlib.
+    """
+
+    if config["agent"]["origin"] in AVAILABLE_AGENTS:
+        agents_path = importlib.resources.files("beobench.data.agents")
+        agent_file = agents_path.joinpath(f"{config['agent']['origin']}.py")
+        uses_importlib = True
+    else:
+        agent_file = pathlib.Path(config["agent"]["origin"])
+        uses_importlib = False
+
+    return agent_file, uses_importlib
