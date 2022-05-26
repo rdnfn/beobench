@@ -1,7 +1,6 @@
 """Module to schedule experiments."""
 
 from __future__ import annotations
-from importlib.abc import Traversable
 
 import os
 import uuid
@@ -154,7 +153,10 @@ def run(
             # (this is usually reached from inside an experiment container)
 
             container_ro_dir_abs = CONTAINER_RO_DIR.absolute()
-            args = ["python", str(container_ro_dir_abs / _get_agent_file(config).name)]
+            args = [
+                "python",
+                str(container_ro_dir_abs / _get_agent_file(config)[0].name),
+            ]
             subprocess.check_call(args)
 
         else:
@@ -260,10 +262,10 @@ def _build_and_run_in_container(config: dict) -> None:
 
     with contextlib.ExitStack() as stack:
         # get agent file path
-        agent_file = _get_agent_file(config)
+        agent_file, uses_importlib = _get_agent_file(config)
         # if using package built-in agent, then make sure agent file path exists
         # by entering context (because it's potentially temp.).
-        if isinstance(agent_file, Traversable):
+        if uses_importlib:
             agent_file = stack.enter_context(importlib.resources.as_file(agent_file))
         # load agent file
         ag_file_abs = agent_file.absolute()
@@ -317,20 +319,23 @@ def _create_config_from_kwargs(**kwargs) -> dict:
     return config
 
 
-def _get_agent_file(config: dict) -> Union[Traversable, pathlib.Path]:
+def _get_agent_file(config: dict) -> tuple:
     """Get agent file path based on config.
 
     Args:
         config (dict): Beobench config.
 
     Returns:
-        Union[Traversable, pathlib.Path]: path or traversible of agent file.
+        tuple: path or traversible of agent file, and whether agent is accessed via
+            importlib.
     """
 
     if config["agent"]["origin"] in AVAILABLE_AGENTS:
         agents_path = importlib.resources.files("beobench.data.agents")
         agent_file = agents_path.joinpath(f"{config['agent']['origin']}.py")
+        uses_importlib = True
     else:
         agent_file = pathlib.Path(config["agent"]["origin"])
+        uses_importlib = False
 
-    return agent_file
+    return agent_file, uses_importlib
