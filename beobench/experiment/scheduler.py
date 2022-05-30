@@ -307,7 +307,8 @@ def _build_and_run_in_container(config: dict) -> None:
             arg_str = arg_str.replace(wandb_api_key, "<API_KEY_HIDDEN>")
         logger.info(f"Executing docker command: {arg_str}")
 
-        subprocess.check_call(args)
+        # subprocess.check_call(args)
+        beobench.utils.run_command(args, process_name="exp. container")
 
 
 def _create_config_from_kwargs(**kwargs) -> dict:

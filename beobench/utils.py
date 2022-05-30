@@ -1,6 +1,7 @@
 """Module with a number of utility functions."""
 
 import docker
+import subprocess
 
 import beobench.logging
 from beobench.logging import logger
@@ -115,3 +116,19 @@ def restart() -> None:
     """
 
     shutdown()
+
+
+def run_command(cmd_line_args, process_name):
+    """Run command and log its output."""
+
+    process = subprocess.Popen(
+        cmd_line_args,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    with process.stdout:
+        beobench.logging.log_subprocess(
+            process.stdout,
+            process_name=process_name,
+        )
+    _ = process.wait()  # 0 means success
