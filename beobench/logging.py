@@ -15,7 +15,7 @@ def setup(include_time=False) -> None:
         sys.stdout,
         colorize=True,
         format=(
-            "<blue>Beobench</blue> "
+            "<blue><b>Beobench</b></blue> "
             "<y>⚡️</y>"
             f"{time_str}"
             "<level>{message}</level>"
@@ -27,6 +27,8 @@ def log_subprocess(pipe, process_name="subprocess"):
     """Log subprocess pipe.
 
     Adapted from from https://stackoverflow.com/a/21978778.
+
+    Color setting of context is described in https://stackoverflow.com/a/33206814.
     """
     for line in iter(pipe.readline, b""):  # b'\n'-separated lines
         context = f"\033[34m{process_name}:\033[0m"  # .decode("ascii")
