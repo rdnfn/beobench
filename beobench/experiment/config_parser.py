@@ -8,6 +8,7 @@ import ast
 import sys
 import random
 import os
+from loguru import logger
 
 import beobench
 import beobench.utils
@@ -138,7 +139,7 @@ def get_user() -> dict:
     """
 
     if os.path.isfile(USER_CONFIG_PATH):
-        print(f"Beobench: recognised user config at '{USER_CONFIG_PATH}'.")
+        logger.info(f"Recognised user config at '{USER_CONFIG_PATH}'.")
         user_config = parse(USER_CONFIG_PATH)
     else:
         user_config = {}

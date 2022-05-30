@@ -4,6 +4,7 @@ import contextlib
 import subprocess
 import os
 import docker
+from loguru import logger
 
 import beobench
 from beobench.constants import AVAILABLE_INTEGRATIONS
@@ -74,7 +75,7 @@ def build_experiment_container(
         )
         package_build_context = True
 
-        print(f"Beobench: recognised integration named {gym_name}.")
+        logger.info(f"Recognised integration named {gym_name}.")
     else:
         # get alphanumeric name from context
         context_name = "".join(e for e in build_context if e.isalnum())
@@ -88,15 +89,14 @@ def build_experiment_container(
 
     # skip build if image already exists.
     if not force_build and check_image_exists(stage2_image_tag):
-        print(f"Beobench: existing image found ({stage2_image_tag}). Skipping build.")
+        logger.info(f"Existing image found ({stage2_image_tag}). Skipping build.")
         return stage2_image_tag
 
-    print(
-        f"Beobench: image not found ({stage2_image_tag}) or forced",
-        "rebuild. Building image.",
+    logger.warning(
+        f"Image not found ({stage2_image_tag}) or forced rebuild. Building image.",
     )
 
-    print(f"Building experiment base image `{stage0_image_tag}`...")
+    logger.info(f"Building experiment base image `{stage0_image_tag}`...")
 
     with contextlib.ExitStack() as stack:
         # if using build context from beobench package, get (potentially temp.) build
@@ -114,7 +114,7 @@ def build_experiment_container(
             build_context,
         ]
         env = os.environ.copy()
-        print("Running command: " + " ".join(stage0_build_args))
+        logger.info("Running command: " + " ".join(stage0_build_args))
         subprocess.check_call(
             stage0_build_args,
             env=env,  # this enables accessing dockerfile in subdir
@@ -146,7 +146,7 @@ def build_experiment_container(
         with subprocess.Popen(
             ["cat", stage1_dockerfile], stdout=subprocess.PIPE
         ) as proc:
-            print("Running command: " + " ".join(stage1_build_args))
+            logger.info("Running command: " + " ".join(stage1_build_args))
             subprocess.check_call(
                 stage1_build_args,
                 stdin=proc.stdout,
@@ -191,14 +191,14 @@ def build_experiment_container(
         with subprocess.Popen(
             ["cat", stage2_dockerfile], stdout=subprocess.PIPE
         ) as proc:
-            print("Running command: " + " ".join(stage2_build_args))
+            logger.info("Running command: " + " ".join(stage2_build_args))
             subprocess.check_call(
                 stage2_build_args,
                 stdin=proc.stdout,
                 env=env,  # this enables accessing dockerfile in subdir
             )
 
-    print("Experiment gym image build finished.")
+    logger.info("Experiment gym image build finished.")
 
     return stage2_image_tag
 
@@ -213,10 +213,10 @@ def create_docker_network(network_name: str) -> None:
         network_name (str): name of docker network.
     """
 
-    print("Creating docker network ...")
+    logger.info("Creating docker network ...")
     try:
         args = ["docker", "network", "create", network_name]
         subprocess.check_call(args)
-        print("Docker network created.")
+        logger.info("Docker network created.")
     except subprocess.CalledProcessError:
-        print("No new network created. Network may already exist.")
+        logger.info("No new network created. Network may already exist.")

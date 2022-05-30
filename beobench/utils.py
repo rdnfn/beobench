@@ -1,6 +1,8 @@
 """Module with a number of utility functions."""
 
 import docker
+from loguru import logger
+import sys
 
 
 def check_if_in_notebook() -> bool:
@@ -87,17 +89,19 @@ def merge_dicts(
 def shutdown() -> None:
     """Shut down all beobench and BOPTEST containers."""
 
-    print("Stopping any remaining beobench and BOPTEST docker containers...")
+    setup_logging()
+
+    logger.info("Stopping any remaining beobench and BOPTEST docker containers...")
 
     client = docker.from_env()
     container_num = 0
     for container in client.containers.list():
         if "auto_beobench" in container.name or "auto_boptest" in container.name:
-            print(f"Stopping container {container.name}")
+            logger.info(f"Stopping container {container.name}")
             container.stop(timeout=0)
             container_num += 1
 
-    print(f"Stopped {container_num} container(s).")
+    logger.info(f"Stopped {container_num} container(s).")
 
 
 def restart() -> None:
@@ -110,3 +114,18 @@ def restart() -> None:
     """
 
     shutdown()
+
+
+def setup_logging() -> None:
+    """Setup Beobench loguru logging setup."""
+    logger.remove()
+    logger.add(
+        sys.stdout,
+        colorize=True,
+        format=(
+            "<blue>Beobench</blue> "
+            "<y>⚡️</y>"
+            "<light-black>[{time:YYYY-MM-DD, HH:mm:ss.SSSS}]</light-black> "
+            "<level>{message}</level>"
+        ),
+    )
