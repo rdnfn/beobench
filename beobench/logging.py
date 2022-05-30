@@ -11,6 +11,7 @@ def setup(include_time=False) -> None:
     else:
         time_str = ""
     logger.remove()
+    logger.level("INFO", color="")
     logger.add(
         sys.stdout,
         colorize=True,
