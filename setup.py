@@ -17,6 +17,7 @@ requirements = [
     "click",
     "pyyaml",
     "importlib-resources",  # backport of importlib.resources, required for Python<=3.8
+    "loguru",
 ]
 
 # The extended requirements are only used inside experiment/gym containers
