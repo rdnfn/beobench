@@ -2,6 +2,13 @@
 History
 =======
 
+0.5.1 (2022-06-00)
+------------------
+
+* Features:
+
+  * Pretty logging based on loguru package.
+
 0.5.0 (2022-05-26)
 ------------------
 
