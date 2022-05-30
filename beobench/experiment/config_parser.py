@@ -8,7 +8,7 @@ import ast
 import sys
 import random
 import os
-from loguru import logger
+from beobench.logging import logger
 
 import beobench
 import beobench.utils

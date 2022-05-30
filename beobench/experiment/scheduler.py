@@ -10,7 +10,6 @@ import yaml
 import copy
 import contextlib
 from typing import Union
-from loguru import logger
 
 # To enable compatiblity with Python<=3.6 (e.g. for sinergym dockerfile)
 try:
@@ -24,9 +23,11 @@ except ImportError:
 import beobench.experiment.containers
 import beobench.experiment.config_parser
 import beobench.utils
+import beobench.logging
+from beobench.logging import logger
 from beobench.constants import CONTAINER_DATA_DIR, CONTAINER_RO_DIR, AVAILABLE_AGENTS
 
-beobench.utils.setup_logging()
+beobench.logging.setup()
 
 
 def run(
