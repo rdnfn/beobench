@@ -1,7 +1,8 @@
 agent:
   origin: random_action
   config:
-    num_steps: 100
+    stop:
+      timesteps_total: 3
 env:
   gym: sinergym
   config:
