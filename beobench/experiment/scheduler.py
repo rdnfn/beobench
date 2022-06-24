@@ -156,6 +156,8 @@ def run(
             # Execute experiment
             # (this is usually reached from inside an experiment container)
 
+            logger.info("Running agent script.")
+
             container_ro_dir_abs = CONTAINER_RO_DIR.absolute()
             args = [
                 "python",
@@ -308,7 +310,7 @@ def _build_and_run_in_container(config: dict) -> None:
         logger.info(f"Executing docker command: {arg_str}")
 
         # subprocess.check_call(args)
-        beobench.utils.run_command(args, process_name="exp. container")
+        beobench.utils.run_command(args, process_name="container")
 
 
 def _create_config_from_kwargs(**kwargs) -> dict:
