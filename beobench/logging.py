@@ -33,5 +33,5 @@ def log_subprocess(pipe, process_name="subprocess"):
     """
     for line in iter(pipe.readline, b""):  # b'\n'-separated lines
         context = f"\033[34m{process_name}:\033[0m"  # .decode("ascii")
-        line = line.decode("ascii").rstrip()
+        line = line.decode("utf-8").rstrip()
         logger.info(f"{context} {line}")
