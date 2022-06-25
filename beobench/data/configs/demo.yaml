@@ -8,5 +8,8 @@ env:
   config:
     name: Eplus-5Zone-hot-continuous-v1
     normalize: True
+wrappers:
+  - origin: general
+    class: WandbLogger
 general:
   local_dir: ./beobench_results
