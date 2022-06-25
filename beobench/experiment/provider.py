@@ -39,7 +39,11 @@ def create_env(env_config: dict = None) -> object:
 
     for wrapper_dict in config["wrappers"]:
         wrapper = _get_wrapper(wrapper_dict)
-        env = wrapper(env, **wrapper_dict["config"])
+        if "config" in wrapper_dict.keys():
+            wrapper_config = wrapper_dict["config"]
+        else:
+            wrapper_config = {}
+        env = wrapper(env, **wrapper_config)
 
     return env
 
