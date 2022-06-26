@@ -10,3 +10,7 @@ env:
 wrappers:
   - origin: general
     class: WandbLogger
+general:
+    wandb_entity: beobench
+    wandb_project: demo
+    # wandb_api_key: HIDDEN
