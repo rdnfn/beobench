@@ -2,12 +2,21 @@
 History
 =======
 
-0.5.1 (2022-06-00)
+0.5.1 (2022-06-28)
 ------------------
 
 * Features:
 
-  * Pretty logging based on loguru package.
+  * Add pretty logging based on loguru package. Now all Beobench output is clearly marked as such.
+
+* Improvements
+
+  * Enable adding wrapper without setting config.
+  * Add ``demo.yaml`` simple example config.
+
+* Fixes
+
+  * Update Sinergym integration to latest Sinergym version.
 
 0.5.0 (2022-05-26)
 ------------------
