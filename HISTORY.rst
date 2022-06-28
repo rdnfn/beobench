@@ -9,12 +9,12 @@ History
 
   * Add pretty logging based on loguru package. Now all Beobench output is clearly marked as such.
 
-* Improvements
+* Improvements:
 
   * Enable adding wrapper without setting config.
   * Add ``demo.yaml`` simple example config.
 
-* Fixes
+* Fixes:
 
   * Update Sinergym integration to latest Sinergym version.
 
@@ -29,7 +29,7 @@ History
   * Configs from experiments now specify the Beobench version used. When trying to rerun an experiment this version will be checked, and an error thrown if there is a mismatch between installed and requested version.
   * Add improved high-level API for getting started. This uses the CLI arguments ``--method``, ``--gym`` and ``--env``. Example usage: ``beobench run --method ppo --gym sinergym --env Eplus-5Zone-hot-continuous-v1`` (#55).
 
-* Improvements
+* Improvements:
 
   * Add ``CITATION.cff`` file to make citing software easier.
   * By default, docker builds of experiment images are now skipped if an image with tag corresponding to installed Beobench version already exists.
@@ -38,7 +38,7 @@ History
   * Add support for logging summary metrics on every env reset to wandb.
   * Energym config now uses ``name`` argument like other integrations (#34).
 
-* Fixes
+* Fixes:
 
   * Updated BOPTEST integration to work with current version of Beobench.
 
