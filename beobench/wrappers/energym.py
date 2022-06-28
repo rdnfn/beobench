@@ -26,7 +26,7 @@ class CustomReward(gym.Wrapper):
     def step(self, action):
         obs, _, done, info = self.env.step(action)
 
-        reward = sum(
+        reward = sum(  # pylint: disable=consider-using-generator
             [info["obs"][key] * value for key, value in self.info_obs_weights.items()]
         )
         return obs, reward, done, info

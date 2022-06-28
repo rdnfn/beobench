@@ -19,15 +19,9 @@ build       # PyPA build tool
 # Jupyter notebooks
 jupyterlab
 
-# ML & RL tools
-# gym
-# torch
-# ray[rllib]
-# wandb
-
-# Convex solver tools (OPTIONAL)
-# cvxpy
-
 # for rst development (used by vscode)
 doc8
 rstcheck
+
+# logging
+loguru

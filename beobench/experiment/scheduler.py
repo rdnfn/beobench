@@ -23,7 +23,11 @@ except ImportError:
 import beobench.experiment.containers
 import beobench.experiment.config_parser
 import beobench.utils
+import beobench.logging
+from beobench.logging import logger
 from beobench.constants import CONTAINER_DATA_DIR, CONTAINER_RO_DIR, AVAILABLE_AGENTS
+
+beobench.logging.setup()
 
 
 def run(
@@ -94,7 +98,7 @@ def run(
         num_samples (int, optional): number of experiment samples to run. This defaults
             to a single sample, i.e. just running the experiment once.
     """
-    print("Beobench: starting experiment run ...")
+    logger.info("Starting experiment run ...")
     # parsing relevant kwargs and adding them to config
     kwarg_config = _create_config_from_kwargs(
         local_dir=local_dir,
@@ -134,9 +138,9 @@ def run(
     for i in range(1, num_samples + 1):
         # TODO: enable checking whether something is run in container
         # and do not print the statement below if inside experiment container.
-        print(
+        logger.info(
             (
-                f"Beobench: running experiment in container with environment "
+                f"Running experiment in container with environment "
                 f"{config['env']['name']}"
                 f" and agent from {config['agent']['origin']}. Sample {i} of"
                 f" {num_samples}."
@@ -151,6 +155,8 @@ def run(
         if no_additional_container:
             # Execute experiment
             # (this is usually reached from inside an experiment container)
+
+            logger.info("Running agent script.")
 
             container_ro_dir_abs = CONTAINER_RO_DIR.absolute()
             args = [
@@ -301,9 +307,10 @@ def _build_and_run_in_container(config: dict) -> None:
         arg_str = " ".join(args)
         if wandb_api_key:
             arg_str = arg_str.replace(wandb_api_key, "<API_KEY_HIDDEN>")
-        print(f"Executing docker command: {arg_str}")
+        logger.info(f"Executing docker command: {arg_str}")
 
-        subprocess.check_call(args)
+        # subprocess.check_call(args)
+        beobench.utils.run_command(args, process_name="container")
 
 
 def _create_config_from_kwargs(**kwargs) -> dict:

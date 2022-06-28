@@ -1,6 +1,10 @@
 """Module with a number of utility functions."""
 
 import docker
+import subprocess
+
+import beobench.logging
+from beobench.logging import logger
 
 
 def check_if_in_notebook() -> bool:
@@ -87,17 +91,19 @@ def merge_dicts(
 def shutdown() -> None:
     """Shut down all beobench and BOPTEST containers."""
 
-    print("Stopping any remaining beobench and BOPTEST docker containers...")
+    beobench.logging.setup()
+
+    logger.info("Stopping any remaining beobench and BOPTEST docker containers...")
 
     client = docker.from_env()
     container_num = 0
     for container in client.containers.list():
         if "auto_beobench" in container.name or "auto_boptest" in container.name:
-            print(f"Stopping container {container.name}")
+            logger.info(f"Stopping container {container.name}")
             container.stop(timeout=0)
             container_num += 1
 
-    print(f"Stopped {container_num} container(s).")
+    logger.info(f"Stopped {container_num} container(s).")
 
 
 def restart() -> None:
@@ -110,3 +116,19 @@ def restart() -> None:
     """
 
     shutdown()
+
+
+def run_command(cmd_line_args, process_name):
+    """Run command and log its output."""
+
+    process = subprocess.Popen(  # pylint: disable=consider-using-with
+        cmd_line_args,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    with process.stdout:
+        beobench.logging.log_subprocess(
+            process.stdout,
+            process_name=process_name,
+        )
+    _ = process.wait()  # 0 means success

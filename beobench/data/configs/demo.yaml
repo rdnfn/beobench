@@ -1,0 +1,16 @@
+agent:
+  origin: random_action
+  config:
+    stop:
+      timesteps_total: 10
+env:
+  gym: sinergym
+  config:
+    name: Eplus-5Zone-hot-continuous-v1
+wrappers:
+  - origin: general
+    class: WandbLogger
+general:
+    wandb_entity: beobench
+    wandb_project: demo
+    # wandb_api_key: HIDDEN
