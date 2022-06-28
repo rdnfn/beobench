@@ -121,7 +121,7 @@ def restart() -> None:
 def run_command(cmd_line_args, process_name):
     """Run command and log its output."""
 
-    process = subprocess.Popen(
+    process = subprocess.Popen(  # pylint: disable=consider-using-with
         cmd_line_args,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
