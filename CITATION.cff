@@ -9,7 +9,7 @@ message: >-
   If you use this software, please cite it using the
   metadata from this file.
 type: software
-version: 0.5.0
+version: 0.5.1
 url: https://github.com/rdnfn/beobench
 authors:
   - given-names: Arduin
