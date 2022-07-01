@@ -11,7 +11,7 @@ History
 
 * Fixes:
 
-  * Revert default build command to ``docker build`` from ``docker buildx build``. Only arm64 machines use ``buildx`` now. This aims to enable usage of older docker versions such as v19.03 on non-arm64 machines. Arm64 machines require buildx and thus newer docker versions.
+  * Revert default build command to ``docker build`` from ``docker buildx build``. Only arm64 machines use ``buildx`` now. This aims to enable usage of older docker versions such as v19.03 on non-arm64 machines. Arm64 machines require buildx and thus also newer docker versions.
   * Fix wrong env name in logging output. Removes unused default env name var and fix logging output to use new env name location.
 
 
