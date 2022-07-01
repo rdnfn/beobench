@@ -2,7 +2,7 @@
 
 __author__ = """Beobench authors"""
 __email__ = "-"
-__version__ = "0.5.1"
+__version__ = "0.5.2"
 
 from beobench.utils import restart
 from beobench.experiment.scheduler import run

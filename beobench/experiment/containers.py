@@ -20,7 +20,22 @@ except ImportError:
 
 
 def check_image_exists(image: str):
-    client = docker.from_env()
+    try:
+        client = docker.from_env()
+    except docker.errors.DockerException as e:
+        logger.error(
+            (
+                "Unable to access docker client. "
+                "Is Docker installed and are all permissions setup? "
+                "See here for Beobench installation guidance: "
+                "at https://beobench.readthedocs.io/en/latest/getting_started.html. "
+                "If on Linux, make sure to follow the post-installation steps to "
+                "ensure all necessary permissions are set, see here: "
+                "https://beobench.readthedocs.io/en/latest/guides/"
+                "installation_linux.html"
+            )
+        )
+        raise e
 
     try:
         client.images.get(image)
@@ -55,14 +70,18 @@ def build_experiment_container(
     # Flags are shared between gym image build and gym_and_beobench image build
     flags = []
 
-    # Using buildx to enable platform-specific builds
-    build_commands = ["docker", "buildx", "build"]
-
     # On arm64 machines force experiment containers to be amd64
     # This is only useful for development purposes.
     # (example: M1 macbooks)
     if os.uname().machine in ["arm64", "aarch64"]:
+        # Using buildx to enable platform-specific builds
+        build_commands = ["docker", "buildx", "build"]
         flags += ["--platform", "linux/amd64"]
+    else:
+        # Otherwise use standard docker build command.
+        # This change enables usage of older docker versions w/o buildx,
+        # e.g. v19.03, on non-arm64 machines
+        build_commands = ["docker", "build"]
 
     if use_no_cache:
         flags.append("--no-cache")
@@ -220,3 +239,7 @@ def create_docker_network(network_name: str) -> None:
         logger.info("Docker network created.")
     except subprocess.CalledProcessError:
         logger.info("No new network created. Network may already exist.")
+
+
+class DockerSetupError(Exception):
+    pass
