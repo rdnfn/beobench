@@ -70,14 +70,18 @@ def build_experiment_container(
     # Flags are shared between gym image build and gym_and_beobench image build
     flags = []
 
-    # Using buildx to enable platform-specific builds
-    build_commands = ["docker", "buildx", "build"]
-
     # On arm64 machines force experiment containers to be amd64
     # This is only useful for development purposes.
     # (example: M1 macbooks)
     if os.uname().machine in ["arm64", "aarch64"]:
+        # Using buildx to enable platform-specific builds
+        build_commands = ["docker", "buildx", "build"]
         flags += ["--platform", "linux/amd64"]
+    else:
+        # Otherwise use standard docker build command.
+        # This change enables usage of older docker versions w/o buildx,
+        # e.g. v19.03, on non-arm64 machines
+        build_commands = ["docker", "build"]
 
     if use_no_cache:
         flags.append("--no-cache")
