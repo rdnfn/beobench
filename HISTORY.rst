@@ -5,16 +5,13 @@ History
 0.5.1 (2022-07-00)
 ------------------
 
-* Features:
-
-  *
-
 * Improvements:
 
-  *
+  * Add more informative error when there are issues with access to Docker from Beobench.
 
 * Fixes:
 
+  * Revert default build command to ``docker build`` from ``docker buildx build``. Only arm64 machines use ``buildx`` now. This aims to enable usage of older docker versions such as v19.03 on non-arm64 machines. Arm64 machines require buildx and thus newer docker versions.
   * Fix wrong env name in logging output. Removes unused default env name var and fix logging output to use new env name location.
 
 
