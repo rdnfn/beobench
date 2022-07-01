@@ -2,6 +2,23 @@
 History
 =======
 
+0.5.1 (2022-07-00)
+------------------
+
+* Features:
+
+  *
+
+* Improvements:
+
+  *
+
+* Fixes:
+
+  * Fix wrong env name in logging output. Removes unused default env name var and fix logging output to use new env name location.
+
+
+
 0.5.1 (2022-06-28)
 ------------------
 
