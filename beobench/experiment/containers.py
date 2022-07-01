@@ -20,7 +20,22 @@ except ImportError:
 
 
 def check_image_exists(image: str):
-    client = docker.from_env()
+    try:
+        client = docker.from_env()
+    except docker.errors.DockerException as e:
+        logger.error(
+            (
+                "Unable to access docker client. "
+                "Is Docker installed and are all permissions setup? "
+                "See here for Beobench installation guidance: "
+                "at https://beobench.readthedocs.io/en/latest/getting_started.html. "
+                "If on Linux, make sure to follow the post-installation steps to "
+                "ensure all necessary permissions are set, see here: "
+                "https://beobench.readthedocs.io/en/latest/guides/"
+                "installation_linux.html"
+            )
+        )
+        raise e
 
     try:
         client.images.get(image)
@@ -220,3 +235,7 @@ def create_docker_network(network_name: str) -> None:
         logger.info("Docker network created.")
     except subprocess.CalledProcessError:
         logger.info("No new network created. Network may already exist.")
+
+
+class DockerSetupError(Exception):
+    pass
