@@ -138,11 +138,20 @@ def run(
     for i in range(1, num_samples + 1):
         # TODO: enable checking whether something is run in container
         # and do not print the statement below if inside experiment container.
+        if "name" in config["env"]["config"].keys():
+            env_name = config["env"]["config"]["name"]
+        else:
+            env_name = "default"
         logger.info(
             (
-                f"Running experiment in container with environment "
-                f"{config['env']['name']}"
-                f" and agent from {config['agent']['origin']}. Sample {i} of"
+                f"Running experiment in container with "
+                f"'{env_name}' environment from '{config['env']['gym']}' gym."
+            )
+        )
+
+        logger.info(
+            (
+                f"Using agent from {config['agent']['origin']}. Sample {i} of"
                 f" {num_samples}."
             )
         )

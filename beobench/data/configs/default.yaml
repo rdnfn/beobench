@@ -54,8 +54,6 @@ agent:
 env:
   # Gym framework of environment
   gym: energym
-  # Environment name
-  name: MixedUseFanFCU-v0
   # Configuration passed to integration's `create_env()`
   # function. Specific to whatever gym framework you use
   # (in this case Energym).
