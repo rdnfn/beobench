@@ -40,7 +40,7 @@ jobs:
       #    python-version: ${{ matrix.python }}
       - run: pip install pytest
       - run: pip install .
-      - run: pytest
+      - run: pytest -s
       #- name: Install tox and any other packages
       #  run: pip install tox pytest
       #- name: Run tox
