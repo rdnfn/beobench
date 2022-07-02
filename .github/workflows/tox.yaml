@@ -30,14 +30,14 @@ jobs:
         python: ["3.8"]
     steps:
       - run: apk add --upgrade --no-cache -U git
-      - run: apk add --no-cache -U py3-pip
+      - run: apk add --no-cache -U python3 py3-pip
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: Setup Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python }}
+      #- name: Setup Python
+      #  uses: actions/setup-python@v3
+      #  with:
+      #    python-version: ${{ matrix.python }}
       - run: pip install pytest
       - run: pytest
       #- name: Install tox and any other packages
