@@ -29,8 +29,8 @@ jobs:
       matrix:
         python: ["3.8"]
     steps:
-      - run: apk add --upgrade --no-cache git
-      - run: apk add --no-cache pip
+      - run: apk add --upgrade --no-cache -U git
+      - run: apk add --no-cache -U pip
       - uses: actions/checkout@v3
         with:
           submodules: recursive
