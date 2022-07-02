@@ -6,5 +6,13 @@ import beobench
 
 
 @pytest.mark.slow
-def test_run_command(run_config):
+def test_run_local(run_config):
+    """Run beobench experiment using current state of beobench in
+    experiment container."""
     beobench.run(config=run_config, dev_path=".")
+
+
+@pytest.mark.slow
+def test_run_pypi(run_config):
+    """Run beobench experiment using latest pypi-beobench in experiment container."""
+    beobench.run(config=run_config)
