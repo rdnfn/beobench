@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: update git
         # Run tox using the version of Python in `PATH`
-        run: apt-get update && apt-get install --only-upgrade pip
+        run: sudo apt-get update && sudo apt-get install --only-upgrade pip
       - uses: actions/checkout@v3
         with:
           submodules: recursive
