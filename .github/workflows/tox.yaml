@@ -30,7 +30,7 @@ jobs:
         python: ["3.8"]
     steps:
       - run: apk add --upgrade --no-cache -U git
-      - run: apk add --no-cache -U pip
+      - run: apk add --no-cache -U py3-pip
       - uses: actions/checkout@v3
         with:
           submodules: recursive
