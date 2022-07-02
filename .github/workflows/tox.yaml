@@ -22,8 +22,9 @@ jobs:
         # Run tox using the version of Python in `PATH`
         run: tox -e py
 
-  old-version-test:
-    runs-on: docker:19.03-dind
+  docker-v19.03-test:
+    runs-on: ubuntu-latest
+    container: docker:19.03-dind
     strategy:
       matrix:
         python: ["3.8"]
