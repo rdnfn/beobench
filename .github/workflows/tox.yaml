@@ -22,7 +22,7 @@ jobs:
         # Run tox using the version of Python in `PATH`
         run: tox -e py
 
-  docker-v19.03-test:
+  docker-v19_03-test:
     runs-on: ubuntu-latest
     container: docker:19.03-dind
     strategy:
