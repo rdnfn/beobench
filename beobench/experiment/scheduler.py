@@ -169,8 +169,8 @@ def run(
 
             container_ro_dir_abs = CONTAINER_RO_DIR.absolute()
             args_view = [
-                "cat",
-                str(container_ro_dir_abs / _get_agent_file(config)[0].name),
+                "ls",
+                "-a",
             ]
             subprocess.check_call(args_view)
             args = [
