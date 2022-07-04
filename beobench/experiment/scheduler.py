@@ -172,7 +172,9 @@ def run(
                 "ls",
                 "-a",
                 "/root/beobench_configs/",
-                "&&",
+            ]
+            subprocess.check_call(args_view)
+            args_view = [
                 "cat",
                 "/root/beobench_configs/random_action.py",
             ]
