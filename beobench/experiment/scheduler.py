@@ -168,10 +168,7 @@ def run(
             logger.info("Running agent script.")
 
             container_ro_dir_abs = CONTAINER_RO_DIR.absolute()
-            args_view = [
-                "ls",
-                "-a",
-            ]
+            args_view = ["ls", "-a", "/"]
             subprocess.check_call(args_view)
             args = [
                 "python",
