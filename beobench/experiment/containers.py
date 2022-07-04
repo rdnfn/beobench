@@ -173,11 +173,6 @@ def build_experiment_container(
             )
 
         # Part 3: build stage 2 (complete) experiment image
-        stage2_dockerfile = str(
-            importlib.resources.files("beobench.data.dockerfiles").joinpath(
-                "Dockerfile.beobench_install"
-            )
-        )
         if beobench_package is None:
             beobench_package = "beobench"
         if beobench_package == "beobench":
@@ -190,6 +185,12 @@ def build_experiment_container(
             # need to add std-in-dockerfile via -f flag and not context directly
             stage2_docker_flags = ["-f", "-"]
 
+        stage2_dockerfile = str(
+            importlib.resources.files("beobench.data.dockerfiles").joinpath(
+                f"Dockerfile.beobench_install_{package_type}"
+            )
+        )
+
         stage2_build_args = [
             *build_commands,
             "-t",
@@ -197,10 +198,6 @@ def build_experiment_container(
             *stage2_docker_flags,
             "--build-arg",
             f"PREV_IMAGE={stage1_image_tag}",
-            "--build-arg",
-            f"PACKAGE={beobench_package}",
-            "--build-arg",
-            f"PACKAGE_TYPE={package_type}",
             "--build-arg",
             f"EXTRAS={beobench_extras}",
             *flags,
