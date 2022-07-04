@@ -168,17 +168,6 @@ def run(
             logger.info("Running agent script.")
 
             container_ro_dir_abs = CONTAINER_RO_DIR.absolute()
-            args_view = [
-                "ls",
-                "-a",
-                "/root/beobench_configs/",
-            ]
-            subprocess.check_call(args_view)
-            args_view = [
-                "cat",
-                "/root/beobench_configs/random_action.py",
-            ]
-            subprocess.check_call(args_view)
             args = [
                 "python",
                 str(container_ro_dir_abs / _get_agent_file(config)[0].name),
@@ -296,7 +285,6 @@ def _build_and_run_in_container(config: dict) -> None:
         # load agent file
         ag_file_abs = agent_file.absolute()
         logger.info(f"Absolute agent file path: {ag_file_abs}")
-        subprocess.check_call(["cat", ag_file_abs])
         ag_file_on_docker_abs = (CONTAINER_RO_DIR / agent_file.name).absolute()
         docker_flags += [
             "-v",
@@ -333,6 +321,8 @@ def _build_and_run_in_container(config: dict) -> None:
 
         # subprocess.check_call(args)
         beobench.utils.run_command(args, process_name="container")
+
+    logger.info("Completed experiment.")
 
 
 def _create_config_from_kwargs(**kwargs) -> dict:
