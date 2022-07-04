@@ -2,6 +2,14 @@
 History
 =======
 
+0.5.3 (2022-07-05)
+------------------
+
+* Fixes:
+
+  * Change the way Beobench is installed inside experiment containers. Previously this was done using conditional logic inside Dockerfiles. Now the logic is done in Python, with two different dockerfiles for local and pypi installations. This enables the use of non-buildx in the construction of Beobench experiment containers.
+
+
 0.5.2 (2022-07-01)
 ------------------
 
