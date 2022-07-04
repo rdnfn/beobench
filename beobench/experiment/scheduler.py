@@ -168,6 +168,11 @@ def run(
             logger.info("Running agent script.")
 
             container_ro_dir_abs = CONTAINER_RO_DIR.absolute()
+            args_view = [
+                "cat",
+                str(container_ro_dir_abs / _get_agent_file(config)[0].name),
+            ]
+            subprocess.check_call(args_view)
             args = [
                 "python",
                 str(container_ro_dir_abs / _get_agent_file(config)[0].name),
