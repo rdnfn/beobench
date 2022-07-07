@@ -188,15 +188,16 @@ def check_config(config: dict) -> None:
     Args:
         config (dict): Beobench config.
     """
-    requested_version = config["general"]["version"]
-    if requested_version != beobench.__version__:
-        raise ValueError(
-            f"Beobench config requests version {requested_version}"
-            f" that does not match installed version {beobench.__version__}. "
-            "Change the installed Beobench version to the requested version "
-            f"{requested_version} or remove general.version parameter from config "
-            "to prevent this error."
-        )
+    if "version" in config["general"].keys():
+        requested_version = config["general"]["version"]
+        if requested_version != beobench.__version__:
+            raise ValueError(
+                f"Beobench config requests version {requested_version}"
+                f" that does not match installed version {beobench.__version__}. "
+                "Change the installed Beobench version to the requested version "
+                f"{requested_version} or remove general.version parameter from config "
+                "to prevent this error."
+            )
 
 
 def get_high_level_config(method: str, gym: str, env: str) -> dict:

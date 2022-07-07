@@ -1,0 +1,7 @@
+ARG PREV_IMAGE
+
+FROM ${PREV_IMAGE}
+# install beobench
+ARG EXTRAS="extended,rllib"
+COPY . /tmp/beobench_repo/
+RUN pip --disable-pip-version-check --no-cache-dir install "/tmp/beobench_repo[${EXTRAS}]"

@@ -284,6 +284,7 @@ def _build_and_run_in_container(config: dict) -> None:
             agent_file = stack.enter_context(importlib.resources.as_file(agent_file))
         # load agent file
         ag_file_abs = agent_file.absolute()
+        logger.info(f"Absolute agent file path: {ag_file_abs}")
         ag_file_on_docker_abs = (CONTAINER_RO_DIR / agent_file.name).absolute()
         docker_flags += [
             "-v",
@@ -320,6 +321,8 @@ def _build_and_run_in_container(config: dict) -> None:
 
         # subprocess.check_call(args)
         beobench.utils.run_command(args, process_name="container")
+
+    logger.info("Completed experiment.")
 
 
 def _create_config_from_kwargs(**kwargs) -> dict:
