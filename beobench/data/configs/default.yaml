@@ -107,4 +107,4 @@ general:
   # experiment once.
   num_samples: 1
   # Beobench version
-  version: 0.5.1
+  # version: 0.5.2
