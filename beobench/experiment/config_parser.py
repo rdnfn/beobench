@@ -96,12 +96,12 @@ def create_rllib_config(config: dict) -> dict:
     rllib_config["config"]["env_config"] = config["env"]["config"]
     if "name" in config["env"].keys():
         rllib_config["config"]["env"] = config["env"]["name"]
-    elif "name" in config["env"]["config"].keys():
+    elif (
+        config["env"]["config"] is not None and "name" in config["env"]["config"].keys()
+    ):
         rllib_config["config"]["env"] = config["env"]["config"]["name"]
     else:
-        raise ValueError(
-            "No name found in config. Either env.name or env.config.name should be set."
-        )
+        rllib_config["config"]["env"] = f"default_{config['env']['gym']}_env_name"
 
     return rllib_config
 
