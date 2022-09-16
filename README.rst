@@ -295,7 +295,7 @@ Need help using Beobench or want to discuss the toolkit? Reach out via ``contact
 Citation
 ========
 
-If you find Beobench helpful in your work, please consider citing the accompanying paper:
+If you find Beobench helpful in your work, please consider citing the `accompanying paper <https://dl.acm.org/doi/10.1145/3538637.3538866>`_:
 
 .. code-block::
 
