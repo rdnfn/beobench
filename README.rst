@@ -297,24 +297,24 @@ Citation
 
 If you find Beobench helpful in your work, please consider citing the accompanying paper:
 
-```
-@inproceedings{10.1145/3538637.3538866,
-author = {Findeis, Arduin and Kazhamiaka, Fiodar and Jeen, Scott and Keshav, Srinivasan},
-title = {Beobench: A Toolkit for Unified Access to Building Simulations for Reinforcement Learning},
-year = {2022},
-isbn = {9781450393973},
-publisher = {Association for Computing Machinery},
-address = {New York, NY, USA},
-url = {https://doi.org/10.1145/3538637.3538866},
-doi = {10.1145/3538637.3538866},
-booktitle = {Proceedings of the Thirteenth ACM International Conference on Future Energy Systems},
-pages = {374–382},
-numpages = {9},
-keywords = {reinforcement learning, building energy optimisation, building simulation, building control},
-location = {Virtual Event},
-series = {e-Energy '22}
-}
-```
+.. code-block::
+
+        @inproceedings{10.1145/3538637.3538866,
+        author = {Findeis, Arduin and Kazhamiaka, Fiodar and Jeen, Scott and Keshav, Srinivasan},
+        title = {Beobench: A Toolkit for Unified Access to Building Simulations for Reinforcement Learning},
+        year = {2022},
+        isbn = {9781450393973},
+        publisher = {Association for Computing Machinery},
+        address = {New York, NY, USA},
+        url = {https://doi.org/10.1145/3538637.3538866},
+        doi = {10.1145/3538637.3538866},
+        booktitle = {Proceedings of the Thirteenth ACM International Conference on Future Energy Systems},
+        pages = {374–382},
+        numpages = {9},
+        keywords = {reinforcement learning, building energy optimisation, building simulation, building control},
+        location = {Virtual Event},
+        series = {e-Energy '22}
+        }
 
 License
 =======
