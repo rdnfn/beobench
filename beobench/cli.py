@@ -90,7 +90,15 @@ def cli():
 @click.option(
     "--force-build",
     is_flag=True,
-    help="whether to force a re-build, even if image already exists.",
+    help="Whether to force a re-build, even if image already exists.",
+)
+@click.option(
+    "--dry-run",
+    is_flag=True,
+    help=(
+        "Whether to dry run the experiment without"
+        " running docker commands/saving files."
+    ),
 )
 def run(
     config: str,
@@ -108,6 +116,7 @@ def run(
     use_no_cache: bool,
     dev_path: str,
     force_build: bool,
+    dry_run: bool,
 ) -> None:
     """Run beobench experiment from command line.
 
@@ -135,6 +144,7 @@ def run(
         use_no_cache=use_no_cache,
         dev_path=dev_path,
         force_build=force_build,
+        dry_run=dry_run,
     )
 
 

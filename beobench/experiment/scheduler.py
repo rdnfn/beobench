@@ -50,6 +50,7 @@ def run(
     beobench_extras: str = None,
     force_build: str = False,
     num_samples: int = None,
+    dry_run: bool = False,
 ) -> None:
     """Run experiment.
 
@@ -97,6 +98,9 @@ def run(
             image already exists.
         num_samples (int, optional): number of experiment samples to run. This defaults
             to a single sample, i.e. just running the experiment once.
+        dry_run (bool, optional): whether to just dry run this function
+            without launching any docker containers or experiment processes.
+            Primarily intended for testing and debugging.
     """
     logger.info("Starting experiment run ...")
     # parsing relevant kwargs and adding them to config
@@ -175,20 +179,24 @@ def run(
                 "python",
                 str(container_ro_dir_abs / _get_agent_file(config)[0].name),
             ]
-            subprocess.check_call(args)
+            if not dry_run:
+                subprocess.check_call(args)
 
         else:
             # First build container image and then execute experiment inside container
             # But only run one experiment per container.
             config["general"]["num_samples"] = 1
-            _build_and_run_in_container(config)
+            _build_and_run_in_container(config, dry_run=dry_run)
 
 
-def _build_and_run_in_container(config: dict) -> None:
+def _build_and_run_in_container(config: dict, dry_run: bool = False) -> None:
     """Build container image and run experiment in docker container.
 
     Args:
         config (dict): Beobench configuration.
+        dry_run (bool, optional): whether to just dry run this function
+            without launching any docker containers or experiment processes.
+            Primarily intended for testing and debugging.
     """
 
     # We need to deepcopy the config as some sensitive data (API keys) is deleted at
@@ -240,8 +248,13 @@ def _build_and_run_in_container(config: dict) -> None:
     config_path.parent.mkdir(parents=True, exist_ok=True)
     config_path_abs = config_path.absolute()
     config_container_path_abs = (CONTAINER_RO_DIR / "config.yaml").absolute()
-    with open(config_path, "w", encoding="utf-8") as conf_file:
-        yaml.dump(config, conf_file)
+
+    if not dry_run:
+        with open(config_path, "w", encoding="utf-8") as conf_file:
+            yaml.dump(config, conf_file)
+    else:
+        logger.info(f"dry_run: would save config file to {config_path}.")
+
     docker_flags += [
         "-v",
         f"{config_path_abs}:{config_container_path_abs}:ro",
@@ -254,8 +267,11 @@ def _build_and_run_in_container(config: dict) -> None:
     # enable docker-from-docker access only for built-in boptest integration.
     if config["env"]["gym"] == "boptest":
 
-        # Create docker network (only useful if starting other containers)
-        beobench.experiment.containers.create_docker_network("beobench-net")
+        if not dry_run:
+            # Create docker network (only useful if starting other containers)
+            beobench.experiment.containers.create_docker_network("beobench-net")
+        else:
+            logger.info("dry_run: would start docker network.")
 
         docker_flags += [
             # enable access to docker-from-docker
@@ -322,10 +338,15 @@ def _build_and_run_in_container(config: dict) -> None:
             arg_str = arg_str.replace(wandb_api_key, "<API_KEY_HIDDEN>")
         logger.info(f"Executing docker command: {arg_str}")
 
-        # subprocess.check_call(args)
-        beobench.utils.run_command(args, process_name="container")
+        if not dry_run:
+            beobench.utils.run_command(args, process_name="container")
+        else:
+            logger.info("dry_run: would run above command but won't.")
 
-    logger.info("Completed experiment.")
+    if not dry_run:
+        logger.info("Completed experiment.")
+    else:
+        logger.info("Completed dry run.")
 
 
 def _create_config_from_kwargs(**kwargs) -> dict:
