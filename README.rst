@@ -75,14 +75,14 @@ Installation
 
 .. end-qs-sec1
 
-..
 
+        **Info**
 
-    ℹ️ **OS support**
+        **OS support**
 
-    - **Linux:** recommended and tested (Ubuntu 20.04).
-    - **Windows:** use via `Windows Subsystem for Linux (WSL) <https://docs.microsoft.com/en-us/windows/wsl/install>`_ recommended.
-    - **macOS:** experimental support for Apple silicon systems — only intended for development purposes (not running experiments). Intel-based macOS support untested.
+        - **Linux:** recommended and tested (Ubuntu 20.04).
+        - **Windows:** only use via `Windows Subsystem for Linux (WSL) <https://docs.microsoft.com/en-us/windows/wsl/install>`_ recommended.
+        - **macOS:** experimental support for Apple silicon systems — only intended for development purposes (not running experiments). Intel-based macOS support untested.
 
 .. start-qs-sec2
 
