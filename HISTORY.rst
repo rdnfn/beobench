@@ -2,12 +2,13 @@
 History
 =======
 
-0.5.3 (2022-07-05)
+0.5.3 (2022-09-16)
 ------------------
 
 * Fixes:
 
   * Change the way Beobench is installed inside experiment containers. Previously this was done using conditional logic inside Dockerfiles. Now the logic is done in Python, with two different dockerfiles for local and pypi installations. This enables the use of non-buildx in the construction of Beobench experiment containers. Credit and thanks to @HYDesmondLiu and @david-woelfle for finding and sharing the underlying error.
+  * Fix #90 by removing access to env config before env_creator script. Thanks to @HYDesmondLiu, who first flagged this bug in #82.
 
 
 0.5.2 (2022-07-01)

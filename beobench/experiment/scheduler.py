@@ -138,7 +138,10 @@ def run(
     for i in range(1, num_samples + 1):
         # TODO: enable checking whether something is run in container
         # and do not print the statement below if inside experiment container.
-        if "name" in config["env"]["config"].keys():
+        if (
+            config["env"]["config"] is not None
+            and "name" in config["env"]["config"].keys()
+        ):
             env_name = config["env"]["config"]["name"]
         else:
             env_name = "default"
