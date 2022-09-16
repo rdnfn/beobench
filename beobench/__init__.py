@@ -18,6 +18,6 @@ if os.name == "nt":
         "However, you can run Beobench inside Windows Subsystem for Linux (WSL)"
         " on a Windows machine. "
         "See the following link: "
-        "https://docs.microsoft.com/en-us/windows/wsl/install."
+        "https://docs.microsoft.com/en-us/windows/wsl/install. "
         "Beobench will still execute initially but will fail eventually."
     )
