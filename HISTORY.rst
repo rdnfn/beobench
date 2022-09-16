@@ -8,6 +8,7 @@ History
 * Improvements
 
   * Add support for dry running ``beobench run`` with ``--dry-run`` flag. This aims to help with testing and debugging.
+  * Add explicit warning for windows users with recommended fixes (i.e. using WSL instead).
 
 * Fixes:
 
