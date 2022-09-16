@@ -219,13 +219,17 @@ def _build_and_run_in_container(config: dict, dry_run: bool = False) -> None:
     else:
         beobench_extras = config["general"]["beobench_extras"]
 
-    image_tag = beobench.experiment.containers.build_experiment_container(
-        build_context=config["env"]["gym"],
-        use_no_cache=config["general"]["use_no_cache"],
-        beobench_extras=beobench_extras,
-        beobench_package=config["general"]["dev_path"],
-        force_build=config["general"]["force_build"],
-    )
+    if not dry_run:
+        image_tag = beobench.experiment.containers.build_experiment_container(
+            build_context=config["env"]["gym"],
+            use_no_cache=config["general"]["use_no_cache"],
+            beobench_extras=beobench_extras,
+            beobench_package=config["general"]["dev_path"],
+            force_build=config["general"]["force_build"],
+        )
+    else:
+        logger.info("dry_run: would have built docker image.")
+        image_tag = "dry_run"
 
     ### part 2: create args and run command in docker container
     if config["general"]["docker_flags"] is None:
