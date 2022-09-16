@@ -75,10 +75,9 @@ Installation
 
 .. end-qs-sec1
 
+..
 
-        **Info**
-
-        **OS support**
+        **Warning**: **OS support**
 
         - **Linux:** recommended and tested (Ubuntu 20.04).
         - **Windows:** only use via `Windows Subsystem for Linux (WSL) <https://docs.microsoft.com/en-us/windows/wsl/install>`_ recommended.
@@ -173,7 +172,7 @@ dictionary gives us access to the full experiment configuration
 
 ..
 
-        ℹ️ **info**
+        **Note**
 
         We can use these two imports *regardless* of the gym framework we are using. This invariability allows us to create agent scripts that work across frameworks.
 
