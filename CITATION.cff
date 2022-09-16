@@ -20,3 +20,26 @@ authors:
     family-names: Jeen
   - given-names: Srinivasan
     family-names: Keshav
+preferred-citation:
+  authors:
+    - given-names: Arduin
+      family-names: Findeis
+    - given-names: Fiodar
+      family-names: Kazhamiaka
+    - given-names: Scott
+      family-names: Jeen
+    - given-names: Srinivasan
+      family-names: Keshav
+  title: >-
+    Beobench: A Toolkit for Unified Access to Building
+    Simulations for Reinforcement Learning
+  type: conference-paper
+  year: 2021
+  start: 374
+  end: 382
+  collection-title: Proceedings of the Thirteenth ACM International Conference on Future Energy Systems
+  doi: 10.1145/3538637.3538866
+  conference:
+    name: e-Energy '22
+    location: Virtual Event
+
