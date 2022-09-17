@@ -5,6 +5,10 @@ History
 0.5.3 (2022-09-16)
 ------------------
 
+* Features:
+
+  * Add support for installing agent script's requirements via requirements file (#71).
+
 * Improvements
 
   * Add support for dry running ``beobench run`` with ``--dry-run`` flag. This aims to help with testing and debugging.
