@@ -50,6 +50,7 @@ def build_experiment_container(
     beobench_package: str = "beobench",
     beobench_extras: str = "extended",
     force_build: bool = False,
+    requirements: str = None,
 ) -> None:
     """Build experiment container from beobench/integrations/boptest/Dockerfile.
 
@@ -106,10 +107,16 @@ def build_experiment_container(
     stage1_image_tag = f"{image_name}_intermediate:{version}"
     stage2_image_tag = f"{image_name}_complete:{version}"
 
+    if requirements is None:
+        final_image_tag = stage2_image_tag
+    else:
+        stage3_image_tag = f"{image_name}_custom_requirements:{version}"
+        final_image_tag = stage3_image_tag
+
     # skip build if image already exists.
-    if not force_build and check_image_exists(stage2_image_tag):
-        logger.info(f"Existing image found ({stage2_image_tag}). Skipping build.")
-        return stage2_image_tag
+    if not force_build and check_image_exists(final_image_tag):
+        logger.info(f"Existing image found ({final_image_tag}). Skipping build.")
+        return final_image_tag
 
     logger.warning(
         f"Image not found ({stage2_image_tag}) or forced rebuild. Building image.",
@@ -214,9 +221,44 @@ def build_experiment_container(
                 env=env,  # this enables accessing dockerfile in subdir
             )
 
+        if requirements is not None:
+            # Part 4: build stage 3 (optional) additional installation of requirements
+            build_context = str(requirements.parents[0].absolute())
+            # need to add std-in-dockerfile via -f flag and not context directly
+            stage3_docker_flags = ["-f", "-"]
+
+            stage3_dockerfile = str(
+                importlib.resources.files("beobench.data.dockerfiles").joinpath(
+                    "Dockerfile.requirements"
+                )
+            )
+
+            stage3_build_args = [
+                *build_commands,
+                "-t",
+                stage3_image_tag,
+                *stage3_docker_flags,
+                "--build-arg",
+                f"PREV_IMAGE={stage2_image_tag}",
+                "--build-arg",
+                f"REQUIREMENTS={requirements.name}",
+                *flags,
+                build_context,
+            ]
+
+            with subprocess.Popen(
+                ["cat", stage3_dockerfile], stdout=subprocess.PIPE
+            ) as proc:
+                logger.info("Running command: " + " ".join(stage3_build_args))
+                subprocess.check_call(
+                    stage3_build_args,
+                    stdin=proc.stdout,
+                    env=env,  # this enables accessing dockerfile in subdir
+                )
+
     logger.info("Experiment gym image build finished.")
 
-    return stage2_image_tag
+    return final_image_tag
 
 
 def create_docker_network(network_name: str) -> None:
