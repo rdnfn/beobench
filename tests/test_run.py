@@ -4,25 +4,29 @@ import pytest
 
 import beobench
 
+CMD_CONFIG = {
+    "dev_path": ".",
+}
+
 
 @pytest.mark.slow
 def test_run_local(run_config):
     """Run beobench experiment using current state of beobench in
     experiment container."""
-    beobench.run(config=run_config, dev_path=".")
+    beobench.run(config=run_config, **CMD_CONFIG)
 
 
 @pytest.mark.slow
 def test_run_pypi(run_config):
     """Run beobench experiment using latest pypi-beobench in experiment container."""
-    beobench.run(config=run_config, force_build=True)
+    beobench.run(config=run_config, **CMD_CONFIG)
 
 
 @pytest.mark.slow
 def test_null_env_config():
     """Run beobench experiment using latest pypi-beobench in experiment container."""
     config = {"env": {"config": None}}
-    beobench.run(config=config, force_build=True)
+    beobench.run(config=config, **CMD_CONFIG)
 
 
 @pytest.mark.slow
@@ -30,4 +34,4 @@ def test_reqs_install(agent_sb3, requirements_sb3):
     config = {
         "agent": {"origin": str(agent_sb3), "requirements": str(requirements_sb3)}
     }
-    beobench.run(config=config)
+    beobench.run(config=config, **CMD_CONFIG)
