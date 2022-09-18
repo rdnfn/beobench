@@ -6,6 +6,7 @@ import beobench
 
 CMD_CONFIG = {
     "dev_path": ".",
+    "force_build": True,
 }
 
 
