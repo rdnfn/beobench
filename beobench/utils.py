@@ -127,12 +127,10 @@ def run_command(cmd_line_args, process_name):
         stderr=subprocess.STDOUT,
     )
     with process.stdout:
-        beobench.logging.log_subprocess(
+        output = beobench.logging.log_subprocess(
             process.stdout,
             process_name=process_name,
         )
-    # returncode = process.wait()  # 0 means success
-    output, _ = process.communicate()
-    retcode = process.poll()
+    retcode = process.wait()  # 0 means success
     if retcode:
         raise subprocess.CalledProcessError(retcode, cmd=cmd_line_args, output=output)
