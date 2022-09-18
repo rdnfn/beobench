@@ -180,7 +180,7 @@ def run(
                 str(container_ro_dir_abs / _get_agent_file(config)[0].name),
             ]
             if not dry_run:
-                subprocess.check_output(args)
+                subprocess.run(args, check=True, capture_output=True)
 
         else:
             # First build container image and then execute experiment inside container
