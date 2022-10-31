@@ -17,10 +17,16 @@ def test_run_local(run_config):
     beobench.run(config=run_config, **CMD_CONFIG)
 
 
+@pytest.mark.skip(
+    reason=(
+        "This test may fail on breaking changes between versions,"
+        " thus not running by default."
+    )
+)
 @pytest.mark.slow
 def test_run_pypi(run_config):
     """Run beobench experiment using latest pypi-beobench in experiment container."""
-    beobench.run(config=run_config, **CMD_CONFIG)
+    beobench.run(config=run_config)
 
 
 @pytest.mark.slow
