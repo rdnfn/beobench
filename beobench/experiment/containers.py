@@ -75,7 +75,7 @@ def build_experiment_container(
     # Flags are shared between gym image build and gym_and_beobench image build
     flags = []
     if not force_no_buildx:
-        build_commands = ["docker", "buildx", "build", "--load"]
+        build_commands = ["docker", "buildx", "build"]  # ,"--load"]
     else:
         build_commands = ["docker", "build"]
 
