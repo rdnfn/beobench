@@ -3,6 +3,7 @@
 import click
 
 import beobench.experiment.scheduler
+import beobench.experiment.containers
 import beobench.utils
 
 
@@ -152,3 +153,33 @@ def run(
 def restart():
     """Restart beobench. This will stop any remaining running beobench containers."""
     beobench.utils.restart()
+
+
+@cli.command()
+@click.option(
+    "--build-context",
+    "-b",
+    default=None,
+    help=(
+        "Context to build from. This can either be a path to"
+        "directory with Dockerfile in it, or a URL to a github repo, or name"
+        "of existing beobench integration (e.g. `boptest`)."
+    ),
+    type=str,
+)
+@click.option(
+    "--registry",
+    default=None,
+    help=("Registry to push to."),
+    type=str,
+)
+@click.option(
+    "--push-image",
+    is_flag=True,
+    help=("Whether to push image to registry."),
+)
+def build_container(build_context: str, registry: str, push_image: bool):
+    """Build experiment container"""
+    beobench.experiment.containers.build_experiment_container(
+        build_context=build_context, registry=registry, push_image=push_image
+    )

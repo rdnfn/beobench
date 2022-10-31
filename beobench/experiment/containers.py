@@ -51,6 +51,8 @@ def build_experiment_container(
     beobench_extras: str = "extended",
     force_build: bool = False,
     requirements: str = None,
+    registry: str = None,
+    push_image: bool = False,
 ) -> None:
     """Build experiment container from beobench/integrations/boptest/Dockerfile.
 
@@ -103,14 +105,18 @@ def build_experiment_container(
         package_build_context = False
 
     # Create tags of different image stages
-    stage0_image_tag = f"{image_name}_base:{version}"
-    stage1_image_tag = f"{image_name}_intermediate:{version}"
-    stage2_image_tag = f"{image_name}_complete:{version}"
+    if registry is None:
+        registry_str = ""
+    else:
+        registry_str = f"{registry}/"
+    stage0_image_tag = f"{registry_str}{image_name}_base:{version}"
+    stage1_image_tag = f"{registry_str}{image_name}_intermediate:{version}"
+    stage2_image_tag = f"{registry_str}{image_name}_complete:{version}"
 
     if requirements is None:
         final_image_tag = stage2_image_tag
     else:
-        stage3_image_tag = f"{image_name}_custom_requirements:{version}"
+        stage3_image_tag = f"{registry_str}{image_name}_custom_requirements:{version}"
         final_image_tag = stage3_image_tag
 
     # skip build if image already exists.
@@ -255,6 +261,11 @@ def build_experiment_container(
                     stdin=proc.stdout,
                     env=env,  # this enables accessing dockerfile in subdir
                 )
+
+    if push_image:
+        subprocess.check_call(
+            ["docker", "image", "push", stage2_image_tag],
+        )
 
     logger.info("Experiment gym image build finished.")
 
