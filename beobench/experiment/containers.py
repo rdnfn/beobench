@@ -52,7 +52,7 @@ def build_experiment_container(
     force_build: bool = False,
     requirements: str = None,
     registry: str = None,
-    push_image: bool = False,
+    push_image: bool = False,  # pylint: disable=unused-argument
     enable_dockerhub_cache: bool = False,
     force_no_buildx: bool = False,
 ) -> None:
@@ -292,10 +292,10 @@ def build_experiment_container(
                     env=env,  # this enables accessing dockerfile in subdir
                 )
 
-    if push_image:
-        subprocess.check_call(
-            ["docker", "image", "push", stage2_image_tag],
-        )
+    # if push_image:
+    #    subprocess.check_call(
+    #        ["docker", "image", "push", stage2_image_tag],
+    #    )
 
     logger.info("Experiment gym image build finished.")
 
