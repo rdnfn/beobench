@@ -96,9 +96,9 @@ def build_experiment_container(
             )
         build_commands += [
             "--cache-from",
-            "type=registry,ref=rdnfn/beobench:buildcache",
+            "type=registry,ref=ghcr.io/rdnfn/beobench:buildcache",
             "--cache-to",
-            "type=registry,ref=rdnfn/beobench:buildcache,mode=max",
+            "type=registry,ref=ghcr.io/rdnfn/beobench:buildcache,mode=max",
         ]
 
     if use_no_cache:
