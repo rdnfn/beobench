@@ -101,6 +101,15 @@ def cli():
         " running docker commands/saving files."
     ),
 )
+@click.option(
+    "--registry",
+    default=None,
+    help=(
+        "Registry to take Beobench experiment container images from."
+        " Defaults to empty string, which is Docker Hub"
+    ),
+    type=str,
+)
 def run(
     config: str,
     method: str,
@@ -118,6 +127,7 @@ def run(
     dev_path: str,
     force_build: bool,
     dry_run: bool,
+    registry: str,
 ) -> None:
     """Run beobench experiment from command line.
 
@@ -146,6 +156,7 @@ def run(
         dev_path=dev_path,
         force_build=force_build,
         dry_run=dry_run,
+        registry=registry,
     )
 
 
