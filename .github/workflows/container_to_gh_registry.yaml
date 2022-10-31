@@ -31,9 +31,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
       -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      -
         name: Login to ghcr
         #if: github.event_name != 'pull_request'
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -48,7 +54,7 @@ jobs:
         run: pip install .
       -
         name: Build image
-        run: beobench build-experiment-container --build-context ${{ matrix.gym }} --registry ghcr.io --push-image
+        run: beobench build-experiment-container --build-context ${{ matrix.gym }} --registry ghcr.io --push-image --enable-dockerhub-cache
       # -
       #   name: Build and push
       #   id: docker_build

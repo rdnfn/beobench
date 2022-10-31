@@ -53,6 +53,8 @@ def build_experiment_container(
     requirements: str = None,
     registry: str = None,
     push_image: bool = False,
+    enable_dockerhub_cache: bool = False,
+    force_no_buildx: bool = False,
 ) -> None:
     """Build experiment container from beobench/integrations/boptest/Dockerfile.
 
@@ -72,19 +74,32 @@ def build_experiment_container(
 
     # Flags are shared between gym image build and gym_and_beobench image build
     flags = []
+    if not force_no_buildx:
+        build_commands = ["docker", "buildx", "build"]
+    else:
+        build_commands = ["docker", "build"]
 
     # On arm64 machines force experiment containers to be amd64
     # This is only useful for development purposes.
     # (example: M1 macbooks)
     if os.uname().machine in ["arm64", "aarch64"]:
         # Using buildx to enable platform-specific builds
-        build_commands = ["docker", "buildx", "build"]
         flags += ["--platform", "linux/amd64"]
-    else:
-        # Otherwise use standard docker build command.
-        # This change enables usage of older docker versions w/o buildx,
-        # e.g. v19.03, on non-arm64 machines
-        build_commands = ["docker", "build"]
+
+    if enable_dockerhub_cache:
+        if force_no_buildx:
+            raise ValueError(
+                (
+                    "Cannot use dockerhub cache without buildx."
+                    " Disable force_no_buildx flat in beobench.run."
+                )
+            )
+        build_commands += [
+            "--cache-from",
+            "type=registry,ref=rdnfn/beobench:buildcache",
+            "--cache-to",
+            "type=registry,ref=rdnfn/beobench:buildcache,mode=max",
+        ]
 
     if use_no_cache:
         flags.append("--no-cache")
