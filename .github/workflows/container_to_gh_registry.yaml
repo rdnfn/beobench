@@ -1,11 +1,17 @@
 name: GH registry upload
 
+# Based on following tutorial
+# https://docs.docker.com/ci-cd/github-actions/
+
 on: [pull_request]
 
 jobs:
 
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        gym: ["sinergym", "energym", "boptest"]
     steps:
       -
         name: Checkout
@@ -42,7 +48,7 @@ jobs:
         run: pip install .
       -
         name: Build image
-        run: beobench build-experiment-container --build-context sinergym --registry ghcr.io --push-image
+        run: beobench build-experiment-container --build-context ${{ matrix.gym }} --registry ghcr.io --push-image
       # -
       #   name: Build and push
       #   id: docker_build

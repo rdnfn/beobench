@@ -90,7 +90,7 @@ def build_experiment_container(
         flags.append("--no-cache")
 
     if build_context in AVAILABLE_INTEGRATIONS:
-        image_name = f"beobench_{build_context}"
+        image_name = f"rdnfn/beobench_{build_context}"
         gym_name = build_context
         gym_source = importlib.resources.files("beobench").joinpath(
             f"beobench_contrib/gyms/{gym_name}"
