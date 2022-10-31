@@ -124,15 +124,15 @@ def build_experiment_container(
 
     # Create tags of different image stages
     if registry is None:
-        registry_str = ""
-    stage0_image_tag = f"{registry_str}{image_name}_base:{version}"
-    stage1_image_tag = f"{registry_str}{image_name}_intermediate:{version}"
-    stage2_image_tag = f"{registry_str}{image_name}_complete:{version}"
+        registry = ""
+    stage0_image_tag = f"{registry}{image_name}_base:{version}"
+    stage1_image_tag = f"{registry}{image_name}_intermediate:{version}"
+    stage2_image_tag = f"{registry}{image_name}_complete:{version}"
 
     if requirements is None:
         final_image_tag = stage2_image_tag
     else:
-        stage3_image_tag = f"{registry_str}{image_name}_custom_requirements:{version}"
+        stage3_image_tag = f"{registry}{image_name}_custom_requirements:{version}"
         final_image_tag = stage3_image_tag
 
     # skip build if image already exists.
