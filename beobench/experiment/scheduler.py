@@ -51,6 +51,8 @@ def run(
     force_build: str = False,
     num_samples: int = None,
     dry_run: bool = False,
+    use_registry_container: bool = True,
+    registry: str = "",
 ) -> None:
     """Run experiment.
 
@@ -186,10 +188,20 @@ def run(
             # First build container image and then execute experiment inside container
             # But only run one experiment per container.
             config["general"]["num_samples"] = 1
-            _build_and_run_in_container(config, dry_run=dry_run)
+            _build_and_run_in_container(
+                config,
+                dry_run=dry_run,
+                use_registry_container=use_registry_container,
+                registry=registry,
+            )
 
 
-def _build_and_run_in_container(config: dict, dry_run: bool = False) -> None:
+def _build_and_run_in_container(
+    config: dict,
+    dry_run: bool = False,
+    use_registry_container: bool = True,
+    registry: str = "",
+) -> None:
     """Build container image and run experiment in docker container.
 
     Args:
@@ -227,14 +239,18 @@ def _build_and_run_in_container(config: dict, dry_run: bool = False) -> None:
         logger.info("No requirements file recognised.")
 
     if not dry_run:
-        image_tag = beobench.experiment.containers.build_experiment_container(
-            build_context=config["env"]["gym"],
-            use_no_cache=config["general"]["use_no_cache"],
-            beobench_extras=beobench_extras,
-            beobench_package=config["general"]["dev_path"],
-            force_build=config["general"]["force_build"],
-            requirements=reqs_file,
-        )
+
+        if not use_registry_container:
+            image_tag = beobench.experiment.containers.build_experiment_container(
+                build_context=config["env"]["gym"],
+                use_no_cache=config["general"]["use_no_cache"],
+                beobench_extras=beobench_extras,
+                beobench_package=config["general"]["dev_path"],
+                force_build=config["general"]["force_build"],
+                requirements=reqs_file,
+            )
+        else:
+            image_tag = f"{registry}rdnfn/beobench_complete:{beobench.__version__}"
     else:
         logger.info("dry_run: would have built docker image.")
         image_tag = "dry_run"
