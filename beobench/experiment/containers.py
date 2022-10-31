@@ -75,7 +75,7 @@ def build_experiment_container(
     # Flags are shared between gym image build and gym_and_beobench image build
     flags = []
     if not force_no_buildx:
-        build_commands = ["docker", "buildx", "build"]
+        build_commands = ["docker", "buildx", "build", "--load"]
     else:
         build_commands = ["docker", "build"]
 
@@ -86,20 +86,23 @@ def build_experiment_container(
         # Using buildx to enable platform-specific builds
         flags += ["--platform", "linux/amd64"]
 
-    if enable_dockerhub_cache:
-        if force_no_buildx:
-            raise ValueError(
-                (
-                    "Cannot use dockerhub cache without buildx."
-                    " Disable force_no_buildx flat in beobench.run."
+    def add_optional_cache_args(args, img_tag):
+        """Add correct cache registry to build args."""
+        if enable_dockerhub_cache:
+            if force_no_buildx:
+                raise ValueError(
+                    (
+                        "Cannot use dockerhub cache without buildx."
+                        " Disable force_no_buildx flat in beobench.run."
+                    )
                 )
-            )
-        build_commands += [
-            "--cache-from",
-            "type=registry,ref=ghcr.io/rdnfn/beobench:buildcache",
-            "--cache-to",
-            "type=registry,ref=ghcr.io/rdnfn/beobench:buildcache,mode=max",
-        ]
+            args += [
+                "--cache-from",
+                f"type=registry,ref={img_tag}:buildcache",
+                "--cache-to",
+                f"type=registry,ref={img_tag}:buildcache,mode=max",
+            ]
+        return args
 
     if use_no_cache:
         flags.append("--no-cache")
@@ -160,6 +163,9 @@ def build_experiment_container(
             *flags,
             build_context,
         ]
+        stage0_build_args = add_optional_cache_args(
+            args=stage0_build_args, img_tag=stage0_image_tag
+        )
         env = os.environ.copy()
         logger.info("Running command: " + " ".join(stage0_build_args))
         subprocess.check_call(
@@ -188,6 +194,9 @@ def build_experiment_container(
             *flags,
             build_context,
         ]
+        stage1_build_args = add_optional_cache_args(
+            args=stage1_build_args, img_tag=stage1_image_tag
+        )
 
         # Load dockerfile into pipe
         with subprocess.Popen(
@@ -231,6 +240,9 @@ def build_experiment_container(
             *flags,
             build_context,
         ]
+        stage2_build_args = add_optional_cache_args(
+            args=stage2_build_args, img_tag=stage2_image_tag
+        )
 
         with subprocess.Popen(
             ["cat", stage2_dockerfile], stdout=subprocess.PIPE
@@ -266,6 +278,9 @@ def build_experiment_container(
                 *flags,
                 build_context,
             ]
+            stage3_build_args = add_optional_cache_args(
+                args=stage3_build_args, img_tag=stage3_image_tag
+            )
 
             with subprocess.Popen(
                 ["cat", stage3_dockerfile], stdout=subprocess.PIPE
