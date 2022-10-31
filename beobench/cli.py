@@ -178,7 +178,7 @@ def restart():
     is_flag=True,
     help=("Whether to push image to registry."),
 )
-def build_container(build_context: str, registry: str, push_image: bool):
+def build_experiment_container(build_context: str, registry: str, push_image: bool):
     """Build experiment container"""
     beobench.experiment.containers.build_experiment_container(
         build_context=build_context, registry=registry, push_image=push_image

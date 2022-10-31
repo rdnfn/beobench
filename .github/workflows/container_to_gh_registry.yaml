@@ -40,7 +40,7 @@ jobs:
         run: pip install .
       -
         name: Build image
-        run: beobench build-image --build-context sinergym --registry ghcr.io --push-image
+        run: beobench build-experiment-container --build-context sinergym --registry ghcr.io --push-image
       # -
       #   name: Build and push
       #   id: docker_build
