@@ -1,4 +1,4 @@
-name: CI to GHCR
+name: GH registry upload
 
 on: [pull_request]
 
@@ -9,7 +9,9 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
       -
         name: Set up Docker Buildx
         id: buildx
