@@ -26,6 +26,11 @@ def run_config():
     return beobench.experiment.config_parser.get_standard_config("test_energym")
 
 
+@pytest.fixture
+def rand_agent_config():
+    return beobench.experiment.config_parser.get_standard_config("method_random_action")
+
+
 @pytest.fixture(scope="session")
 def agent_sb3(tmp_path_factory):
     agent_file_path = create_tmp_file(
