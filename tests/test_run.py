@@ -26,13 +26,20 @@ def test_run_pypi(run_config):
 @pytest.mark.slow
 def test_null_env_config():
     """Run beobench experiment using latest pypi-beobench in experiment container."""
-    config = {"env": {"config": None}}
+    config = {
+        "env": {"config": None},
+        "agent": {"config": {"stop": {"timesteps_total": 10}}},
+    }
     beobench.run(config=config, **CMD_CONFIG)
 
 
 @pytest.mark.slow
 def test_reqs_install(agent_sb3, requirements_sb3):
     config = {
-        "agent": {"origin": str(agent_sb3), "requirements": str(requirements_sb3)}
+        "agent": {
+            "origin": str(agent_sb3),
+            "requirements": str(requirements_sb3),
+            "config": {"stop": {"timesteps_total": 10}},
+        },
     }
     beobench.run(config=config, **CMD_CONFIG)
