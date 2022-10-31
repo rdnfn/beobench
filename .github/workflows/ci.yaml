@@ -1,4 +1,4 @@
-name: "CI tox tests"
+name: "CI"
 
 on: [pull_request]
 
@@ -67,6 +67,8 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Test docker access
+        run: docker pull ghcr.io/rdnfn/beobench_complete:0.5.2
       - uses: actions/checkout@v3
         with:
           submodules: recursive
