@@ -101,6 +101,7 @@ def build_experiment_container(
                 f"type=registry,ref={img_tag}:buildcache",
                 "--cache-to",
                 f"type=registry,ref={img_tag}:buildcache,mode=max",
+                "--push",
             ]
         return args
 
