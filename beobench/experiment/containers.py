@@ -125,8 +125,6 @@ def build_experiment_container(
     # Create tags of different image stages
     if registry is None:
         registry_str = ""
-    else:
-        registry_str = f"{registry}/"
     stage0_image_tag = f"{registry_str}{image_name}_base:{version}"
     stage1_image_tag = f"{registry_str}{image_name}_intermediate:{version}"
     stage2_image_tag = f"{registry_str}{image_name}_complete:{version}"
