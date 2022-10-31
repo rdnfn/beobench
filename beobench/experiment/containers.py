@@ -96,9 +96,10 @@ def build_experiment_container(
                         " Disable force_no_buildx flat in beobench.run."
                     )
                 )
+            img_tag = img_tag.split(":")[0]
             args += [
-                f'--cache-from="type=registry,ref={img_tag}:buildcache"',
-                f'--cache-to="type=registry,ref={img_tag}:buildcache,mode=max"',
+                f"--cache-from=type=registry,ref={img_tag}:buildcache",
+                f"--cache-to=type=registry,ref={img_tag}:buildcache,mode=max",
                 "--push",
             ]
         return args
