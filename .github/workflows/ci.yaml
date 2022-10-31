@@ -1,0 +1,101 @@
+name: "CI tox tests"
+
+on: [pull_request]
+
+jobs:
+  container-build:
+    # Based on following tutorial
+    # https://docs.docker.com/ci-cd/github-actions/
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        gym: ["sinergym", "energym", "boptest"]
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      -
+        name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: rdnfn
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      -
+        name: Login to ghcr
+        #if: github.event_name != 'pull_request'
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python }}
+      -
+        name: Install Beobench
+        run: pip install .
+      -
+        name: Build image
+        run: beobench build-experiment-container --build-context ${{ matrix.gym }} --registry ghcr.io/ --push-image --enable-dockerhub-cache
+  main-test:
+    needs: container-build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.7", "3.8", "3.9"]
+    steps:
+      -
+        name: Login to ghcr
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install tox and any other packages
+        run: pip install tox pytest
+      - name: Run tox
+        # Run tox using the version of Python in `PATH`
+        run: tox -e py
+
+  # Test of Docker-in-Docker usage
+  # Disabled because of the following issue:
+  # https://github.com/rdnfn/beobench/issues/85
+  #
+  # docker-v19_03-test:
+  #   runs-on: ubuntu-latest
+  #   container: docker:19.03-dind
+  #   strategy:
+  #     matrix:
+  #       python: ["3.8"]
+  #   steps:
+  #     - run: apk add --upgrade --no-cache -U git
+  #     - run: apk add --no-cache -U python3 py3-pip
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         submodules: recursive
+  #     - run: pip install pytest
+  #     - run: pip install .
+  #     - run: pytest -s
