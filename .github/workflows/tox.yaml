@@ -1,6 +1,10 @@
 name: Tox tests
 
-on: [pull_request]
+on:
+  workflow_run:
+    workflows: ["CI: container build"]
+    types:
+      - completed
 
 jobs:
   main-test:
@@ -9,6 +13,13 @@ jobs:
       matrix:
         python: ["3.7", "3.8", "3.9"]
     steps:
+      -
+        name: Login to ghcr
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v3
         with:
           submodules: recursive
