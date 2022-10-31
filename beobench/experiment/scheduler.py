@@ -25,7 +25,12 @@ import beobench.experiment.config_parser
 import beobench.utils
 import beobench.logging
 from beobench.logging import logger
-from beobench.constants import CONTAINER_DATA_DIR, CONTAINER_RO_DIR, AVAILABLE_AGENTS
+from beobench.constants import (
+    CONTAINER_DATA_DIR,
+    CONTAINER_RO_DIR,
+    AVAILABLE_AGENTS,
+    AVAILABLE_INTEGRATIONS,
+)
 
 beobench.logging.setup()
 
@@ -250,7 +255,19 @@ def _build_and_run_in_container(
                 requirements=reqs_file,
             )
         else:
-            image_tag = f"{registry}rdnfn/beobench_complete:{beobench.__version__}"
+            build_context = config["env"]["gym"]
+            if build_context in AVAILABLE_INTEGRATIONS:
+                image_tag = (
+                    f"{registry}rdnfn/beobench_{build_context}_"
+                    f"complete:{beobench.__version__}"
+                )
+            else:
+                raise ValueError(
+                    f"Build context {build_context} is not one of available "
+                    f"integrations {AVAILABLE_INTEGRATIONS}."
+                    " Set use_registry_container=False in beobench.run for "
+                    "custom builds."
+                )
     else:
         logger.info("dry_run: would have built docker image.")
         image_tag = "dry_run"
