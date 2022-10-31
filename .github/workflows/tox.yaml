@@ -2,6 +2,10 @@ name: Tox tests
 
 on:
   workflow_run:
+    # This workflow is only started after
+    # test experiment containers have been
+    # successfully built and pushed to
+    # to GH container registry
     workflows: ["CI: container build"]
     types:
       - completed

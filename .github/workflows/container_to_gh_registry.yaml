@@ -1,4 +1,4 @@
-name: GH registry upload
+name: "CI: container build"
 
 # Based on following tutorial
 # https://docs.docker.com/ci-cd/github-actions/
