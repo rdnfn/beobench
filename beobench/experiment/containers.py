@@ -48,7 +48,7 @@ def build_experiment_container(
     build_context: str,
     use_no_cache: bool = False,
     beobench_package: str = "beobench",
-    beobench_extras: str = "extended,rllib",
+    beobench_extras: str = "extended,rllib,sb3",
     force_build: bool = False,
     requirements: str = None,
     registry: str = None,
