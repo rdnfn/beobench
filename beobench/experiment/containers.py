@@ -51,7 +51,7 @@ def build_experiment_container(
     beobench_extras: str = "extended,rllib,sb3",
     force_build: bool = False,
     requirements: str = None,
-    registry: str = None,
+    registry: str = "",
     push_image: bool = False,  # pylint: disable=unused-argument
     enable_dockerhub_cache: bool = False,
     force_no_buildx: bool = False,
@@ -101,8 +101,12 @@ def build_experiment_container(
             args += [
                 f"--cache-from=type=registry,ref={img_tag}:buildcache",
                 f"--cache-to=type=registry,ref={img_tag}:buildcache,mode=max",
+            ]
+        if push_image:
+            args += [
                 "--push",
             ]
+
         return args
 
     if use_no_cache:
