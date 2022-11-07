@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         gym: ["sinergym", "energym", "boptest"]
-        version: ["light","standard"]
+        variant: ["light","standard"]
     steps:
       -
         name: Checkout
@@ -53,7 +53,7 @@ jobs:
         run: pip install .
       -
         name: Build image
-        run: beobench build-experiment-container --build-context ${{ matrix.gym }} --registry ghcr.io/ --push-image --enable-dockerhub-cache --beobench-package . --extras-mode ${{ matrix.mode }}
+        run: beobench build-experiment-container --build-context ${{ matrix.gym }} --registry ghcr.io/ --push-image --enable-dockerhub-cache --beobench-package . --extras-mode ${{ matrix.variant }}
   main-test:
     needs: container-build
     runs-on: ubuntu-latest
