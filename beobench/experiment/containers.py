@@ -55,6 +55,7 @@ def build_experiment_container(
     push_image: bool = False,  # pylint: disable=unused-argument
     enable_dockerhub_cache: bool = False,
     force_no_buildx: bool = False,
+    img_name_appendix: str = "",
 ) -> None:
     """Build experiment container from beobench/integrations/boptest/Dockerfile.
 
@@ -121,6 +122,8 @@ def build_experiment_container(
         context_name = "".join(e for e in build_context if e.isalnum())
         image_name = f"beobench_custom_{context_name}"
         package_build_context = False
+
+    image_name += img_name_appendix
 
     # Create tags of different image stages
     if registry is None:
