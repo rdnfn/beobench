@@ -257,6 +257,8 @@ def _build_and_run_in_container(
         else:
             build_context = config["env"]["gym"]
             if build_context in AVAILABLE_INTEGRATIONS:
+                if registry is None:
+                    registry = ""
                 image_tag = (
                     f"{registry}rdnfn/beobench_{build_context}_"
                     f"complete:{beobench.__version__}"
