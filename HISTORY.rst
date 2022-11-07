@@ -8,7 +8,7 @@ History
 * Features:
 
   * Add support for installing agent script's requirements via requirements file (#71).
-  * Upload pre-built docker containers to dockerhub, removing the need to build Beobench experiment containers on users machines.
+  * Upload pre-built docker containers to dockerhub. Removing the need to build Beobench experiment containers on users machines (#87).
 
 * Improvements
 
