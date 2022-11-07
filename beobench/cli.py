@@ -194,8 +194,18 @@ def restart():
     is_flag=True,
     help=("Whether to push image to registry."),
 )
+@click.option(
+    "--beobench-package",
+    default=None,
+    help=("Path of Beobench package (if using local package)."),
+    type=str,
+)
 def build_experiment_container(
-    build_context: str, registry: str, push_image: bool, enable_dockerhub_cache: bool
+    build_context: str,
+    registry: str,
+    push_image: bool,
+    enable_dockerhub_cache: bool,
+    beobench_package: str,
 ):
     """Build experiment container"""
     beobench.experiment.containers.build_experiment_container(
@@ -203,4 +213,5 @@ def build_experiment_container(
         registry=registry,
         push_image=push_image,
         enable_dockerhub_cache=enable_dockerhub_cache,
+        beobench_package=beobench_package,
     )

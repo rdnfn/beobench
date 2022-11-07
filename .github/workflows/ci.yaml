@@ -52,7 +52,7 @@ jobs:
         run: pip install .
       -
         name: Build image
-        run: beobench build-experiment-container --build-context ${{ matrix.gym }} --registry ghcr.io/ --push-image --enable-dockerhub-cache
+        run: beobench build-experiment-container --build-context ${{ matrix.gym }} --registry ghcr.io/ --push-image --enable-dockerhub-cache --beobench-package .
   main-test:
     needs: container-build
     runs-on: ubuntu-latest
