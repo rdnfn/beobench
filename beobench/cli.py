@@ -200,18 +200,49 @@ def restart():
     help=("Path of Beobench package (if using local package)."),
     type=str,
 )
+@click.option(
+    "--beobench-extras",
+    default="extended,rllib,sb3",
+    help="Extra dependencies to install for Beobench package.",
+    type=str,
+)
+@click.option(
+    "--img-name-appendix",
+    default="",
+    help="String to add to image tag name.",
+    type=str,
+)
+@click.option(
+    "--extras-mode",
+    default=None,
+    help="Beobench extras mode.",
+    type=str,
+)
 def build_experiment_container(
     build_context: str,
     registry: str,
     push_image: bool,
     enable_dockerhub_cache: bool,
     beobench_package: str,
+    img_name_appendix: str,
+    beobench_extras: str,
+    extras_mode: str,
 ):
     """Build experiment container"""
+
+    if extras_mode == "standard":
+        beobench_extras = "extended,rllib,sb3"
+        img_name_appendix = ""
+    if extras_mode == "light":
+        beobench_extras = "extended"
+        img_name_appendix = "_light"
+
     beobench.experiment.containers.build_experiment_container(
         build_context=build_context,
         registry=registry,
         push_image=push_image,
         enable_dockerhub_cache=enable_dockerhub_cache,
         beobench_package=beobench_package,
+        img_name_appendix=img_name_appendix,
+        beobench_extras=beobench_extras,
     )
