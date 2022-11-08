@@ -1,6 +1,6 @@
 FROM python:3.10
 
-RUN pip install celery numpy
+RUN pip install celery numpy gym
 
 RUN mkdir -p /source/
 WORKDIR /source/
