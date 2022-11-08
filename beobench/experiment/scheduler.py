@@ -203,9 +203,9 @@ def run(
 
 def _build_and_run_in_container(
     config: dict,
-    dry_run: bool = False,
-    use_registry_container: bool = True,
-    registry: str = "",
+    dry_run: bool,
+    use_registry_container: bool,
+    registry: str,
 ) -> None:
     """Build container image and run experiment in docker container.
 
@@ -244,8 +244,8 @@ def _build_and_run_in_container(
         logger.info("No requirements file recognised.")
 
     if not dry_run:
-
         if not use_registry_container:
+            logger.info("Not using registry container. Building container locally.")
             image_tag = beobench.experiment.containers.build_experiment_container(
                 build_context=config["env"]["gym"],
                 use_no_cache=config["general"]["use_no_cache"],
@@ -255,6 +255,7 @@ def _build_and_run_in_container(
                 requirements=reqs_file,
             )
         else:
+            logger.info("Running experiment with downloaded registry container.")
             build_context = config["env"]["gym"]
             if build_context in AVAILABLE_INTEGRATIONS:
                 if registry is None:

@@ -112,9 +112,8 @@ def cli():
 )
 @click.option(
     "--use-registry",
-    default=False,
-    help=("Whether to use container from registry, and not build container locally."),
-    type=str,
+    is_flag=True,
+    help="Whether to use container from registry, and not build container locally.",
 )
 def run(
     config: str,
