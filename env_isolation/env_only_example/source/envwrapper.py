@@ -3,21 +3,31 @@
 This does the celery connection magic.
 """
 from celery import Celery
+import os
 
 # This is a conditional import, i.e. it will import the environment if it is
 # available (only in the environment container).
 try:
     from environment.dummyenv import DummyEnvironment
+
+    env = DummyEnvironment()
+
 except ImportError:
     DummyEnvironment = None
 
-if DummyEnvironment is not None:
-    env = DummyEnvironment()
+try:
+    os.environ["ENVCONTAINER"]  # pylint: disable=pointless-statement
+    print("Using container broker.")
+    broker = "pyamqp://guest@beobench-rabitmq-broker//"
+except KeyError:
+    print("Using localhost broker.")
+    broker = "pyamqp://guest@localhost:5672//"
+
 
 # Everything below is important for the agent script too.
 app = Celery(
     "remote-environment",
-    broker="pyamqp://guest@beobench-rabitmq-broker//",
+    broker=broker,
     # This is important to let us wait for results, i.e. to  the
     # interaction with the environment synchronous.
     result_backend="rpc://",

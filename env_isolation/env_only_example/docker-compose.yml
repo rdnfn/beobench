@@ -16,11 +16,12 @@ services:
       dockerfile: Dockerfile_environment
     init: true # Faster shutdown.
     depends_on: [ "beobench-rabitmq-broker" ]
-
-  beobench-agent-dummy:
-    container_name: beobench-agent-dummy
-    build:
-      context: ./source
-      dockerfile: Dockerfile_agent
-    init: true # Faster shutdown.
-    depends_on: [ "beobench-rabitmq-broker" ]
+    environment:
+      ENVCONTAINER: 'envcontainer'
+  # beobench-agent-dummy:
+  #   container_name: beobench-agent-dummy
+  #   build:
+  #     context: ./source
+  #     dockerfile: Dockerfile_agent
+  #   init: true # Faster shutdown.
+  #   depends_on: [ "beobench-rabitmq-broker" ]
