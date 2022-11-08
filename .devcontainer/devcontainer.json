@@ -21,11 +21,11 @@
 	// ADAPT: the mount must be adapted to cloned repo location
 	"workspaceMount": "source=${localWorkspaceFolder},target=/beobench,type=bind,consistency=cached",
 	// ADAPT: the mount must be adapted to the gitconfig location on the remote machine
-	//"mounts": [
-	//	"source=${localEnv:HOME}/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached",
-	//],
+	"mounts": [
+		"source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached,readonly=true",
+	],
 	//"initializeCommand": "export DOCKER_BUILDKIT=0 && export COMPOSE_DOCKER_CLI_BUILD=0",
-	"postCreateCommand": "pip install -e . && git config --system --add safe.directory /beobench",
+	"postCreateCommand": "pip install -e .", //&& git config --global --add safe.directory /beobench",
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
 		"python.defaultInterpreterPath": "/usr/local/bin/python",
@@ -61,7 +61,7 @@
 		"trond-snekvik.simple-rst",
 		"lextudio.restructuredtext",
 		"njpwerner.autodocstring",
-		"donjayamanne.githistory",
+		"donjayamanne.githistory"
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
@@ -70,8 +70,12 @@
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode",
 	"features": {
-		"git": "latest",
-		"docker-in-docker": "20.10"
+		"ghcr.io/devcontainers/features/docker-in-docker:1": {
+			"version": "20.10"
+		},
+		"ghcr.io/devcontainers/features/git:1": {
+			"version": "latest"
+		}
 	},
 	"runArgs": [
 		//"--shm-size=32gb",
