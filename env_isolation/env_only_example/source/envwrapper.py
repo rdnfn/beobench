@@ -40,3 +40,13 @@ def reset():
 @app.task
 def step(action):
     return env.step(action)
+
+
+@app.task
+def action_space():
+    return env.action_space
+
+
+@app.task
+def observation_space():
+    return env.observation_space
