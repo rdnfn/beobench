@@ -56,7 +56,7 @@ def run(
     force_build: str = False,
     num_samples: int = None,
     dry_run: bool = False,
-    use_registry_container: bool = True,
+    use_registry_container: bool = False,
     registry: str = "",
 ) -> None:
     """Run experiment.

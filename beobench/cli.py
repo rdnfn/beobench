@@ -110,6 +110,12 @@ def cli():
     ),
     type=str,
 )
+@click.option(
+    "--use-registry",
+    default=False,
+    help=("Whether to use container from registry, and not build container locally."),
+    type=str,
+)
 def run(
     config: str,
     method: str,
@@ -128,6 +134,7 @@ def run(
     force_build: bool,
     dry_run: bool,
     registry: str,
+    use_registry: bool,
 ) -> None:
     """Run beobench experiment from command line.
 
@@ -157,6 +164,7 @@ def run(
         force_build=force_build,
         dry_run=dry_run,
         registry=registry,
+        use_registry_container=use_registry,
     )
 
 
