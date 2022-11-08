@@ -7,7 +7,7 @@ import numpy as np
 
 import gym
 
-from envwrapper import step, reset
+from envwrapper import step, reset, action_space
 
 print("\nStarting local experiment.")
 env = gym.make("CartPole-v0")
@@ -30,3 +30,7 @@ for i in range(10):
         # sleep(1)
     except ConnectionError as e:
         print(f"Failed with exception {e}. Retrying.")
+
+async_result = action_space.delay()
+action_space = async_result.get()
+print(f"action space: {action_space}")
