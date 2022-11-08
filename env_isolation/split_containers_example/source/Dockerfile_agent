@@ -1,0 +1,11 @@
+FROM python:3.10
+
+RUN pip install celery numpy
+
+RUN mkdir -p /source/
+WORKDIR /source/
+COPY __init__.py __init__.py
+COPY envwrapper.py envwrapper.py
+COPY agent.py agent.py
+
+ENTRYPOINT [ "python", "-u", "/source/agent.py" ]

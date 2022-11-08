@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+
+  beobench-rabitmq-broker:
+    container_name: beobench-rabitmq-broker
+    image: rabbitmq:3
+    init: true # Faster shutdown.
+
+  beobench-environment-dummy:
+    container_name: beobench-environment-dummy
+    build:
+      context: ./source
+      dockerfile: Dockerfile_environment
+    init: true # Faster shutdown.
+    depends_on: [ "beobench-rabitmq-broker" ]
+
+  beobench-agent-dummy:
+    container_name: beobench-agent-dummy
+    build:
+      context: ./source
+      dockerfile: Dockerfile_agent
+    init: true # Faster shutdown.
+    depends_on: [ "beobench-rabitmq-broker" ]
