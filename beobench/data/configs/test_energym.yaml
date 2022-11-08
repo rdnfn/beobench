@@ -5,7 +5,7 @@ agent:
   origin: random_action # either path to agent script or name of standard agent
   config:
     stop:
-      timesteps_total: 2
+      timesteps_total: 10
     config:
       horizon: 96
 

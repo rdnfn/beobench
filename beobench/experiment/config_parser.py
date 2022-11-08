@@ -96,12 +96,12 @@ def create_rllib_config(config: dict) -> dict:
     rllib_config["config"]["env_config"] = config["env"]["config"]
     if "name" in config["env"].keys():
         rllib_config["config"]["env"] = config["env"]["name"]
-    elif "name" in config["env"]["config"].keys():
+    elif (
+        config["env"]["config"] is not None and "name" in config["env"]["config"].keys()
+    ):
         rllib_config["config"]["env"] = config["env"]["config"]["name"]
     else:
-        raise ValueError(
-            "No name found in config. Either env.name or env.config.name should be set."
-        )
+        rllib_config["config"]["env"] = f"default_{config['env']['gym']}_env_name"
 
     return rllib_config
 
@@ -188,15 +188,16 @@ def check_config(config: dict) -> None:
     Args:
         config (dict): Beobench config.
     """
-    requested_version = config["general"]["version"]
-    if requested_version != beobench.__version__:
-        raise ValueError(
-            f"Beobench config requests version {requested_version}"
-            f" that does not match installed version {beobench.__version__}. "
-            "Change the installed Beobench version to the requested version "
-            f"{requested_version} or remove general.version parameter from config "
-            "to prevent this error."
-        )
+    if "version" in config["general"].keys():
+        requested_version = config["general"]["version"]
+        if requested_version != beobench.__version__:
+            raise ValueError(
+                f"Beobench config requests version {requested_version}"
+                f" that does not match installed version {beobench.__version__}. "
+                "Change the installed Beobench version to the requested version "
+                f"{requested_version} or remove general.version parameter from config "
+                "to prevent this error."
+            )
 
 
 def get_high_level_config(method: str, gym: str, env: str) -> dict:

@@ -52,6 +52,7 @@ setup(
     extras_require={
         "extended": extended_requirements,
         "rllib": rllib_requirements,
+        "sb3": ["stable-baselines3"],
     },
     license="MIT license",
     long_description=readme + "\n\n" + history,

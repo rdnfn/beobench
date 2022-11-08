@@ -48,8 +48,14 @@ def build_experiment_container(
     build_context: str,
     use_no_cache: bool = False,
     beobench_package: str = "beobench",
-    beobench_extras: str = "extended",
+    beobench_extras: str = "extended,rllib,sb3",
     force_build: bool = False,
+    requirements: str = None,
+    registry: str = "",
+    push_image: bool = False,  # pylint: disable=unused-argument
+    enable_dockerhub_cache: bool = False,
+    force_no_buildx: bool = False,
+    img_name_appendix: str = "",
 ) -> None:
     """Build experiment container from beobench/integrations/boptest/Dockerfile.
 
@@ -69,25 +75,45 @@ def build_experiment_container(
 
     # Flags are shared between gym image build and gym_and_beobench image build
     flags = []
+    if not force_no_buildx:
+        build_commands = ["docker", "buildx", "build"]  # ,"--load"]
+    else:
+        build_commands = ["docker", "build"]
 
     # On arm64 machines force experiment containers to be amd64
     # This is only useful for development purposes.
     # (example: M1 macbooks)
     if os.uname().machine in ["arm64", "aarch64"]:
         # Using buildx to enable platform-specific builds
-        build_commands = ["docker", "buildx", "build"]
         flags += ["--platform", "linux/amd64"]
-    else:
-        # Otherwise use standard docker build command.
-        # This change enables usage of older docker versions w/o buildx,
-        # e.g. v19.03, on non-arm64 machines
-        build_commands = ["docker", "build"]
+
+    def add_optional_cache_args(args, img_tag):
+        """Add correct cache registry to build args."""
+        if enable_dockerhub_cache:
+            if force_no_buildx:
+                raise ValueError(
+                    (
+                        "Cannot use dockerhub cache without buildx."
+                        " Disable force_no_buildx flat in beobench.run."
+                    )
+                )
+            img_tag = img_tag.split(":")[0]
+            args += [
+                f"--cache-from=type=registry,ref={img_tag}:buildcache",
+                f"--cache-to=type=registry,ref={img_tag}:buildcache,mode=max",
+            ]
+        if push_image:
+            args += [
+                "--push",
+            ]
+
+        return args
 
     if use_no_cache:
         flags.append("--no-cache")
 
     if build_context in AVAILABLE_INTEGRATIONS:
-        image_name = f"beobench_{build_context}"
+        image_name = f"rdnfn/beobench_{build_context}"
         gym_name = build_context
         gym_source = importlib.resources.files("beobench").joinpath(
             f"beobench_contrib/gyms/{gym_name}"
@@ -101,15 +127,25 @@ def build_experiment_container(
         image_name = f"beobench_custom_{context_name}"
         package_build_context = False
 
+    image_name += img_name_appendix
+
     # Create tags of different image stages
-    stage0_image_tag = f"{image_name}_base:{version}"
-    stage1_image_tag = f"{image_name}_intermediate:{version}"
-    stage2_image_tag = f"{image_name}_complete:{version}"
+    if registry is None:
+        registry = ""
+    stage0_image_tag = f"{registry}{image_name}_base:{version}"
+    stage1_image_tag = f"{registry}{image_name}_intermediate:{version}"
+    stage2_image_tag = f"{registry}{image_name}_complete:{version}"
+
+    if requirements is None:
+        final_image_tag = stage2_image_tag
+    else:
+        stage3_image_tag = f"{registry}{image_name}_custom_requirements:{version}"
+        final_image_tag = stage3_image_tag
 
     # skip build if image already exists.
-    if not force_build and check_image_exists(stage2_image_tag):
-        logger.info(f"Existing image found ({stage2_image_tag}). Skipping build.")
-        return stage2_image_tag
+    if not force_build and check_image_exists(final_image_tag):
+        logger.info(f"Existing image found ({final_image_tag}). Skipping build.")
+        return final_image_tag
 
     logger.warning(
         f"Image not found ({stage2_image_tag}) or forced rebuild. Building image.",
@@ -132,6 +168,9 @@ def build_experiment_container(
             *flags,
             build_context,
         ]
+        stage0_build_args = add_optional_cache_args(
+            args=stage0_build_args, img_tag=stage0_image_tag
+        )
         env = os.environ.copy()
         logger.info("Running command: " + " ".join(stage0_build_args))
         subprocess.check_call(
@@ -160,6 +199,9 @@ def build_experiment_container(
             *flags,
             build_context,
         ]
+        stage1_build_args = add_optional_cache_args(
+            args=stage1_build_args, img_tag=stage1_image_tag
+        )
 
         # Load dockerfile into pipe
         with subprocess.Popen(
@@ -173,11 +215,6 @@ def build_experiment_container(
             )
 
         # Part 3: build stage 2 (complete) experiment image
-        stage2_dockerfile = str(
-            importlib.resources.files("beobench.data.dockerfiles").joinpath(
-                "Dockerfile.beobench_install"
-            )
-        )
         if beobench_package is None:
             beobench_package = "beobench"
         if beobench_package == "beobench":
@@ -190,6 +227,12 @@ def build_experiment_container(
             # need to add std-in-dockerfile via -f flag and not context directly
             stage2_docker_flags = ["-f", "-"]
 
+        stage2_dockerfile = str(
+            importlib.resources.files("beobench.data.dockerfiles").joinpath(
+                f"Dockerfile.beobench_install_{package_type}"
+            )
+        )
+
         stage2_build_args = [
             *build_commands,
             "-t",
@@ -198,14 +241,13 @@ def build_experiment_container(
             "--build-arg",
             f"PREV_IMAGE={stage1_image_tag}",
             "--build-arg",
-            f"PACKAGE={beobench_package}",
-            "--build-arg",
-            f"PACKAGE_TYPE={package_type}",
-            "--build-arg",
             f"EXTRAS={beobench_extras}",
             *flags,
             build_context,
         ]
+        stage2_build_args = add_optional_cache_args(
+            args=stage2_build_args, img_tag=stage2_image_tag
+        )
 
         with subprocess.Popen(
             ["cat", stage2_dockerfile], stdout=subprocess.PIPE
@@ -217,9 +259,52 @@ def build_experiment_container(
                 env=env,  # this enables accessing dockerfile in subdir
             )
 
+        if requirements is not None:
+            # Part 4: build stage 3 (optional) additional installation of requirements
+            build_context = str(requirements.parents[0].absolute())
+            # need to add std-in-dockerfile via -f flag and not context directly
+            stage3_docker_flags = ["-f", "-"]
+
+            stage3_dockerfile = str(
+                importlib.resources.files("beobench.data.dockerfiles").joinpath(
+                    "Dockerfile.requirements"
+                )
+            )
+
+            stage3_build_args = [
+                *build_commands,
+                "-t",
+                stage3_image_tag,
+                *stage3_docker_flags,
+                "--build-arg",
+                f"PREV_IMAGE={stage2_image_tag}",
+                "--build-arg",
+                f"REQUIREMENTS={requirements.name}",
+                *flags,
+                build_context,
+            ]
+            stage3_build_args = add_optional_cache_args(
+                args=stage3_build_args, img_tag=stage3_image_tag
+            )
+
+            with subprocess.Popen(
+                ["cat", stage3_dockerfile], stdout=subprocess.PIPE
+            ) as proc:
+                logger.info("Running command: " + " ".join(stage3_build_args))
+                subprocess.check_call(
+                    stage3_build_args,
+                    stdin=proc.stdout,
+                    env=env,  # this enables accessing dockerfile in subdir
+                )
+
+    # if push_image:
+    #    subprocess.check_call(
+    #        ["docker", "image", "push", stage2_image_tag],
+    #    )
+
     logger.info("Experiment gym image build finished.")
 
-    return stage2_image_tag
+    return final_image_tag
 
 
 def create_docker_network(network_name: str) -> None:

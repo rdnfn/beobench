@@ -25,7 +25,12 @@ import beobench.experiment.config_parser
 import beobench.utils
 import beobench.logging
 from beobench.logging import logger
-from beobench.constants import CONTAINER_DATA_DIR, CONTAINER_RO_DIR, AVAILABLE_AGENTS
+from beobench.constants import (
+    CONTAINER_DATA_DIR,
+    CONTAINER_RO_DIR,
+    AVAILABLE_AGENTS,
+    AVAILABLE_INTEGRATIONS,
+)
 
 beobench.logging.setup()
 
@@ -50,6 +55,9 @@ def run(
     beobench_extras: str = None,
     force_build: str = False,
     num_samples: int = None,
+    dry_run: bool = False,
+    use_registry_container: bool = False,
+    registry: str = "",
 ) -> None:
     """Run experiment.
 
@@ -97,6 +105,9 @@ def run(
             image already exists.
         num_samples (int, optional): number of experiment samples to run. This defaults
             to a single sample, i.e. just running the experiment once.
+        dry_run (bool, optional): whether to just dry run this function
+            without launching any docker containers or experiment processes.
+            Primarily intended for testing and debugging.
     """
     logger.info("Starting experiment run ...")
     # parsing relevant kwargs and adding them to config
@@ -138,7 +149,10 @@ def run(
     for i in range(1, num_samples + 1):
         # TODO: enable checking whether something is run in container
         # and do not print the statement below if inside experiment container.
-        if "name" in config["env"]["config"].keys():
+        if (
+            config["env"]["config"] is not None
+            and "name" in config["env"]["config"].keys()
+        ):
             env_name = config["env"]["config"]["name"]
         else:
             env_name = "default"
@@ -172,20 +186,34 @@ def run(
                 "python",
                 str(container_ro_dir_abs / _get_agent_file(config)[0].name),
             ]
-            subprocess.check_call(args)
+            if not dry_run:
+                subprocess.check_output(args)
 
         else:
             # First build container image and then execute experiment inside container
             # But only run one experiment per container.
             config["general"]["num_samples"] = 1
-            _build_and_run_in_container(config)
+            _build_and_run_in_container(
+                config,
+                dry_run=dry_run,
+                use_registry_container=use_registry_container,
+                registry=registry,
+            )
 
 
-def _build_and_run_in_container(config: dict) -> None:
+def _build_and_run_in_container(
+    config: dict,
+    dry_run: bool,
+    use_registry_container: bool,
+    registry: str,
+) -> None:
     """Build container image and run experiment in docker container.
 
     Args:
         config (dict): Beobench configuration.
+        dry_run (bool, optional): whether to just dry run this function
+            without launching any docker containers or experiment processes.
+            Primarily intended for testing and debugging.
     """
 
     # We need to deepcopy the config as some sensitive data (API keys) is deleted at
@@ -208,13 +236,44 @@ def _build_and_run_in_container(config: dict) -> None:
     else:
         beobench_extras = config["general"]["beobench_extras"]
 
-    image_tag = beobench.experiment.containers.build_experiment_container(
-        build_context=config["env"]["gym"],
-        use_no_cache=config["general"]["use_no_cache"],
-        beobench_extras=beobench_extras,
-        beobench_package=config["general"]["dev_path"],
-        force_build=config["general"]["force_build"],
-    )
+    if "requirements" in config["agent"].keys():
+        reqs_file = pathlib.Path(config["agent"]["requirements"])
+        logger.info(f"Requirements file recognised: {reqs_file}")
+    else:
+        reqs_file = None
+        logger.info("No requirements file recognised.")
+
+    if not dry_run:
+        if not use_registry_container:
+            logger.info("Not using registry container. Building container locally.")
+            image_tag = beobench.experiment.containers.build_experiment_container(
+                build_context=config["env"]["gym"],
+                use_no_cache=config["general"]["use_no_cache"],
+                beobench_extras=beobench_extras,
+                beobench_package=config["general"]["dev_path"],
+                force_build=config["general"]["force_build"],
+                requirements=reqs_file,
+            )
+        else:
+            logger.info("Running experiment with downloaded registry container.")
+            build_context = config["env"]["gym"]
+            if build_context in AVAILABLE_INTEGRATIONS:
+                if registry is None:
+                    registry = ""
+                image_tag = (
+                    f"{registry}rdnfn/beobench_{build_context}_"
+                    f"complete:{beobench.__version__}"
+                )
+            else:
+                raise ValueError(
+                    f"Build context {build_context} is not one of available "
+                    f"integrations {AVAILABLE_INTEGRATIONS}."
+                    " Set use_registry_container=False in beobench.run for "
+                    "custom builds."
+                )
+    else:
+        logger.info("dry_run: would have built docker image.")
+        image_tag = "dry_run"
 
     ### part 2: create args and run command in docker container
     if config["general"]["docker_flags"] is None:
@@ -237,8 +296,13 @@ def _build_and_run_in_container(config: dict) -> None:
     config_path.parent.mkdir(parents=True, exist_ok=True)
     config_path_abs = config_path.absolute()
     config_container_path_abs = (CONTAINER_RO_DIR / "config.yaml").absolute()
-    with open(config_path, "w", encoding="utf-8") as conf_file:
-        yaml.dump(config, conf_file)
+
+    if not dry_run:
+        with open(config_path, "w", encoding="utf-8") as conf_file:
+            yaml.dump(config, conf_file)
+    else:
+        logger.info(f"dry_run: would save config file to {config_path}.")
+
     docker_flags += [
         "-v",
         f"{config_path_abs}:{config_container_path_abs}:ro",
@@ -251,8 +315,11 @@ def _build_and_run_in_container(config: dict) -> None:
     # enable docker-from-docker access only for built-in boptest integration.
     if config["env"]["gym"] == "boptest":
 
-        # Create docker network (only useful if starting other containers)
-        beobench.experiment.containers.create_docker_network("beobench-net")
+        if not dry_run:
+            # Create docker network (only useful if starting other containers)
+            beobench.experiment.containers.create_docker_network("beobench-net")
+        else:
+            logger.info("dry_run: would start docker network.")
 
         docker_flags += [
             # enable access to docker-from-docker
@@ -284,6 +351,7 @@ def _build_and_run_in_container(config: dict) -> None:
             agent_file = stack.enter_context(importlib.resources.as_file(agent_file))
         # load agent file
         ag_file_abs = agent_file.absolute()
+        logger.info(f"Absolute agent file path: {ag_file_abs}")
         ag_file_on_docker_abs = (CONTAINER_RO_DIR / agent_file.name).absolute()
         docker_flags += [
             "-v",
@@ -318,8 +386,15 @@ def _build_and_run_in_container(config: dict) -> None:
             arg_str = arg_str.replace(wandb_api_key, "<API_KEY_HIDDEN>")
         logger.info(f"Executing docker command: {arg_str}")
 
-        # subprocess.check_call(args)
-        beobench.utils.run_command(args, process_name="container")
+        if not dry_run:
+            beobench.utils.run_command(args, process_name="container")
+        else:
+            logger.info("dry_run: would run above command but won't.")
+
+    if not dry_run:
+        logger.info("Completed experiment.")
+    else:
+        logger.info("Completed dry run.")
 
 
 def _create_config_from_kwargs(**kwargs) -> dict:
