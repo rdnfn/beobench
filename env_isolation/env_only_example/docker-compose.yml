@@ -5,6 +5,8 @@ services:
   beobench-rabitmq-broker:
     container_name: beobench-rabitmq-broker
     image: rabbitmq:3
+    ports:
+      - 5672:5672
     init: true # Faster shutdown.
 
   beobench-environment-dummy:
