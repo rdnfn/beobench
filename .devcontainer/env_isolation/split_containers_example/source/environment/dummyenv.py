@@ -15,11 +15,11 @@ class DummyEnvironment:
     def reset(self):
         self.internal_state = np.zeros(1)
         observation = self.internal_state
-        print("RESET. Obs is: {}".format(observation))
+        print(f"RESET. Obs is: {observation}")
         return observation
 
     def step(self, action):
         self.internal_state += action
         observation = self.internal_state
-        print("STEP. Obs is: {}".format(observation))
+        print(f"STEP. Obs is: {observation}")
         return observation

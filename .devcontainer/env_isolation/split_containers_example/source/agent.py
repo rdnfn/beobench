@@ -11,18 +11,10 @@ from envwrapper import step, reset
 
 async_result = reset.delay()
 observation = async_result.get()
-print(
-    "Agent received initial observation: {} of type {}".format(
-        observation, type(observation)
-    )
-)
+print(f"Agent received initial observation: {observation} of type {type(observation)}")
 
 while True:
     async_result = step.delay(np.ones(1))
     observation = async_result.get()
-    print(
-        "Agent received observation: {} of type {}".format(
-            observation, type(observation)
-        )
-    )
+    print(f"Agent received observation: {observation} of type {type(observation)}")
     sleep(1)
