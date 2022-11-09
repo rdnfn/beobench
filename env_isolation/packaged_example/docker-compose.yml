@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+
+  beobench-rabitmq-broker:
+    container_name: beobench-rabitmq-broker
+    image: rabbitmq:3
+    ports:
+      - 5672:5672
+    init: true # Faster shutdown.
+
+  beobench-environment-dummy:
+    container_name: beobench-example-environment
+    build:
+      context: ../../../beobench
+      dockerfile: /beobench/env_isolation/packaged_example/source/Dockerfile_environment
+    init: true # Faster shutdown.
+    environment:
+      INSIDE_BEOBENCH_CONTAINER: 'true'

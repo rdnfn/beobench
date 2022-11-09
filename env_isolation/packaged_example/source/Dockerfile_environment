@@ -1,0 +1,9 @@
+FROM python:3.10
+
+RUN pip install celery numpy gym==0.26
+
+COPY . beobench
+RUN pip install /beobench
+RUN pip install gym==0.26.2
+
+ENTRYPOINT [ "celery", "-A", "beobench.gym.celery", "worker", "--loglevel=INFO" ]
