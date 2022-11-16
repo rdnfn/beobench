@@ -1,0 +1,8 @@
+ARG PREV_IMAGE
+
+FROM ${PREV_IMAGE}
+# install beobench
+ARG REQUIREMENTS
+COPY ${REQUIREMENTS} /tmp/pip-tmp/requirements.txt
+RUN pip --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
+    && rm -rf /tmp/pip-tmp
