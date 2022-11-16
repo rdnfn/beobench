@@ -6,4 +6,4 @@ env:
     # Sinergym env name
     name: Eplus-5Zone-hot-continuous-v1
     # whether to normalise the observations
-    normalize: True
+    normalize: False
