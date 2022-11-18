@@ -129,8 +129,6 @@ Let's look at a concrete example. Consider this ``config.yaml`` file:
     config:
       # sinergym environment name
       name: Eplus-5Zone-hot-continuous-v1
-      # whether to normalise observations
-      normalize: True
   wrappers: [] # no wrappers added for this example
   general:
     # save experiment data to ``./beobench_results`` directory
