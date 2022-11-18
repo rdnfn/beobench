@@ -196,7 +196,11 @@ def check_config(config: dict) -> None:
                 f" that does not match installed version {beobench.__version__}. "
                 "Change the installed Beobench version to the requested version "
                 f"{requested_version} or remove general.version parameter from config "
-                "to prevent this error."
+                "to prevent this error. "
+                "If you have recently changed Beobench version, it may be worth trying"
+                " adding the flag `--force-build` to the `beobench run` command. "
+                "If you're using Beobench installed from a local clone, also add the "
+                "flag `-d <BEOBENCH_REPO_LOCAL_PATH>`."
             )
 
 
