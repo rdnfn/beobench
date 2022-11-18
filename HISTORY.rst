@@ -2,7 +2,7 @@
 History
 =======
 
-0.5.3 (2022-11-16)
+0.5.3 (2022-11-18)
 ------------------
 
 * Features:
@@ -17,6 +17,8 @@ History
 * Fixes:
 
   * Fix Sinergym data ranges in Sinergym experiment container definition in beobench_contrib (#96). Fix by @XkunW, thanks!
+  * Remove default normalisation with Sinergym (as this may fail with newer Sinergym versions as pointed out by @kad99kev (thanks!)).
+  * Pin the version of sinergym to the currently latest version to avoid future issues (v2.1.2).
   * Change the way Beobench is installed inside experiment containers. Previously this was done using conditional logic inside Dockerfiles. Now the logic is done in Python, with two different dockerfiles for local and pypi installations. This enables the use of non-buildx in the construction of Beobench experiment containers. Credit and thanks to @HYDesmondLiu and @david-woelfle for finding and sharing the underlying error.
   * Fix #90 by removing access to env config before env_creator script. Thanks to @HYDesmondLiu, who first flagged this bug in #82.
   * If one of the Beobench scheduler subprocesses fails (e.g. docker run) the main process now fails as well.
