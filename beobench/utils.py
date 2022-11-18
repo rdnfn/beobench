@@ -131,4 +131,6 @@ def run_command(cmd_line_args, process_name):
             process.stdout,
             process_name=process_name,
         )
-    _ = process.wait()  # 0 means success
+    retcode = process.wait()  # 0 means success
+    if retcode:
+        raise subprocess.CalledProcessError(retcode, cmd=cmd_line_args)

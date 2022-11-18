@@ -3,13 +3,11 @@ name: Tox tests
 on: [pull_request]
 
 jobs:
-  build:
-
+  main-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python: ["3.7", "3.8", "3.9"]
-
     steps:
       - uses: actions/checkout@v3
         with:
@@ -23,3 +21,23 @@ jobs:
       - name: Run tox
         # Run tox using the version of Python in `PATH`
         run: tox -e py
+
+  # Test of Docker-in-Docker usage
+  # Disabled because of the following issue:
+  # https://github.com/rdnfn/beobench/issues/85
+  #
+  # docker-v19_03-test:
+  #   runs-on: ubuntu-latest
+  #   container: docker:19.03-dind
+  #   strategy:
+  #     matrix:
+  #       python: ["3.8"]
+  #   steps:
+  #     - run: apk add --upgrade --no-cache -U git
+  #     - run: apk add --no-cache -U python3 py3-pip
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         submodules: recursive
+  #     - run: pip install pytest
+  #     - run: pip install .
+  #     - run: pytest -s

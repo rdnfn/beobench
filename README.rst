@@ -77,12 +77,11 @@ Installation
 
 ..
 
+        **Warning**: **OS support**
 
-    ℹ️ **OS support**
-
-    - **Linux:** recommended and tested (Ubuntu 20.04).
-    - **Windows:** use via `Windows Subsystem for Linux (WSL) <https://docs.microsoft.com/en-us/windows/wsl/install>`_ recommended.
-    - **macOS:** experimental support for Apple silicon systems — only intended for development purposes (not running experiments). Intel-based macOS support untested.
+        - **Linux:** recommended and tested (Ubuntu 20.04).
+        - **Windows:** only use via `Windows Subsystem for Linux (WSL) <https://docs.microsoft.com/en-us/windows/wsl/install>`_ recommended.
+        - **macOS:** experimental support for Apple silicon systems — only intended for development purposes (not running experiments). Intel-based macOS support untested.
 
 .. start-qs-sec2
 
@@ -130,8 +129,6 @@ Let's look at a concrete example. Consider this ``config.yaml`` file:
     config:
       # sinergym environment name
       name: Eplus-5Zone-hot-continuous-v1
-      # whether to normalise observations
-      normalize: True
   wrappers: [] # no wrappers added for this example
   general:
     # save experiment data to ``./beobench_results`` directory
@@ -173,7 +170,7 @@ dictionary gives us access to the full experiment configuration
 
 ..
 
-        ℹ️ **info**
+        **Note**
 
         We can use these two imports *regardless* of the gym framework we are using. This invariability allows us to create agent scripts that work across frameworks.
 
@@ -290,6 +287,31 @@ Support
 =======
 
 Need help using Beobench or want to discuss the toolkit? Reach out via ``contact-gh (at) arduin.io`` and we are very happy to help either via email or in a call.
+
+
+Citation
+========
+
+If you find Beobench helpful in your work, please consider citing the `accompanying paper <https://dl.acm.org/doi/10.1145/3538637.3538866>`_:
+
+.. code-block::
+
+        @inproceedings{10.1145/3538637.3538866,
+        author = {Findeis, Arduin and Kazhamiaka, Fiodar and Jeen, Scott and Keshav, Srinivasan},
+        title = {Beobench: A Toolkit for Unified Access to Building Simulations for Reinforcement Learning},
+        year = {2022},
+        isbn = {9781450393973},
+        publisher = {Association for Computing Machinery},
+        address = {New York, NY, USA},
+        url = {https://doi.org/10.1145/3538637.3538866},
+        doi = {10.1145/3538637.3538866},
+        booktitle = {Proceedings of the Thirteenth ACM International Conference on Future Energy Systems},
+        pages = {374–382},
+        numpages = {9},
+        keywords = {reinforcement learning, building energy optimisation, building simulation, building control},
+        location = {Virtual Event},
+        series = {e-Energy '22}
+        }
 
 License
 =======

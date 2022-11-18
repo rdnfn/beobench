@@ -31,7 +31,7 @@ agent:
       # Total SGD batch size across all devices for SGD. This defines the
       # minibatch size within each epoch.
       sgd_minibatch_size: 96
-      metrics_smoothing_episodes: 1
+      metrics_num_episodes_for_smoothing: 1
       framework: torch
       log_level: "WARNING"
       num_workers: 1 # this is required for energym to work (can fail silently otherwise)

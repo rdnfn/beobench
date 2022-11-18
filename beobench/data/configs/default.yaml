@@ -41,7 +41,7 @@ agent:
       soft_horizon: True
       # Number of episodes over which RLlib internal metrics
       # are smoothed
-      metrics_smoothing_episodes: 5
+      metrics_num_episodes_for_smoothing: 5
       # Deep learning framework
       framework: torch
       # Number of parallel workers interacting with
@@ -107,4 +107,4 @@ general:
   # experiment once.
   num_samples: 1
   # Beobench version
-  version: 0.5.2
+  # version: 0.5.3
