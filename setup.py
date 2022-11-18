@@ -10,7 +10,7 @@ with open("PYPI_README.rst", encoding="UTF-8") as readme_file:
 with open("HISTORY.rst", encoding="UTF-8") as history_file:
     history = history_file.read()
 
-version = "0.5.2"  # pylint: disable=invalid-name
+version = "0.5.3"  # pylint: disable=invalid-name
 
 requirements = [
     "docker",
