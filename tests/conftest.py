@@ -10,6 +10,11 @@ AGENT_SB3 = """
 import stable_baselines3
 """
 
+AGENT_BROKEN = """
+raise ValueError
+"""
+
+
 REQUIREMENTS_SB3 = """
 stable-baselines3[extra]
 """
@@ -35,6 +40,14 @@ def rand_agent_config():
 def agent_sb3(tmp_path_factory):
     agent_file_path = create_tmp_file(
         "agent_tmp", "agent.py", AGENT_SB3, tmp_path_factory
+    )
+    return agent_file_path
+
+
+@pytest.fixture(scope="session")
+def agent_broken(tmp_path_factory):
+    agent_file_path = create_tmp_file(
+        "agent_tmp", "agent.py", AGENT_BROKEN, tmp_path_factory
     )
     return agent_file_path
 

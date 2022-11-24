@@ -1,6 +1,7 @@
 """Module to test main run command."""
 
 import pytest
+import subprocess
 
 import beobench
 
@@ -49,3 +50,17 @@ def test_reqs_install(agent_sb3, requirements_sb3):
         },
     }
     beobench.run(config=config, **CMD_CONFIG)
+
+
+@pytest.mark.slow
+def test_broken_agent_install(agent_broken, requirements_sb3):
+    """Ensure broken agent error propagates to the main script."""
+    config = {
+        "agent": {
+            "origin": str(agent_broken),
+            "requirements": str(requirements_sb3),
+            "config": {"stop": {"timesteps_total": 10}},
+        },
+    }
+    with pytest.raises(subprocess.CalledProcessError):
+        beobench.run(config=config, **CMD_CONFIG)
