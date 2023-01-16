@@ -9,6 +9,10 @@ History
 
   * Ensure agent script stdout is shown (e.g. log statements and so on) by replacing ``check_output`` call with ``check_call``. This fixes #99 raised by @XkunW (Thanks!).
 
+* Other:
+
+  * Add note on maintenance status of project to main readme and docs.
+
 0.5.3 (2022-11-18)
 ------------------
 
