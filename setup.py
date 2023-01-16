@@ -27,7 +27,8 @@ extended_requirements = [
 ]
 
 rllib_requirements = [
-    "ray[rllib]<=2.1.0",
+    "ray[rllib]<=2.1.0",  # see https://github.com/ray-project/ray/pull/31331
+    "numpy<1.24.0",  # see https://github.com/ray-project/ray/issues/31293
     "torch",
     "gym",
     "wandb",
