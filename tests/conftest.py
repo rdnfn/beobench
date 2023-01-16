@@ -39,7 +39,7 @@ def rand_agent_config():
 @pytest.fixture(scope="session")
 def agent_sb3(tmp_path_factory):
     agent_file_path = create_tmp_file(
-        "agent_tmp", "agent.py", AGENT_SB3, tmp_path_factory
+        "agent_tmp", "agent_sb3.py", AGENT_SB3, tmp_path_factory
     )
     return agent_file_path
 
@@ -47,7 +47,7 @@ def agent_sb3(tmp_path_factory):
 @pytest.fixture(scope="session")
 def agent_broken(tmp_path_factory):
     agent_file_path = create_tmp_file(
-        "agent_tmp", "agent.py", AGENT_BROKEN, tmp_path_factory
+        "agent_tmp", "agent_broken.py", AGENT_BROKEN, tmp_path_factory
     )
     return agent_file_path
 
