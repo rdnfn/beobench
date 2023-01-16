@@ -32,7 +32,7 @@ def log_subprocess(pipe, process_name="subprocess"):
     Color setting of context is described in https://stackoverflow.com/a/33206814.
     """
     lines = []
-    max_len = 1000
+    max_len = 5000
 
     for i, line in enumerate(iter(pipe.readline, b"")):  # b'\n'-separated lines
         context = f"\033[34m{process_name}:\033[0m"  # .decode("ascii")
