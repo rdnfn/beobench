@@ -11,8 +11,7 @@ History
 
 * Other:
 
-  * Add note on maintenance status of project to main readme and docs. Beobench is only receiving minor maintenance updates at this point and may therefore no longer support the latest versions of the integrated building simulation tools. If you would like to use the latest versions of these tools, it is recommended to use them directly without Beobench.
-
+  * Add note on maintenance status of project to main readme and docs. Beobench is only receiving minor maintenance updates at this point. Therefore, Beobench may also no longer support the latest versions of the integrated building simulation tools. If you would like to use the latest versions of these tools, it is recommended to use them directly without Beobench.
 
 0.5.3 (2022-11-18)
 ------------------
