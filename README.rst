@@ -11,6 +11,17 @@
 
    </p>
 
+
+
+_
+
+    **Warning**
+
+    Beobench is only receiving minor maintenance updates at this point and may therefore no longer support the latest versions of the integrated building simulation tools. If you would like to use the latest versions of these tools, it is recommended to use them directly without Beobench.
+
+
+
+
 .. start-in-sphinx-docs
 
 .. image:: https://img.shields.io/pypi/v/beobench.svg
@@ -23,14 +34,8 @@
 .. image:: https://img.shields.io/badge/License-MIT-blue.svg
         :target: https://opensource.org/licenses/MIT
         :alt: License
-        
-        
-_ 
 
-    **Warning**
-    
-    Beobench is only receiving minor maintenance updates at this point and may therefore no longer support the latest versions of the integrated building simulation tools. If you would like to use the latest versions of these tools, it is recommended to use them directly without Beobench.
-    
+
 
 A toolkit providing easy and unified access to building control environments for reinforcement learning (RL). Compared to other domains, `RL environments for building control <https://github.com/rdnfn/rl-building-control#environments>`_ tend to be more difficult to install and handle. Most environments require the user to either manually install a building simulator (e.g. `EnergyPlus <https://github.com/NREL/EnergyPlus>`_) or to manually manage Docker containers. This can be tedious.
 
