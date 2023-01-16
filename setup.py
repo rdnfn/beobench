@@ -10,7 +10,7 @@ with open("PYPI_README.rst", encoding="UTF-8") as readme_file:
 with open("HISTORY.rst", encoding="UTF-8") as history_file:
     history = history_file.read()
 
-version = "0.5.3"  # pylint: disable=invalid-name
+version = "0.5.4"  # pylint: disable=invalid-name
 
 requirements = [
     "docker",
@@ -27,7 +27,8 @@ extended_requirements = [
 ]
 
 rllib_requirements = [
-    "ray[rllib]",
+    "ray[rllib]<=2.1.0",  # see https://github.com/ray-project/ray/pull/31331
+    "numpy<1.24.0",  # see https://github.com/ray-project/ray/issues/31293
     "torch",
     "gym",
     "wandb",

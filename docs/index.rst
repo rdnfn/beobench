@@ -2,6 +2,11 @@
 Beobench docs
 *************
 
+.. warning::
+
+   Beobench is only receiving minor maintenance updates at this point. Therefore, Beobench may also no longer support the latest versions of the integrated building simulation tools. If you would like to use the latest versions of these tools, it is recommended to use them directly without Beobench.
+
+
 .. include:: ../README.rst
    :start-after: start-in-sphinx-docs
    :end-before: end-in-sphinx-docs
