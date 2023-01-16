@@ -27,7 +27,7 @@ extended_requirements = [
 ]
 
 rllib_requirements = [
-    "ray[rllib]",
+    "ray[rllib]<=2.1.0",
     "torch",
     "gym",
     "wandb",
