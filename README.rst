@@ -12,12 +12,8 @@
    </p>
 
 
-..
-
-
-    **Warning**
-
-    Beobench is only receiving minor maintenance updates at this point. Therefore, Beobench may also no longer support the latest versions of the integrated building simulation tools. If you would like to use the latest versions of these tools, it is recommended to use them directly without Beobench.
+**Warning:**
+*Beobench is no longer actively maintained. Consider using the integrated building simulation tools directly without Beobench.*
 
 
 
@@ -26,11 +22,9 @@
 
 .. image:: https://img.shields.io/pypi/v/beobench.svg
         :target: https://pypi.python.org/pypi/beobench
-
 .. image:: https://readthedocs.org/projects/beobench/badge/?version=latest
         :target: https://beobench.readthedocs.io/en/latest/?version=latest
         :alt: Documentation Status
-
 .. image:: https://img.shields.io/badge/License-MIT-blue.svg
         :target: https://opensource.org/licenses/MIT
         :alt: License
