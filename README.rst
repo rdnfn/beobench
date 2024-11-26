@@ -13,7 +13,7 @@
 
 
 **Warning:**
-*Beobench is no longer actively maintained. Consider using the integrated building simulation tools directly without Beobench.*
+*Beobench is no longer actively maintained. I recommended using the integrated building simulation tools directly without Beobench.*
 
 
 
